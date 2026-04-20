@@ -1,6 +1,8 @@
 # SAFAR — AI Context Document
 > Feed this entire document to any AI assistant (Claude, GPT-4, Gemini, Cursor, etc.) to give it full context about the SAFAR project before asking implementation questions.
 
+Any AI agent that changes code must update all Markdown files in the repo to keep documentation current.
+
 ---
 
 ## WHAT IS SAFAR?

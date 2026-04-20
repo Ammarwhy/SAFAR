@@ -2,6 +2,8 @@
 
 ## Working Mode
 
+Any AI agent that changes code must update all Markdown files in the repo to keep documentation current.
+
 - Build in small, testable slices.
 - Never move to the next slice until the current slice runs without runtime/type errors.
 - After every change set, update `Build_Progress.md` with:

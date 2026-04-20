@@ -3,6 +3,8 @@
 **Team:** Rafay Ather Khan (23L-0987) · Abu Bakar Amir (23L-0548) · Soban Ali (23L-0507) · Muhammad Ammar Hussain (23L-0780)  
 **Course:** CS3009 Software Engineering, FAST-NU Lahore · Spring 2026
 
+Any AI agent that changes code must update all Markdown files in the repo to keep documentation current.
+
 ---
 
 ## 1. Product Overview

@@ -129,3 +129,31 @@ For each update entry, include:
 
 ### Follow-ups
 - Continue implementation from the checklist, starting with shared UI components and theme constants.
+
+---
+
+## Entry 005 — 2026-04-20
+
+### Goal
+- Fix Expo web startup dependency conflict and verify browser preview works.
+
+### Changes Made
+- Installed and aligned web dependencies for Expo SDK 55:
+	- `react@19.2.0`
+	- `react-dom@19.2.0`
+	- `react-native-web@0.21.2`
+- Removed deprecated `expo-router/babel` plugin from `babel.config.js`.
+
+### Files Changed
+- `package.json`
+- `package-lock.json`
+- `babel.config.js`
+- `Build_Progress.md`
+- `Project_Explanation.md`
+
+### Verification
+- `npx expo start --web --clear` now starts successfully.
+- Web bundling completes and serves at `http://localhost:8081`.
+
+### Follow-ups
+- Continue feature implementation using either Android LAN mode or web preview.

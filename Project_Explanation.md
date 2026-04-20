@@ -20,6 +20,7 @@ It helps with:
 - Added starter screens for the main tabs.
 - Added the first version of the development checklist.
 - Added a change log so every update is recorded.
+- Fixed web preview dependencies (`react-dom` + `react-native-web`) and confirmed `expo start --web` works.
 
 ## Why These Changes Matter
 

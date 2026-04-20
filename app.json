@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "SAFAR",
+    "slug": "safar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.safar.app"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}

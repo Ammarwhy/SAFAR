@@ -3,6 +3,10 @@
 
 Any AI agent that changes code must update all Markdown files in the repo to keep documentation current.
 
+Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
+
+Current implementation status note: Shared UI component layer has been implemented and core screens have been updated for prototype-first frame alignment with mobile-style web viewport rendering (see Entry 008 in `Build_Progress.md`).
+
 ---
 
 ## WHAT IS SAFAR?

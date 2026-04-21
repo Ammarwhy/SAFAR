@@ -4,12 +4,20 @@
 
 Any AI agent that changes code must update all Markdown files in the repo to keep documentation current.
 
+All markdown updates must include reasoning, verification, and core idea—not only a list of edits.
+
+Primary active testing mode: web variant with `npx expo start --web --clear`.
+
+Latest completed UI milestone: Entry 007 in `Build_Progress.md`.
+
 - Build in small, testable slices.
 - Never move to the next slice until the current slice runs without runtime/type errors.
 - After every change set, update `Build_Progress.md` with:
   - What changed
+  - Why this approach was chosen
   - Files touched
   - Verification done
+  - Core idea behind the change
   - Open issues/blockers
 
 ## Phase 0 — Project Foundation (Start Here)
@@ -43,20 +51,20 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 ## Phase 3 — Shared UI Components
 
-- [ ] `components/layouts/HeritageHeader.tsx`
-- [ ] `components/ui/ArchCard.tsx`
-- [ ] `components/ui/RadarChart.tsx`
-- [ ] `components/ui/ChatBubble.tsx`
-- [ ] `components/ui/ExpenseRow.tsx`
-- [ ] `components/ui/SOSButton.tsx`
-- [ ] `components/ui/AgencyCard.tsx`
-- [ ] `components/ui/OfflineBanner.tsx`
+- [x] `components/layouts/HeritageHeader.tsx`
+- [x] `components/ui/ArchCard.tsx`
+- [x] `components/ui/RadarChart.tsx`
+- [x] `components/ui/ChatBubble.tsx`
+- [x] `components/ui/ExpenseRow.tsx`
+- [x] `components/ui/SOSButton.tsx`
+- [x] `components/ui/AgencyCard.tsx`
+- [x] `components/ui/OfflineBanner.tsx`
 
 ## Phase 4 — Navigation + Screen Scaffolds
 
-- [ ] Auth screens: splash/login
-- [ ] Tabs scaffold: explore, journeys, community, messages, profile
-- [ ] Deep screens: traveler profile, agency profile, safety center
+- [x] Auth screens: splash/login
+- [x] Tabs scaffold: explore, journeys, community, messages, profile
+- [x] Deep screens: traveler profile, agency profile, safety center
 - [ ] Route params and fallback handling for dynamic routes
 
 ## Phase 5 — Feature Delivery (PRD Critical Path)
@@ -71,47 +79,54 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 - [ ] Destination detail with archives section
 
 ### 5C AI Match Discovery
-- [ ] Candidate card + compatibility percentage
-- [ ] Radar comparison chart
-- [ ] Connect/Skip actions
+- [x] Candidate card + compatibility percentage
+- [x] Radar comparison chart (visual placeholder layout)
+- [x] Connect/Skip actions (UI buttons)
 - [ ] Traveler public profile navigation
 
 ### 5D Journeys + Itinerary
-- [ ] Journeys feed hero + status cards
-- [ ] Trips collection with cached labels
+- [x] Journeys feed hero + status cards
+- [x] Trips collection with cached labels
 - [ ] Trip itinerary details and structure
 
 ### 5E Vibe Room (Realtime)
 - [ ] Room message fetch/send via Supabase
 - [ ] Realtime subscription + cleanup
-- [ ] Pinned itinerary card
+- [x] Pinned itinerary card
 - [ ] Poll create/vote
-- [ ] Sync interrupted error state + retry
+- [x] Sync interrupted error state + retry (UI)
 
 ### 5F Expense Ledger
-- [ ] Expense list row rendering
+- [x] Expense list row rendering
 - [ ] Add expense flow
-- [ ] Total + user share cards
-- [ ] Balance/settle up summary
-- [ ] Offline sync indicator
+- [x] Total + user share cards
+- [x] Balance/settle up summary
+- [x] Offline sync indicator
 
 ### 5G Safety Center
-- [ ] SOS button with confirmation
-- [ ] Emergency contact list
-- [ ] Local authority list + call actions
-- [ ] Location state text + map section
-- [ ] Offline safety kit behavior
+- [x] SOS button with confirmation (UI)
+- [x] Emergency contact list (UI)
+- [x] Local authority list + call actions (UI)
+- [x] Location state text + map section (UI)
+- [x] Offline safety kit behavior (UI)
 
 ### 5H Agency Directory
-- [ ] Agency list with verified badges
-- [ ] Agency details with itinerary cards
-- [ ] Contact CTAs and map section
+- [x] Agency list with verified badges
+- [x] Agency details with itinerary cards
+- [x] Contact CTAs and map section (profile CTA area)
 
 ### 5I Profile & Settings
-- [ ] Stats + persona chart
-- [ ] Preferences toggles
-- [ ] Privacy/security section
-- [ ] Sign-out flow
+- [x] Stats + persona chart (visual section)
+- [x] Preferences toggles (visual section)
+- [x] Privacy/security section
+- [x] Sign-out flow (UI action)
+
+## Latest Notes (2026-04-21)
+
+- What changed: We performed a prototype-first UI pass and aligned core screens to PRD frame copy/layout, including a mobile-like web viewport shell.
+- Why it changed: The team requested strict visual parity before backend wiring.
+- How verified: Workspace diagnostics run with no reported errors.
+- Core idea: Lock screen structure first, then attach data/realtime logic in the next phase.
 
 ## Phase 6 — Offline & Reliability Hardening
 

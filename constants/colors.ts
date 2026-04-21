@@ -1,14 +1,14 @@
 export const colors = {
-	primaryBlue: "#1A3A6E",
-	accentGold: "#C8A96E",
-	backgroundCream: "#F5F0E8",
+	primaryBlue: "#371B17",
+	accentGold: "#371B17",
+	backgroundCream: "#EEEDE9",
 	cardWhite: "#FFFFFF",
-	errorRed: "#D32F2F",
-	successGreen: "#4CAF50",
-	textDark: "#1C1C1E",
-	textMuted: "#8E8E93",
+	errorRed: "#B44747",
+	successGreen: "#2F6F5E",
+	textDark: "#251816",
+	textMuted: "#7B716D",
 	overlayDark: "#2C2C2C",
-	borderSoft: "#E3DACD",
+	borderSoft: "#D6D2CC",
 };
 
 export const spacing = {

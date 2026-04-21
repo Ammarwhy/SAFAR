@@ -5,33 +5,33 @@
 
 export const Colors = {
   // Brand colors
-  brand: "#1A3A6E", // Primary blue
-  accent: "#C8A96E", // Gold accent
+  brand: "#371B17", // Rich mahogany primary
+  accent: "#371B17", // Rich mahogany accent
   
   // Background colors
-  bg: "#F5F0E8", // Cream background
-  bgMuted: "#E9E4DA", // Muted background (for decorative elements)
+  bg: "#EEEDE9", // Parchment background
+  bgMuted: "#E5E1DA", // Muted parchment for decorative elements
   bgCard: "#FFFFFF", // Card background
   
   // Text colors
-  textPrimary: "#1C1C1E", // Dark text
-  textSecondary: "#8E8E93", // Muted text
-  textMuted: "#A0A0A0", // Light muted text
+  textPrimary: "#251816", // Dark warm text
+  textSecondary: "#625654", // Muted warm text
+  textMuted: "#7B716D", // Light muted warm text
   
   // Status colors
-  error: "#D32F2F",
-  success: "#4CAF50",
-  warning: "#FF9800",
-  danger: "#D32F2F", // Red error color
-  dangerBg: "#FFE5E5", // Light red background
+  error: "#B44747",
+  success: "#2F6F5E",
+  warning: "#A27245",
+  danger: "#B44747", // Red error color
+  dangerBg: "#F6E8E7", // Light red background
   
   // Card & surface colors
   card: "#FFFFFF",
   surface: "#FAFAFA",
   
   // Border colors
-  border: "#E3DACD",
-  borderDark: "#D0C5B8",
+  border: "#D6D2CC",
+  borderDark: "#BFB6AE",
 };
 
 export const Typography = {
@@ -130,6 +130,7 @@ export const Radius = {
   md: 16,
   lg: 24,
   xl: 32,
+  full: 999,
   pill: 999,
 };
 

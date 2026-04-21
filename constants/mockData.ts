@@ -41,6 +41,16 @@ export type MatchProfile = {
 	tags: string[];
 };
 
+export type MockUser = {
+	name: string;
+	title: string;
+	countries: number;
+	trips: number;
+	followers: number;
+	is2FAEnabled: boolean;
+	isFaceIDEnabled: boolean;
+};
+
 export const destinations: Destination[] = [
 	{
 		id: "samarkand",
@@ -177,3 +187,13 @@ export const MOCK_MATCHES: MatchProfile[] = [
 		tags: ["🍲 Food Explorer", "🗺 Route Sync"],
 	},
 ];
+
+export const MOCK_USER: MockUser = {
+	name: "Elias Thorne",
+	title: "Curator & Route Collector",
+	countries: 14,
+	trips: 28,
+	followers: 8200,
+	is2FAEnabled: true,
+	isFaceIDEnabled: false,
+};

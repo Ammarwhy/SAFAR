@@ -6,7 +6,7 @@ Every change explanation must clearly include: what was changed, why it was chan
 
 Current primary testing mode is the web variant: `npx expo start --web --clear`.
 
-Latest update reference: Entry 008 in `Build_Progress.md`.
+Latest update reference: Entry 009 in `Build_Progress.md`.
 
 ## Simple Summary
 
@@ -29,6 +29,9 @@ It helps with:
 - Fixed web preview dependencies (`react-dom` + `react-native-web`) and confirmed `expo start --web` works.
 - Implemented reusable UI components and applied them across key screens for frame-aligned visuals and cleaner, production-style structure.
 - Added a mobile-like centered viewport for web and completed a larger frame-parity UI pass across core screens using updated PRD copy.
+- Implemented additional production-style screen rewrites for Splash, Login, Explore, Match Discovery, and Profile.
+- Added shared `SafarHeader` and route-aware `BottomTabBar` for consistent screen scaffolding.
+- Completed palette migration to parchment background + rich mahogany primary across major components and updated project docs accordingly.
 
 ## Why These Changes Matter
 
@@ -63,7 +66,7 @@ For every new code change, documentation must answer four things in simple words
 
 ## Latest Change Summary (2026-04-21)
 
-- What changed: Screen-level UIs were reworked to mirror updated prototype language and flow, and web preview now uses a mobile-style container.
-- Why it changed: The implementation plan now prioritizes accurate frame conversion before backend work.
-- How it was verified: Editor diagnostics showed no current code errors after the update.
-- Core idea: Stabilize visual contracts first; then implement backend and state logic with reduced UI churn.
+- What changed: New core screens and shared layout utilities were integrated, mock datasets were expanded, a runtime syntax issue was fixed, and the color system was standardized to parchment (`#EEEDE9`) and rich mahogany (`#371B17`).
+- Why it changed: We needed a professional, consistent UI foundation and accurate screen parity before backend/state wiring.
+- How it was verified: Diagnostics on edited files returned no errors, and Expo web startup was re-run with no blocking runtime failures.
+- Core idea: Finalize reusable visual contracts and tokenized theming first, then attach realtime/data behavior on top of stable UI primitives.

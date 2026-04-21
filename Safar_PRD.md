@@ -1,5 +1,5 @@
 # SAFAR — Product Requirements Document (PRD)
-**Version:** 2.1 | **Date:** April 2026 | **Phase:** 5 — Implementation  
+**Version:** 2.3 | **Date:** April 2026 | **Phase:** 5 — Implementation  
 **Team:** Rafay Ather Khan (23L-0987) · Abu Bakar Amir (23L-0548) · Soban Ali (23L-0507) · Muhammad Ammar Hussain (23L-0780)  
 **Course:** CS3009 Software Engineering, FAST-NU Lahore · Spring 2026
 
@@ -7,7 +7,7 @@
 >
 > **Agent instruction — Doc changes:** Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 >
-> **Current implementation status:** Design-system components plus a prototype-first screen alignment pass are now in place, including mobile-style web viewport rendering (see Entry 008 in `Build_Progress.md`).
+> **Current implementation status:** Design-system components plus extended prototype-first screen rewrites are now in place, including palette migration to parchment (`#EEEDE9`) + rich mahogany (`#371B17`) and mobile-style web viewport rendering (see Entry 009 in `Build_Progress.md`).
 
 ---
 
@@ -18,6 +18,7 @@
 | 2.0 | Apr 21 2026 | Initial implementation PRD | Claude (generated) |
 | 2.1 | Apr 21 2026 | Full alignment with Figma prototype frames: corrected screen names, copy, nav bar labels per screen, dual radar chart axes, split method labels, agency nav context, journey timeline structure | Claude (prototype diff) |
 | 2.2 | Apr 21 2026 | Added implementation status checkpoint for prototype-first UI alignment progress (Entry 008 reference) | Copilot |
+| 2.3 | Apr 21 2026 | Updated implementation status to Entry 009: added latest screen rewrites, tokenized parchment + rich mahogany color system, and documentation synchronization notes | Copilot |
 
 ---
 
@@ -56,20 +57,20 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 
 | ID | Screen Title (exact) | Prototype Description |
 |---|---|---|
-| GUI-01 | SAFAR — Splash | Full-screen arch hero (landscape), "SAFAR" serif title, "CURATED JOURNEYS • TIMELESS ROUTES" subtitle, "Begin Exploration" blue CTA, "● OFFLINE MODE ACTIVE ⬇" pill when offline |
-| GUI-02 | SAFAR — The Digital Curator (Sign In) | Arch hero with "DTS VERIFIED" gold badge overlay, "SAFAR / THE DIGITAL CURATOR" titles, email + password underline fields, red italic login error, "Enter Archive" blue button, "Forgot Access?" + "Request Invitation" links, greyed destination thumbnails below fold |
+| GUI-01 | SAFAR — Splash | Full-screen arch hero (landscape), "SAFAR" serif title, "CURATED JOURNEYS • TIMELESS ROUTES" subtitle, "Begin Exploration" rich mahogany CTA, "● OFFLINE MODE ACTIVE ⬇" pill when offline |
+| GUI-02 | SAFAR — The Digital Curator (Sign In) | Arch hero with "DTS VERIFIED" rich mahogany badge overlay, "SAFAR / THE DIGITAL CURATOR" titles, email + password underline fields, red italic login error, "Enter Archive" rich mahogany button, "Forgot Access?" + "Request Invitation" links, greyed destination thumbnails below fold |
 | GUI-03 | Explore — The Eternal Silk Road | Section label "CURATED JOURNEYS", serif title "The Eternal Silk Road" (italic "Silk Road"), large arch hero (Varanasi sunset), sub-destination grid (Petra + Bukhara), "Heritage Archives" horizontal scroll (VOL. 04, VOL. 09), "The Digital Curator" CTA section with "Access Archives" button |
 | GUI-04 | Journeys — Nomad's Journey | Section label "CURRENT EXPEDITION", hero arch card "Samarkand: The Blue City" with "Offline Access Available" cloud badge, "Nomad's Journey" title, vertical timeline of journey cards with connecting dot indicators: Active/CACHED card, Completed card with Archive Logs count, locked "Unlocking" card; "Offline Safety Kit · N Destinations Downloaded · Update" banner |
-| GUI-05 | Trips Collection | Section label "CURATED JOURNEYS", "Trips Collection" title, stacked trip arch cards each with "CACHED" cloud badge, trip name, duration + cities, "Expanding your horizon?" CTA card with "New Journey" blue button |
+| GUI-05 | Trips Collection | Section label "CURATED JOURNEYS", "Trips Collection" title, stacked trip arch cards each with "CACHED" cloud badge, trip name, duration + cities, "Expanding your horizon?" CTA card with "New Journey" rich mahogany button |
 | GUI-06 | Agency Directory — Master Curators | Section label "THE CURATED SELECTION", "Master Curators of the Silk Road" title, partner intro text, agency cards (arch image, DTS Verified badge, name, est. year, specialty, "View Details" button), "Are you a custodian of history?" CTA with "APPLY FOR CERTIFICATION" button |
 | GUI-07 | Agency Profile — [Agency Name] | Section label "THE PREMIER COLLECTION", agency name in large serif, italic philosophy quote, "Our Philosophy" heading + description, blue stat badge "N UNESCO PARTNERS", "Curated Itineraries" section with trip cards (duration · region, title, teaser), "Begin Your Personal Monograph" card with "Contact Agent" (envelope icon) + "Schedule a Call" buttons |
-| GUI-08 | AI Match Discovery | Arch profile image with DTS-style verified badge, name in blue serif, "LOCATION · ROLE" subtitle, "Journey Alignment" card with % COMPATIBLE badge and 5-axis radar chart, "Curator's Note" quote block, interest tag pills, "Send Message" blue button + "View Profile" outline button |
-| GUI-09 | Traveler Public Profile | Circular profile photo with edit overlay, name + tagline, bio text, location + countries badges, "Travel Persona DNA" 6-axis radar chart, "Achievements" dark navy card (3 rows: icon + title + description), "Curation Score" card with numeric display + trend icon, "Curated Collections" photo grid + "View Archive" link |
-| GUI-10 | Vibe Room | "VIBE ROOM" centred label + "N Active Explorers" subtitle in header, trip member avatar top-right, gold "PINNED PRIORITY" card (itinerary day + activities + map icon), left/right chat bubbles with sender name labels above left bubbles, image-in-bubble support, "Sync Interrupted" error card (cloud-x icon, message, "TRY AGAIN" + "CHECK SAFETY KIT"), "Share a vibe..." input with "+" and send button |
+| GUI-08 | AI Match Discovery | Arch profile image with DTS-style verified badge, name in rich mahogany serif, "LOCATION · ROLE" subtitle, "Journey Alignment" card with % COMPATIBLE badge and 5-axis radar chart, "Curator's Note" quote block, interest tag pills, "Send Message" rich mahogany button + "View Profile" outline button |
+| GUI-09 | Traveler Public Profile | Circular profile photo with edit overlay, name + tagline, bio text, location + countries badges, "Travel Persona DNA" 6-axis radar chart, "Achievements" rich mahogany card (3 rows: icon + title + description), "Curation Score" card with numeric display + trend icon, "Curated Collections" photo grid + "View Archive" link |
+| GUI-10 | Vibe Room | "VIBE ROOM" centred label + "N Active Explorers" subtitle in header, trip member avatar top-right, rich mahogany "PINNED PRIORITY" card (itinerary day + activities + map icon), left/right chat bubbles with sender name labels above left bubbles, image-in-bubble support, "Sync Interrupted" error card (cloud-x icon, message, "TRY AGAIN" + "CHECK SAFETY KIT"), "Share a vibe..." input with "+" and send button |
 | GUI-11 | Expense Ledger | "Expense Ledger" title, trip subtitle, two stat cards (TOTAL EXPENSES light / YOUR SHARE blue), "Recent Transactions" + "Filter" header, transaction rows (category icon, name, date, payer label, VERIFIED badge when confirmed, amount, split label), "Ready to Settle?" card with owed amount + "Settle Up Now" button, "OFFLINE SYNC ACTIVE" footer banner |
-| GUI-12 | Safety Center | "OFFLINE SAFETY KIT: ACTIVE" top banner, "Safety Center" title, large SOS card (red "SOS" + "TAP FOR HELP"), two 2-up feature cards (Location / Guide), "Emergency Contacts" navy card with contact count, "Local Authorities" section (Tourist Police + Heritage Hospital rows each with CALL button), dark map card with "YOU ARE HERE: [LOCATION]" white pill |
-| GUI-13 | User Profile & Settings | Profile card (photo, name, "VERIFIED ACCOUNT" gold badge, role, stats: Expeditions + Heritage Points), "Account" section (Personal Information / Email Address / Expense Ledger), "Preferences" section (Offline Safety Kit toggle / Curated Theme toggle), "Privacy & Security" section (Passkey Access / Privacy Mode), "SIGN OUT OF HERITAGE" red text button |
-| GUI-14 | Connection Error (Sync Interrupted) | Cloud-offline icon, "Sync Interrupted" heading, "Heritage sites often have weak signals. Your messages will be sent once we're back online.", "TRY AGAIN" blue button, "CHECK SAFETY KIT" text link |
+| GUI-12 | Safety Center | "OFFLINE SAFETY KIT: ACTIVE" top banner, "Safety Center" title, large SOS card (red "SOS" + "TAP FOR HELP"), two 2-up feature cards (Location / Guide), "Emergency Contacts" rich mahogany card with contact count, "Local Authorities" section (Tourist Police + Heritage Hospital rows each with CALL button), dark map card with "YOU ARE HERE: [LOCATION]" white pill |
+| GUI-13 | User Profile & Settings | Profile card (photo, name, "VERIFIED ACCOUNT" rich mahogany badge, role, stats: Expeditions + Heritage Points), "Account" section (Personal Information / Email Address / Expense Ledger), "Preferences" section (Offline Safety Kit toggle / Curated Theme toggle), "Privacy & Security" section (Passkey Access / Privacy Mode), "SIGN OUT OF HERITAGE" red text button |
+| GUI-14 | Connection Error (Sync Interrupted) | Cloud-offline icon, "Sync Interrupted" heading, "Heritage sites often have weak signals. Your messages will be sent once we're back online.", "TRY AGAIN" rich mahogany button, "CHECK SAFETY KIT" text link |
 | GUI-15 | (Derived) New Journey / Onboarding | Accessed via "New Journey" CTA on Trips Collection; form to create a new trip with title, destination, date range |
 
 ---
@@ -77,23 +78,23 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 ## 4. Per-Screen Specifications
 
 ### GUI-01 — Splash
-- Background: light cream `#F5F0E8`
-- Heritage header (gold bar) at top
+- Background: parchment `#EEEDE9`
+- Heritage header (rich mahogany bar) at top
 - Arched hero image (green landscape, centred)
-- "**SAFAR**" in large blue serif (`#1A3A6E`), `font-size: ~48px`
+- "**SAFAR**" in large rich mahogany serif (`#371B17`), `font-size: ~48px`
 - "CURATED JOURNEYS • TIMELESS ROUTES" in spaced uppercase sans-serif, muted
-- "**Begin Exploration**" — full-width blue rounded button
+- "**Begin Exploration**" — full-width rich mahogany rounded button
 - "● OFFLINE MODE ACTIVE ⬇" — small pill badge, only when `NetInfo.isConnected === false`
 
 ### GUI-02 — Sign In
 - Heritage header with profile avatar icon (right)
-- Arched hero image; "**DTS VERIFIED**" gold seal badge overlaid bottom-centre of image
-- "**SAFAR**" blue serif title; "THE DIGITAL CURATOR" spaced caps subtitle
+- Arched hero image; "**DTS VERIFIED**" rich mahogany seal badge overlaid bottom-centre of image
+- "**SAFAR**" rich mahogany serif title; "THE DIGITAL CURATOR" spaced caps subtitle
 - "Email Address" — underline text field (no border box)
 - "Password" — underline field with eye-toggle icon (right)
 - **Error state:** red italic text "Login Error: Invalid credentials, please try again." inside a light red card, shown on failed login
-- "**Enter Archive**" — full-width blue rounded CTA button
-- "Forgot Access?" (left, muted) + "**Request Invitation**" (right, blue link)
+- "**Enter Archive**" — full-width rich mahogany rounded CTA button
+- "Forgot Access?" (left, muted) + "**Request Invitation**" (right, rich mahogany link)
 - Divider line
 - Row of 3 greyed-out destination thumbnails (decorative, below fold)
 - **Bottom nav (4 tabs):** Explore (active compass) · Search · Community · Messages · Profile
@@ -106,8 +107,8 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - Large arched hero: Varanasi sunset/Ganges; "INDIA" micro label + "**Varanasi**" location label overlaid bottom-left
 - 2-column grid of smaller arch cards: **Petra** ("THE ROSE CITY") · **Bukhara** ("SILK ROAD GEM")
 - "**Heritage Archives**" horizontal scroll section; cards labelled "VOL. 04 — Agra: Beyond the Marble", "VOL. 09 — Forgotten Kingdom[s]"
-- "**The Digital Curator**" section: gold verified icon, description text, "**Access Archives**" blue button
-- **Bottom nav (5 tabs):** Explore (active, filled blue circle) · community · people · messages · profile
+- "**The Digital Curator**" section: rich mahogany verified icon, description text, "**Access Archives**" rich mahogany button
+- **Bottom nav (5 tabs):** Explore (active, filled rich mahogany circle) · community · people · messages · profile
 
 ### GUI-04 — Nomad's Journey (Journeys)
 - Heritage header with profile avatar (right)
@@ -129,7 +130,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
   2. **Kerala Backwaters** — 7 Days · Alleppey, Kumarakom
   3. **Varanasi: The Eternal City** — 5 Days · Spiritual Heartland
   4. **Himalayan Heights** — 14 Days · Leh, Ladakh, Spiti
-- "Expanding your horizon?" CTA card (location-pin-plus icon) → "**New Journey**" blue button
+- "Expanding your horizon?" CTA card (location-pin-plus icon) → "**New Journey**" rich mahogany button
 - **Bottom nav (5 tabs):** Explore (active) · community · people · messages · profile
 
 ### GUI-06 — Master Curators (Agency Directory)
@@ -137,7 +138,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - "THE CURATED SELECTION" section label
 - "**Master Curators of the Silk Road**" serif title
 - Intro text: "We have partnered with the world's most distinguished travel agencies to provide unparalleled access to historical landmarks and hidden cultural gems. Each partner is rigorously vetted for authenticity and heritage preservation."
-- **Agency cards** (full-width, arched image, gold "DTS Verified" badge top-right of image):
+- **Agency cards** (full-width, arched image, rich mahogany "DTS Verified" badge top-right of image):
   1. **Kashi Journeys** — est. 1984 — "Specializing in spiritual architecture and river-based expeditions through the ancient heart of Varanasi." — "View Details ›" button
   2. **Nomad Silk Road** — est. 1992 — "The premier gateway to Central Asian heritage, from the Registan to the forgotten caravanserais of the Kyzylkum." — "View Details ›" button
   3. **The Nabataean Guild** — est. 2005 — "Archaeological-led tours focusing on the desert kingdoms and the spice trade routes of the Middle East." — "View Details ›" button
@@ -152,30 +153,30 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - "**The Royal Curator**" large serif agency name
 - Italic quote block: *"We do not merely plan journeys; we orchestrate temporal transitions into the heart of history."*
 - "**Our Philosophy**" heading with 2 description paragraphs
-- Blue stat badge: compass icon + "**12**" large + "UNESCO PARTNERS" label
+- Rich mahogany stat badge: compass icon + "**12**" large + "UNESCO PARTNERS" label
 - "**Curated Itineraries**" section + "View All Collections" text link (right):
   - Card 1: arch image (Mughal corridor), "14 DAYS · NORTH INDIA" micro-label, "**The Mughal Legacy**", teaser text
   - Card 2: arch image (monks corridor), "10 DAYS · VARANASI" micro-label, "**Vessels of Faith**", teaser text
 - "**Begin Your Personal Monograph**" CTA card (cream background):
-  - "☐ **Contact Agent**" blue button (envelope icon prefix)
+  - "☐ **Contact Agent**" rich mahogany button (envelope icon prefix)
   - "**Schedule a Call**" outline button
 - **Bottom nav (5 tabs):** compass · people · **person** (active) · chat · profile
 
 ### GUI-08 — AI Match Discovery
 - Heritage header with dark square icon (top-right, context menu)
 - **Profile card** (arched frame — abstract/avatar style art acceptable):
-  - Gold verified badge overlay (bottom-right of image)
-  - "**Amina Al-Farsi**" blue serif name
+  - Rich mahogany verified badge overlay (bottom-right of image)
+  - "**Amina Al-Farsi**" rich mahogany serif name
   - "MUSCAT, OMAN · PROFESSIONAL CURATOR" spaced caps subtitle
 - **Journey Alignment card** (white, rounded):
   - "Journey Alignment" heading; "Based on your travel DNA and heritage interests" subtext
-  - "**94%**" large blue number + "COMPATIBLE" label (top-right of card)
-  - 5-axis radar/spider chart — axes: **CULTURE** (top) · **RELAXATION** (upper-right) · **FOOD** (lower-right) · **NATURE** (bottom) · **ADVENTURE** (lower-left); filled blue polygon with point markers
+  - "**94%**" large rich mahogany number + "COMPATIBLE" label (top-right of card)
+  - 5-axis radar/spider chart — axes: **CULTURE** (top) · **RELAXATION** (upper-right) · **FOOD** (lower-right) · **NATURE** (bottom) · **ADVENTURE** (lower-left); filled rich mahogany polygon with point markers
 - **Curator's Note card** (cream, slightly inset):
   - Label "Curator's Note"
   - Quote: *"Seeking a fellow traveler for a deep-dive into the Silk Road's architectural evolution. I prioritize historical context over standard tourist traps. Let's find the hidden courtyards of Samarkand together."*
 - Interest tag pills: "🏛 History Buff" · "🎨 Visual Arts"
-- "**Send Message**" full-width blue button
+- "**Send Message**" full-width rich mahogany button
 - "**View Profile**" full-width outline button
 - **Bottom nav (5 tabs):** compass · search · **people** (active) · messages · profile
 
@@ -187,8 +188,8 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - Bio: "Curating memories through the lens of ancient geometry and silent landscapes. Julian seeks the intersection of forgotten silk routes and contemporary minimalist architecture."
 - Pill badges: "📍 Based in London" · "🌍 42 Countries"
 - "**Travel Persona DNA**" section heading:
-  - 6-axis radar chart — axes: **HERITAGE** (top) · **CULINARY** (left) · **URBAN** (right) · **NATURE** (bottom) + 2 more (exact labels: see Figma); filled blue shape with dashed outer reference octagon
-- "**Achievements**" dark navy card:
+  - 6-axis radar chart — axes: **HERITAGE** (top) · **CULINARY** (left) · **URBAN** (right) · **NATURE** (bottom) + 2 more (exact labels: see Figma); filled rich mahogany shape with dashed outer reference octagon
+- "**Achievements**" rich mahogany card:
   - 🏛 **Heritage Seeker** — "Explored 50+ UNESCO sites"
   - 🍽 **Gourmand** — "Documented 120 local cuisines"
   - 🏕 **Explorer** — "Off-grid specialist"
@@ -198,25 +199,25 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **Bottom nav (5 tabs):** compass · search · people · chat · **profile** (active)
 
 ### GUI-10 — Vibe Room
-- Heritage header (gold bar):
-  - "VIBE ROOM" centred bold label (blue)
+- Heritage header (rich mahogany bar):
+  - "VIBE ROOM" centred bold label (rich mahogany)
   - "4 Active Explorers" centred subtitle (muted)
   - Trip group avatar (top-right)
-- **Pinned Priority card** (gold/tan background, full-width):
+- **Pinned Priority card** (rich mahogany background, full-width):
   - "📌 PINNED PRIORITY" micro-label
   - "**Kashi Trip Itinerary — Day 3**" bold title
   - "Sunrise Aarti at Dashashwamedh Ghat & Silk Weaving Workshop" subtitle
   - Map icon button (top-right of card)
 - **Chat messages** (vertically scrollable):
   - Left bubble (other user): sender name label above ("AMARA"), white bubble, black text
-  - Right bubble (self): no name, blue (`#1A3A6E`) bubble, white text
+  - Right bubble (self): no name, rich mahogany (`#371B17`) bubble, white text
   - Image bubble: rounded image card with caption text below, sender avatar bottom-left
   - System sender label example: "JULIAN" above image bubble
 - **Sync Interrupted error card** (when WebSocket disconnected):
   - Cloud-X icon (light red/pink tint)
   - "**Sync Interrupted**" heading
   - "Heritage sites often have weak signals. Your messages will be sent once we're back online."
-  - "**TRY AGAIN**" blue button
+  - "**TRY AGAIN**" rich mahogany button
   - "CHECK SAFETY KIT" muted text link
 - **Input bar** (bottom, above nav):
   - "**＋**" circular button (left) — attachments/media
@@ -230,7 +231,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - Subtitle: "Silk Road Expedition · Samarkand to Bukhara"
 - Two stat cards (side by side):
   - Left (light): "TOTAL EXPENSES" label · "**$1,245.50**" large number
-  - Right (blue `#1A3A6E`): "YOUR SHARE" label · "**$622.75**" large white number
+  - Right (rich mahogany `#371B17`): "YOUR SHARE" label · "**$622.75**" large white number
 - "**Recent Transactions**" heading + "⚙ Filter" link (right)
 - **Transaction table** (card container), columns: DETAIL · AMOUNT:
   | # | Icon | Name | Date | Payer | Badge | Amount | Split |
@@ -242,7 +243,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **Ready to Settle? card** (cream, centred):
   - Handshake icon
   - "You currently owe David **$180.35** for the shared expenses of the last 3 days."
-  - "**Settle Up Now**" full-width blue button
+  - "**Settle Up Now**" full-width rich mahogany button
 - "☁ **OFFLINE SYNC ACTIVE** · Data will sync when network is restored" footer banner (dot + cloud icon)
 - **Bottom nav (5 tabs):** Explore · Journey · Connect · **Ledger** (active) · Profile
 
@@ -256,23 +257,23 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **2-column feature cards:**
   - Left: 📍 Location icon · "**Location**" · "Live coordinate broadcast active"
   - Right: 🛡 Guide icon · "**Guide**" · "Verify local heritage expert credentials"
-- **Emergency Contacts card** (navy blue `#1A3A6E`, full-width):
+- **Emergency Contacts card** (rich mahogany `#371B17`, full-width):
   - "**Emergency Contacts**" heading (white)
   - Avatar placeholder with asterisk
   - "3 active contacts notified of your current status." (white)
 - "**Local Authorities**" section heading:
-  - Row: 🛡 icon · "**Tourist Police**" bold · "Varanasi Division · 2.4km away" muted · "**CALL**" blue pill button
-  - Row: 🏥 icon · "**Heritage Hospital**" bold · "Emergency Ward · Open 24h" muted · "**CALL**" blue pill button
+  - Row: 🛡 icon · "**Tourist Police**" bold · "Varanasi Division · 2.4km away" muted · "**CALL**" rich mahogany pill button
+  - Row: 🏥 icon · "**Heritage Hospital**" bold · "Emergency Ward · Open 24h" muted · "**CALL**" rich mahogany pill button
 - **Dark map card** (charcoal `#2C2C2C` background, arch-top shape):
   - White pill overlay: "● YOU ARE HERE: DASHASHWAMEDH GHAT"
-- **Bottom nav (5 tabs — safety context):** Explore · Search · Community · Messages · **Safety** (active, blue)
+- **Bottom nav (5 tabs — safety context):** Explore · Search · Community · Messages · **Safety** (active, rich mahogany)
 
 ### GUI-13 — User Profile & Settings
 - Heritage header with search icon + dark circular avatar (top-right)
 - **Profile card** (white, rounded):
   - Profile photo (can be avatar/illustration style)
   - "**Elias Thorne**" bold serif name
-  - "✓ **VERIFIED ACCOUNT**" gold badge
+  - "✓ **VERIFIED ACCOUNT**" rich mahogany badge
   - "Curator & Heritage Explorer" role subtitle
   - Stats row: "**14**" · "EXPEDITIONS" | "**8.2k**" · "HERITAGE POINTS"
 - "— **Account**" section label with hairline rule:
@@ -280,7 +281,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
   - "✉ **Email Address**" → arrow · "e.thorne@archive.org"
   - "💳 **Expense Ledger**" → arrow · "Manage budgets and heritage passes"
 - "— **Preferences**" section label:
-  - "☁ **Offline Safety Kit**" toggle (**ON**, blue) · "Auto-cache maps for heritage sites"
+  - "☁ **Offline Safety Kit**" toggle (**ON**, rich mahogany) · "Auto-cache maps for heritage sites"
   - "🌙 **Curated Theme**" toggle (**OFF**, grey) · "Adaptive light/dark heritage palette"
 - "— **Privacy & Security**" section label:
   - "🔒 **Passkey Access**" · "Biometric security enabled"
@@ -329,7 +330,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **FR-23** Real-time text messaging via WebSocket/Supabase Realtime (< 1 second delivery)
 - **FR-24** Image and media sharing displayed as rounded image bubble with caption
 - **FR-25** Group poll creation (question + options) and voting with live result aggregation
-- **FR-26** "Pinned Priority" gold card at top of chat: shows itinerary day number, activity names, and map icon; set by pinning an itinerary
+- **FR-26** "Pinned Priority" rich mahogany card at top of chat: shows itinerary day number, activity names, and map icon; set by pinning an itinerary
 - **FR-27** Left chat bubbles show sender name label above; right bubbles (own) have no label
 - **FR-28** "Sync Interrupted" inline error card when WebSocket disconnects, with "TRY AGAIN" and "CHECK SAFETY KIT"
 - **FR-29** Offline message queue — messages queued locally and sent on reconnect
@@ -353,7 +354,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **FR-40** Categories: Dining · Transport · Stay · Activity (each has a distinct icon)
 - **FR-41** Split method labels exactly as shown in prototype: **"Split equally"** and **"Individual"** (not "Equal" or "Payer-only")
 - **FR-42** "VERIFIED" green badge displayed on expense rows where payment has been confirmed
-- **FR-43** Stat cards: "TOTAL EXPENSES" (light card) and "YOUR SHARE" (blue card) side-by-side
+- **FR-43** Stat cards: "TOTAL EXPENSES" (light card) and "YOUR SHARE" (rich mahogany card) side-by-side
 - **FR-44** Auto-calculate balances; "Ready to Settle?" card shows exact owed amount and counterparty name
 - **FR-45** "Settle Up Now" marks the balance as settled
 - **FR-46** "OFFLINE SYNC ACTIVE" footer banner when offline; changes queued for sync
@@ -362,7 +363,7 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 - **FR-47** "OFFLINE SAFETY KIT: ACTIVE" top banner when offline kit is loaded
 - **FR-48** Large SOS card (full-width, white with red glow): "SOS" red serif + "TAP FOR HELP" — tap triggers confirmation modal then distress event
 - **FR-49** 2-up feature cards: **Location** ("Live coordinate broadcast active") and **Guide** ("Verify local heritage expert credentials")
-- **FR-50** Emergency Contacts navy card: shows active contact count, "N active contacts notified of your current status."
+- **FR-50** Emergency Contacts rich mahogany card: shows active contact count, "N active contacts notified of your current status."
 - **FR-51** Local Authorities list: Tourist Police row (division name, distance in km, CALL button) and Heritage Hospital row (ward name, Open 24h status, CALL button)
 - **FR-52** "YOU ARE HERE: [LOCATION NAME]" white pill overlaid on dark map card
 - **FR-53** Safety check-in timer — configurable; alerts contacts if not checked in
@@ -370,15 +371,15 @@ This table uses the **exact copy and terminology** visible in the Figma prototyp
 
 ### 5.8 Agency Directory & Profile
 - **FR-55** Agency Directory (GUI-06) header copy: "THE CURATED SELECTION" / "Master Curators of the Silk Road"
-- **FR-56** Agency cards: arched image, "DTS Verified" gold badge, name, establishment year, specialty description, "View Details ›" button
+- **FR-56** Agency cards: arched image, "DTS Verified" rich mahogany badge, name, establishment year, specialty description, "View Details ›" button
 - **FR-57** "Are you a custodian of history?" CTA section with "APPLY FOR CERTIFICATION" button
 - **FR-58** Agency Directory uses a **4-tab bottom nav**: Explore Routes · Agencies · Concierge · Profile
-- **FR-59** Agency Profile (GUI-07) shows: "THE PREMIER COLLECTION" label, agency name, italic philosophy quote, "Our Philosophy" text, UNESCO Partners blue badge, curated itinerary cards
+- **FR-59** Agency Profile (GUI-07) shows: "THE PREMIER COLLECTION" label, agency name, italic philosophy quote, "Our Philosophy" text, UNESCO Partners rich mahogany badge, curated itinerary cards
 - **FR-60** Agency itinerary cards: duration + region micro-label, title, teaser text, arch image
 - **FR-61** "Begin Your Personal Monograph" CTA card with "Contact Agent" (envelope icon) and "Schedule a Call" buttons
 
 ### 5.9 User Profile & Settings
-- **FR-62** Profile card shows: photo, "VERIFIED ACCOUNT" gold badge, role title, Expeditions count, Heritage Points count
+- **FR-62** Profile card shows: photo, "VERIFIED ACCOUNT" rich mahogany badge, role title, Expeditions count, Heritage Points count
 - **FR-63** Account section: Personal Information, Email Address, Expense Ledger shortcut (opens Expense Ledger settings)
 - **FR-64** Preferences toggles: Offline Safety Kit (default ON) and Curated Theme / dark-light (default OFF)
 - **FR-65** Privacy & Security section: Passkey Access (biometric) and Privacy Mode (incognito) — display-only status labels (not toggles) for these two
@@ -670,15 +671,15 @@ isRead: Boolean
 ### Color Tokens
 | Token | Hex | Usage |
 |---|---|---|
-| `primary-blue` | `#1A3A6E` | Headings, CTAs, active tab, own chat bubbles, YOUR SHARE card |
-| `accent-gold` | `#C8A96E` | Heritage header bar, DTS Verified badge, Pinned Priority card |
-| `background-cream` | `#F5F0E8` | All screen backgrounds, CTA section backgrounds |
+| `primary-mahogany` | `#371B17` | Headings, CTAs, active tab, own chat bubbles, key component surfaces |
+| `accent-mahogany` | `#371B17` | Heritage header bar, DTS Verified badge, Pinned Priority card |
+| `background-parchment` | `#EEEDE9` | All screen backgrounds and base surfaces |
 | `card-white` | `#FFFFFF` | Card surfaces, SOS card, feature cards |
-| `error-red` | `#D32F2F` | SOS text, login error text |
-| `success-green` | `#4CAF50` | "Active" badge, VERIFIED badge, online dot |
-| `text-dark` | `#1C1C1E` | Primary body text |
-| `text-muted` | `#8E8E93` | Subtitles, captions, locked content |
-| `navy-card` | `#1A3A6E` | Emergency Contacts card, Achievements card |
+| `error-red` | `#B44747` | SOS text, login error text |
+| `success-green` | `#2F6F5E` | "Active" badge, VERIFIED badge, online dot |
+| `text-dark` | `#251816` | Primary body text |
+| `text-muted` | `#7B716D` | Subtitles, captions, locked content |
+| `mahogany-card` | `#371B17` | Emergency Contacts card, Achievements card, CTA surfaces |
 | `overlay-dark` | `#2C2C2C` | Map background |
 
 ### Typography
@@ -689,10 +690,10 @@ isRead: Boolean
 
 ### Signature UI Motifs
 - **Arched image frame** — pointed arch at top, flat bottom; implemented via `borderTopLeftRadius` + `borderTopRightRadius` with large values + `overflow: hidden`, OR SVG `clipPath`. Used on all destination, agency, and profile images.
-- **Heritage header bar** — gold/tan (`#C8A96E`) background, `font-style: italic` "Heritage" text with temple (🏛) icon, profile avatar circle right
-- **Blue rounded pill CTA** — `borderRadius: 999`, `backgroundColor: #1A3A6E`, white text, full-width
+- **Heritage header bar** — rich mahogany (`#371B17`) background, `font-style: italic` "Heritage" text with temple (🏛) icon, profile avatar circle right
+- **Rich mahogany rounded pill CTA** — `borderRadius: 999`, `backgroundColor: #371B17`, white text, full-width
 - **Radar/spider chart** — two distinct instances: 5-axis Journey Alignment (match screen) + 6-axis Persona DNA (profile screen)
-- **DTS Verified gold badge** — gold seal with checkmark, overlaid bottom-centre or top-right of arched images
+- **DTS Verified mahogany badge** — rich mahogany seal with checkmark, overlaid bottom-centre or top-right of arched images
 - **Status badges** — "Active" green pill · "CACHED" cloud+text muted · "VERIFIED" green text badge on expense rows
 - **Offline pill** — "● OFFLINE MODE ACTIVE ⬇" small pill, cream background, shown at bottom of splash or top of any screen when disconnected
 
@@ -709,7 +710,7 @@ The bottom navigation bar labels change depending on the active section. Impleme
 | Safety Center | Explore | Search | Community | Messages | **Safety** |
 | Profile & Settings | Explore | Paths | Community | Archive | **Profile** |
 
-Active tab is always indicated by filled blue icon + label.
+Active tab is always indicated by filled rich mahogany icon + label.
 
 ---
 

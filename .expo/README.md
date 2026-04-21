@@ -11,3 +11,9 @@ The ".expo" folder is created when an Expo project is started using "expo start"
 
 No, you should not share the ".expo" folder. It does not contain any information that is relevant for other developers working on the project, it is specific to your machine.
 Upon project creation, the ".expo" folder is already added to your ".gitignore" file.
+
+---
+
+Project documentation sync note (2026-04-21):
+- Latest implementation checkpoint is Entry 009 in `Build_Progress.md`.
+- Core project documentation is maintained in root markdown files (`Build_Progress.md`, `Implementation_Checklist.md`, `Project_Explanation.md`, `Safar_Context.md`, `Safar_PRD.md`).

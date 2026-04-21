@@ -4,18 +4,25 @@ import { Colors, Radius, Spacing } from "@/constants/Theme";
 type SafarHeaderProps = {
   title?: string;
   subtitle?: string;
+  showAvatar?: boolean;
 };
 
-export default function SafarHeader({ title = "SAFAR", subtitle = "Discovery" }: SafarHeaderProps) {
+export default function SafarHeader({
+  title = "SAFAR",
+  subtitle = "Discovery",
+  showAvatar = true,
+}: SafarHeaderProps) {
   return (
     <View style={styles.wrap}>
       <View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
-      <View style={styles.avatar}>
-        <Text style={styles.avatarText}>◉</Text>
-      </View>
+      {showAvatar ? (
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>◉</Text>
+        </View>
+      ) : null}
     </View>
   );
 }

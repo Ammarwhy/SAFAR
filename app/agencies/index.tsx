@@ -53,30 +53,30 @@ const styles = StyleSheet.create({
 	body: { marginTop: spacing.xs, marginBottom: spacing.md, color: colors.textMuted, lineHeight: 20 },
 	ctaCard: {
 		marginTop: spacing.md,
-		backgroundColor: "#EFE4D1",
+		backgroundColor: colors.primaryBlue,
 		borderRadius: 16,
 		padding: spacing.md,
 	},
 	ctaTitle: {
-		color: colors.primaryBlue,
+		color: colors.cardWhite,
 		fontSize: 18,
 		fontWeight: "700",
 	},
 	ctaBody: {
-		color: colors.textDark,
+		color: colors.cardWhite,
 		marginTop: 6,
 		lineHeight: 20,
 	},
 	outlineButton: {
 		marginTop: spacing.sm,
 		borderWidth: 1,
-		borderColor: colors.primaryBlue,
+		borderColor: colors.cardWhite,
 		borderRadius: 999,
 		paddingVertical: 11,
 		alignItems: "center",
 	},
 	outlineText: {
-		color: colors.primaryBlue,
+		color: colors.cardWhite,
 		fontWeight: "700",
 	},
 });

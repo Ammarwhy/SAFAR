@@ -80,18 +80,18 @@ const styles = StyleSheet.create({
 	sectionTitle: { marginTop: spacing.md, marginBottom: spacing.sm, color: colors.primaryBlue, fontWeight: "700", fontSize: 20 },
 	settleCard: {
 		marginTop: spacing.sm,
-		backgroundColor: "#EFE4D1",
+		backgroundColor: colors.primaryBlue,
 		borderRadius: radius.lg,
 		padding: spacing.md,
 	},
-	settleTitle: { color: colors.primaryBlue, fontWeight: "700", fontSize: 18 },
-	settleBody: { color: colors.textDark, marginTop: 6, lineHeight: 20 },
+	settleTitle: { color: colors.cardWhite, fontWeight: "700", fontSize: 18 },
+	settleBody: { color: colors.cardWhite, marginTop: 6, lineHeight: 20 },
 	settleButton: {
 		marginTop: spacing.sm,
-		backgroundColor: colors.primaryBlue,
+		backgroundColor: colors.cardWhite,
 		borderRadius: 999,
 		paddingVertical: 11,
 		alignItems: "center",
 	},
-	settleButtonText: { color: colors.cardWhite, fontWeight: "700" },
+	settleButtonText: { color: colors.primaryBlue, fontWeight: "700" },
 });

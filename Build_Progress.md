@@ -328,3 +328,71 @@ Current primary testing workflow: Web variant via `npx expo start --web --clear`
 
 ### Core Idea
 - Freeze the product surface first (prototype-faithful front-end), then attach data/state systems to each finalized screen in a second pass.
+
+---
+
+## Entry 009 — 2026-04-21
+
+### Goal
+- Complete the next prototype screens, stabilize shared layout utilities, migrate the UI to the parchment + rich mahogany palette, and synchronize all project documentation with the latest implementation state.
+
+### Changes Made
+- Implemented and integrated additional screen-level UIs:
+	- Auth Splash redesign (`app/(auth)/index.tsx`)
+	- Auth Login redesign with validation/error/loading states (`app/(auth)/login.tsx`)
+	- Explore Discover Hub redesign (`app/(tabs)/explore/index.tsx`)
+	- Match Discovery redesign (`app/(tabs)/community/index.tsx`)
+	- Profile & Settings redesign (`app/(tabs)/profile/index.tsx`)
+- Added/updated shared support pieces:
+	- Added unified theme file `constants/Theme.ts` (Colors, Typography, Spacing, Radius, Shadow)
+	- Added `MOCK_EXPLORE`, `MOCK_MATCHES`, and `MOCK_USER` in `constants/mockData.ts`
+	- Added `components/layouts/SafarHeader.tsx` and `components/layouts/BottomTabBar.tsx`
+	- Enhanced `BottomTabBar` to auto-highlight based on current route
+	- Enhanced `SafarHeader` with optional `showAvatar` prop
+- Applied color-system migration:
+	- Global background switched to parchment `#EEEDE9`
+	- Primary/accent switched to rich mahogany `#371B17`
+	- Removed remaining yellow/gold/tan visual accents from major components and CTA surfaces
+	- Replaced legacy hardcoded palette values in affected screens/layout containers
+- Fixed runtime issue found during debug run:
+	- Resolved unterminated string constant in `app/(tabs)/community/index.tsx`
+- Updated all project documentation files to reflect the new screen state and design-system direction.
+
+### Files Changed
+- `app/(auth)/index.tsx`
+- `app/(auth)/login.tsx`
+- `app/(tabs)/explore/index.tsx`
+- `app/(tabs)/community/index.tsx`
+- `app/(tabs)/profile/index.tsx`
+- `app/(tabs)/journeys/collection.tsx`
+- `app/(tabs)/journeys/[tripId]/expense.tsx`
+- `app/(tabs)/journeys/[tripId]/itinerary.tsx`
+- `app/agencies/index.tsx`
+- `app/agencies/[agencyId].tsx`
+- `app/_layout.tsx`
+- `components/layouts/SafarHeader.tsx`
+- `components/layouts/BottomTabBar.tsx`
+- `constants/Theme.ts`
+- `constants/colors.ts`
+- `constants/mockData.ts`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+
+### Verification
+- Ran workspace diagnostics on all edited TS/TSX files: no reported errors.
+- Restarted Expo web (`npx expo start --web --clear`) multiple times during implementation/debug cycle.
+- Confirmed no blocking startup/runtime errors after fixes; only non-blocking Expo package compatibility warnings remained.
+
+### Known Issues / Follow-ups
+- `tsconfig` warning/error around `ignoreDeprecations` remains a separate pre-existing tooling concern.
+- Expo dependency compatibility warnings remain; can be resolved by aligning package versions with `npx expo install` recommendations.
+- Backend/data wiring and realtime behavior are still pending for full functional completion.
+
+### Reasoning
+- The team required high-fidelity prototype conversion first, so we prioritized screen contracts, shared component consistency, and unified theme tokens before backend integration.
+
+### Core Idea
+- Establish one authoritative visual language (token-driven parchment + mahogany system) and one reusable layout pattern, then layer business logic onto stable UI contracts.

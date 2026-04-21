@@ -5,7 +5,13 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Shared UI component layer has been implemented and core screens have been updated for prototype-first frame alignment with mobile-style web viewport rendering (see Entry 008 in `Build_Progress.md`).
+Current implementation status note: Shared UI component layer plus additional core screen rewrites are now in place, with palette migration to parchment (`#EEEDE9`) + rich mahogany (`#371B17`) and mobile-style web viewport rendering (see Entry 009 in `Build_Progress.md`).
+
+### Latest Checkpoint (Entry 009)
+- What changed: Splash, Login, Explore, Match Discovery, and Profile were updated to the latest frame style; `SafarHeader` and route-aware `BottomTabBar` were added; mock datasets were expanded (`MOCK_EXPLORE`, `MOCK_MATCHES`, `MOCK_USER`); color tokens were migrated to parchment + rich mahogany.
+- Why it changed: Prototype parity and color-system consistency were required before backend/realtime wiring.
+- How verified: Diagnostics on edited files returned no errors; Expo web startup was re-run and reported no blocking runtime failures.
+- Core idea: Use token-driven design and reusable screen scaffolding to lock visual contracts before data/state integration.
 
 ---
 
@@ -100,7 +106,7 @@ safar/
 │   │   ├── ChatBubble.tsx        # Vibe room message bubble
 │   │   └── OfflineBanner.tsx     # Offline mode indicator
 │   └── layouts/
-│       └── HeritageHeader.tsx    # Gold top bar (logo + avatar)
+│       └── HeritageHeader.tsx    # Rich mahogany top bar (logo + avatar)
 ├── lib/
 │   ├── supabase.ts               # Supabase client config
 │   ├── matchEngine.ts            # MatchEngine scoring algorithm
@@ -438,14 +444,14 @@ function getSettlementSummary(balances: Record<string, number>, currentUserId: s
 ```tsx
 // Uses react-native-gifted-charts RadarChart or victory-native VictoryRadar
 // 6 axes: Heritage, Culinary, Urban, Nature, Adventure, Relaxation
-// Two datasets: current user (filled blue), match candidate (outline dashed)
+// Two datasets: current user (filled rich mahogany), match candidate (outline dashed)
 // Used in: Profile (GUI-08), Match Discovery (GUI-07)
 ```
 
 ### 3. HeritageHeader
 ```tsx
 // components/layouts/HeritageHeader.tsx
-// Gold/tan bar (#C8A96E background)
+// Rich mahogany bar (#371B17 background)
 // Left: temple icon + "Heritage" italic text
 // Right: profile avatar circle (or search icon)
 // Used on every screen
@@ -462,7 +468,7 @@ function getSettlementSummary(balances: Record<string, number>, currentUserId: s
 ### 5. ChatBubble
 ```tsx
 // Left-aligned (others): white card, sender name above in small text
-// Right-aligned (me): blue (#1A3A6E) card, no name
+// Right-aligned (me): rich mahogany (#371B17) card, no name
 // Supports: Text, Image (rounded), and system messages
 ```
 
@@ -587,7 +593,7 @@ Modals:
 
 2. **Expo over bare React Native:** Expo's managed workflow gives GPS, camera, notifications, and SQLite without native setup. Critical for deadline.
 
-3. **NativeWind for styling:** Write `className="bg-[#1A3A6E] rounded-2xl p-4"` instead of `StyleSheet.create()`. Much faster iteration.
+3. **NativeWind for styling:** Write `className="bg-[#371B17] rounded-2xl p-4"` instead of `StyleSheet.create()`. Much faster iteration.
 
 4. **Zustand over Redux:** No boilerplate. `const useAuthStore = create(set => ({ user: null, setUser: (u) => set({ user: u }) }))`. Done.
 

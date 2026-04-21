@@ -76,25 +76,25 @@ const styles = StyleSheet.create({
 	title: { marginTop: spacing.md, fontSize: 28, fontWeight: "700", color: colors.primaryBlue },
 	cardWrap: { marginBottom: spacing.md },
 	ctaCard: {
-		backgroundColor: "#EFE4D1",
+		backgroundColor: colors.primaryBlue,
 		borderRadius: 16,
 		padding: spacing.md,
 		marginTop: spacing.sm,
 	},
 	ctaTitle: {
-		color: colors.primaryBlue,
+		color: colors.cardWhite,
 		fontSize: 18,
 		fontWeight: "700",
 		marginBottom: spacing.sm,
 	},
 	ctaButton: {
-		backgroundColor: colors.primaryBlue,
+		backgroundColor: colors.cardWhite,
 		paddingVertical: 11,
 		borderRadius: 999,
 		alignItems: "center",
 	},
 	ctaButtonText: {
-		color: colors.cardWhite,
+		color: colors.primaryBlue,
 		fontWeight: "700",
 	},
 });

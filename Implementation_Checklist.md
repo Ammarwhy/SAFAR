@@ -8,7 +8,7 @@ All markdown updates must include reasoning, verification, and core idea—not o
 
 Primary active testing mode: web variant with `npx expo start --web --clear`.
 
-Latest completed UI milestone: Entry 007 in `Build_Progress.md`.
+Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 
 - Build in small, testable slices.
 - Never move to the next slice until the current slice runs without runtime/type errors.
@@ -123,10 +123,10 @@ Latest completed UI milestone: Entry 007 in `Build_Progress.md`.
 
 ## Latest Notes (2026-04-21)
 
-- What changed: We performed a prototype-first UI pass and aligned core screens to PRD frame copy/layout, including a mobile-like web viewport shell.
-- Why it changed: The team requested strict visual parity before backend wiring.
-- How verified: Workspace diagnostics run with no reported errors.
-- Core idea: Lock screen structure first, then attach data/realtime logic in the next phase.
+- What changed: Implemented additional core screens (Splash, Login, Explore, Matches, Profile), added shared `SafarHeader` + `BottomTabBar`, expanded mock data, and migrated major UI surfaces to parchment (`#EEEDE9`) + rich mahogany (`#371B17`).
+- Why it changed: We needed prototype-faithful visuals and one unified palette system before wiring backend state.
+- How verified: Diagnostics were run on edited files with no reported errors; Expo web startup was tested after fixes with no blocking runtime issues.
+- Core idea: Keep the interface token-driven and component-first so future backend/realtime work plugs into a stable, consistent visual contract.
 
 ## Phase 6 — Offline & Reliability Hardening
 

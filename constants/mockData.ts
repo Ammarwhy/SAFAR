@@ -129,6 +129,17 @@ export type MockTraveler = {
 	personaDNA: { label: string; value: number; side: string }[];
 };
 
+export type MockAgency = {
+	id: string;
+	name: string;
+	region: string;
+	rating: number;
+	heroImage: string;
+	startingPrice: number;
+	description?: string;
+	avatars?: string[];
+};
+
 export const destinations: Destination[] = [
 	{
 		id: "samarkand",
@@ -462,3 +473,45 @@ export const MOCK_TRAVELER: MockTraveler = {
 		{ label: "Planning", value: 81, side: "Structured" },
 	],
 };
+
+export const MOCK_AGENCIES: MockAgency[] = [
+	{
+		id: "atlas-nomad-co",
+		name: "Atlas Nomad Co.",
+		region: "Gilgit-Baltistan",
+		rating: 4.9,
+		heroImage:
+			"https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1200&q=80",
+		startingPrice: 185000,
+		description: "Altitude-focused expeditions with veteran local guides and small curated groups.",
+		avatars: [
+			"https://i.pravatar.cc/80?img=12",
+			"https://i.pravatar.cc/80?img=22",
+			"https://i.pravatar.cc/80?img=32",
+		],
+	},
+	{
+		id: "silk-route-collective",
+		name: "Silk Route Collective",
+		region: "Skardu & Hunza",
+		rating: 4.8,
+		heroImage:
+			"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+		startingPrice: 162000,
+		description: "Story-led journeys across heritage corridors with culture-first itinerary design.",
+		avatars: [
+			"https://i.pravatar.cc/80?img=4",
+			"https://i.pravatar.cc/80?img=14",
+			"https://i.pravatar.cc/80?img=24",
+		],
+	},
+	{
+		id: "dune-to-peak-travel",
+		name: "Dune to Peak Travel",
+		region: "Northern Pakistan",
+		rating: 4.7,
+		heroImage:
+			"https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=1200&q=80",
+		startingPrice: 149000,
+	},
+];

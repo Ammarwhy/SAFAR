@@ -1,82 +1,131 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import FrameBottomNav from "@/components/layouts/FrameBottomNav";
-import HeritageHeader from "@/components/layouts/HeritageHeader";
-import AgencyCard from "@/components/ui/AgencyCard";
-import { colors, spacing } from "@/constants/colors";
-import { agencies } from "@/constants/agencies";
+import React from "react";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
+import { MOCK_AGENCIES } from "../../constants/mockData";
+import SafarHeader from "../../components/layouts/SafarHeader";
+import BottomTabBar from "../../components/layouts/BottomTabBar";
 
 export default function AgenciesScreen() {
+	const router = useRouter();
+
 	return (
-		<ScrollView style={styles.container} contentContainerStyle={styles.content}>
-			<HeritageHeader title="THE CURATED SELECTION" subtitle="Agencies" />
-			<Text style={styles.title}>Master Curators of the Silk Road</Text>
-			<Text style={styles.body}>
-				We have partnered with the world's most distinguished travel agencies to provide unparalleled access to historical landmarks and hidden cultural gems.
-			</Text>
-
-			{agencies.map((agency) => (
-				<AgencyCard
-					key={agency.id}
-					name={agency.name}
-					year={agency.year}
-					specialty={agency.specialty}
-					imageUri={agency.imageUri}
-				/>
-			))}
-
-			<View style={styles.ctaCard}>
-				<Text style={styles.ctaTitle}>Are you a custodian of history?</Text>
-				<Text style={styles.ctaBody}>
-					Join our exclusive network of certified travel agencies and showcase your expertise.
-				</Text>
-				<View style={styles.outlineButton}>
-					<Text style={styles.outlineText}>APPLY FOR CERTIFICATION</Text>
+		<SafeAreaView style={styles.safe}>
+			<SafarHeader />
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<View style={styles.titleSection}>
+					<Text style={styles.super}>CURATION</Text>
+					<Text style={styles.pageTitle}>Agencies</Text>
 				</View>
-			</View>
 
-			<FrameBottomNav
-				items={[
-					{ label: "Explore Routes" },
-					{ label: "Agencies", active: true },
-					{ label: "Concierge" },
-					{ label: "Profile" },
-				]}
-			/>
-		</ScrollView>
+				{MOCK_AGENCIES.map((agency) => (
+					<TouchableOpacity
+						key={agency.id}
+						style={styles.agencyCard}
+						onPress={() => router.push(`/agencies/${agency.id}`)}
+						activeOpacity={0.88}
+					>
+						<View style={styles.imgWrap}>
+							<Image source={{ uri: agency.heroImage }} style={styles.heroImg} />
+							<View style={styles.ratingBadge}>
+								<Text style={styles.ratingStar}>★</Text>
+								<Text style={styles.ratingScore}>{agency.rating}</Text>
+							</View>
+						</View>
+
+						<View style={styles.cardBody}>
+							<View style={styles.cardRow}>
+								<View style={styles.cardLeft}>
+									<Text style={styles.agencyName}>{agency.name}</Text>
+									<View style={styles.regionRow}>
+										<Text style={styles.regionPin}>📍</Text>
+										<Text style={styles.regionText}>{agency.region}</Text>
+									</View>
+								</View>
+								<View style={styles.priceWrap}>
+									<Text style={styles.priceLabel}>STARTING AT</Text>
+									<Text style={styles.priceVal}>PKR {(agency.startingPrice / 1000).toFixed(0)}K</Text>
+								</View>
+							</View>
+
+							{agency.description && <Text style={styles.agencyDesc}>{agency.description}</Text>}
+
+							{agency.avatars && (
+								<View style={styles.cardFooter}>
+									<View style={styles.avatarStrip}>
+										{agency.avatars.map((uri, i) => (
+											<Image
+												key={i}
+												source={{ uri }}
+												style={[styles.stripAvatar, { marginLeft: i > 0 ? -8 : 0 }]}
+											/>
+										))}
+									</View>
+									<Text style={styles.fullPrice}>
+										PKR {(agency.startingPrice / 1000).toFixed(0)}K
+										<Text style={styles.perHead}>/per head</Text>
+									</Text>
+								</View>
+							)}
+						</View>
+					</TouchableOpacity>
+				))}
+
+				<View style={{ height: 20 }} />
+			</ScrollView>
+			<BottomTabBar />
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: colors.backgroundCream },
-	content: { padding: spacing.md, paddingBottom: spacing.xl },
-	title: { marginTop: spacing.lg, fontSize: 26, fontWeight: "700", color: colors.primaryBlue },
-	body: { marginTop: spacing.xs, marginBottom: spacing.md, color: colors.textMuted, lineHeight: 20 },
-	ctaCard: {
-		marginTop: spacing.md,
-		backgroundColor: colors.primaryBlue,
-		borderRadius: 16,
-		padding: spacing.md,
+	safe: { flex: 1, backgroundColor: Colors.bg },
+	titleSection: { paddingHorizontal: Spacing.screen, paddingTop: 8, paddingBottom: 12 },
+	super: { ...Typography.label, color: Colors.textMuted, marginBottom: 2 },
+	pageTitle: { ...Typography.h1, color: Colors.textPrimary, fontSize: 36, fontWeight: "800" },
+
+	agencyCard: {
+		marginHorizontal: Spacing.screen,
+		marginBottom: 16,
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.xl,
+		overflow: "hidden",
+		...Shadow.md,
 	},
-	ctaTitle: {
-		color: colors.cardWhite,
-		fontSize: 18,
-		fontWeight: "700",
-	},
-	ctaBody: {
-		color: colors.cardWhite,
-		marginTop: 6,
-		lineHeight: 20,
-	},
-	outlineButton: {
-		marginTop: spacing.sm,
-		borderWidth: 1,
-		borderColor: colors.cardWhite,
-		borderRadius: 999,
-		paddingVertical: 11,
+	imgWrap: { position: "relative" },
+	heroImg: { width: "100%", height: 200 },
+	ratingBadge: {
+		position: "absolute",
+		top: 12,
+		right: 12,
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.full,
+		paddingHorizontal: 10,
+		paddingVertical: 5,
+		flexDirection: "row",
 		alignItems: "center",
+		gap: 4,
+		...Shadow.sm,
 	},
-	outlineText: {
-		color: colors.cardWhite,
-		fontWeight: "700",
-	},
+	ratingStar: { color: Colors.match, fontSize: 13 },
+	ratingScore: { ...Typography.h4, color: Colors.textPrimary, fontSize: 14 },
+
+	cardBody: { padding: 14 },
+	cardRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 },
+	cardLeft: { flex: 1 },
+	agencyName: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 4 },
+	regionRow: { flexDirection: "row", alignItems: "center", gap: 3 },
+	regionPin: { fontSize: 12 },
+	regionText: { ...Typography.bodyMd, color: Colors.textSecondary },
+	priceWrap: { alignItems: "flex-end" },
+	priceLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 9, marginBottom: 2 },
+	priceVal: { ...Typography.h4, color: Colors.textPrimary },
+
+	agencyDesc: { ...Typography.bodyMd, color: Colors.textSecondary, lineHeight: 20, marginBottom: 10 },
+
+	cardFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+	avatarStrip: { flexDirection: "row", alignItems: "center" },
+	stripAvatar: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: Colors.bgCard },
+	fullPrice: { ...Typography.h4, color: Colors.textPrimary },
+	perHead: { ...Typography.bodyMd, color: Colors.textSecondary, fontWeight: "400" },
 });

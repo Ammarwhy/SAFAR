@@ -51,6 +51,84 @@ export type MockUser = {
 	isFaceIDEnabled: boolean;
 };
 
+export type MockTrip = {
+	id: string;
+	title: string;
+	destination: string;
+	heroImage: string;
+	dates: string;
+	daysLeft: number;
+	year: string;
+	subtitle: string;
+	hotel: string;
+	stops: number;
+};
+
+export type MockJourney = {
+	id: string;
+	title: string;
+	status: string;
+	heroImage: string;
+	dates: string;
+	destination: string;
+	distanceKM?: number;
+	gearAdvisory: string;
+	visaUpdate: string;
+};
+
+export type MockExpenseItem = {
+	id: string;
+	name: string;
+	paidBy: string;
+	category: string;
+	amount: number;
+	split: string;
+	icon: string;
+};
+
+export type MockExpenses = {
+	tripTitle: string;
+	totalGroupSpend: number;
+	yourBalance: number;
+	pendingSettlements: number;
+	items: MockExpenseItem[];
+};
+
+export type MockVibeMessage = {
+	id: string;
+	sender: string;
+	avatar: string;
+	text: string;
+	time: string;
+	isMine: boolean;
+	type: "text" | "poll" | "image";
+	poll?: {
+		question: string;
+		options: { label: string; votes: number }[];
+	};
+	imageUrl?: string;
+};
+
+export type MockTraveler = {
+	curationNo: string;
+	name: string;
+	bio: string;
+	avatar: string;
+	destinations: number;
+	passportAge: string;
+	travelStyle: string;
+	pace: string;
+	manifesto: string;
+	tags: string[];
+	currentCity: string;
+	latestFind: {
+		image: string;
+		title: string;
+		subtitle: string;
+	};
+	personaDNA: { label: string; value: number; side: string }[];
+};
+
 export const destinations: Destination[] = [
 	{
 		id: "samarkand",
@@ -196,4 +274,191 @@ export const MOCK_USER: MockUser = {
 	followers: 8200,
 	is2FAEnabled: true,
 	isFaceIDEnabled: false,
+};
+
+export const MOCK_TRIPS: MockTrip[] = [
+	{
+		id: "karakoram-expedition",
+		title: "Karakoram Expedition",
+		destination: "Hunza Valley",
+		heroImage:
+			"https://images.unsplash.com/photo-1615897577435-47d898f65f97?auto=format&fit=crop&w=1200&q=80",
+		dates: "12–19 May 2026",
+		daysLeft: 12,
+		year: "2026",
+		subtitle: "Upcoming summit route",
+		hotel: "Eagle Nest Resort",
+		stops: 6,
+	},
+	{
+		id: "murree-retreat",
+		title: "Murree Retreat",
+		destination: "Murree",
+		heroImage:
+			"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+		dates: "08–11 Jan 2025",
+		daysLeft: 0,
+		year: "2025",
+		subtitle: "Pine valley winter trails",
+		hotel: "Pine Crest Lodge",
+		stops: 4,
+	},
+	{
+		id: "naran-valley",
+		title: "Naran Valley",
+		destination: "Kaghan",
+		heroImage:
+			"https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=900&q=80",
+		dates: "17–22 Jul 2024",
+		daysLeft: 0,
+		year: "2024",
+		subtitle: "Lakes, meadows and road diaries",
+		hotel: "Blue Peak Inn",
+		stops: 5,
+	},
+];
+
+export const MOCK_JOURNEYS: MockJourney[] = [
+	{
+		id: "karakoram-expedition",
+		title: "Karakoram Expedition",
+		status: "ACTIVE",
+		heroImage:
+			"https://images.unsplash.com/photo-1615897577435-47d898f65f97?auto=format&fit=crop&w=1200&q=80",
+		dates: "AUG 12 – AUG 28",
+		destination: "Gilgit-Baltistan",
+		distanceKM: 1240,
+		gearAdvisory: "Temperatures drop sharply after sunset. Add thermal base layers and high-altitude gloves.",
+		visaUpdate: "Visa route update: group clearances submitted. 3 approvals already confirmed.",
+	},
+	{
+		id: "annapurna-circuit",
+		title: "Annapurna Circuit",
+		status: "BOOKING",
+		heroImage:
+			"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+		dates: "SEP 04 – SEP 18",
+		destination: "Nepal",
+		gearAdvisory: "Monsoon shoulder season expected. Include rain shell and waterproof trail boots.",
+		visaUpdate: "Permit window opens in 5 days.",
+	},
+];
+
+export const MOCK_EXPENSES: MockExpenses = {
+	tripTitle: "Karakoram Expedition",
+	totalGroupSpend: 284500,
+	yourBalance: 12400,
+	pendingSettlements: 3,
+	items: [
+		{
+			id: "exp-1",
+			name: "Dinner at Eagle Nest",
+			paidBy: "Areeba",
+			category: "Dining",
+			amount: 18500,
+			split: "Split equally",
+			icon: "🍽",
+		},
+		{
+			id: "exp-2",
+			name: "Valley Transfer",
+			paidBy: "You",
+			category: "Transport",
+			amount: 46000,
+			split: "Split equally",
+			icon: "⛽",
+		},
+		{
+			id: "exp-3",
+			name: "Lodge Stay",
+			paidBy: "Zain",
+			category: "Stay",
+			amount: 92000,
+			split: "By room",
+			icon: "🛏",
+		},
+		{
+			id: "exp-4",
+			name: "Paragliding Session",
+			paidBy: "You",
+			category: "Activity",
+			amount: 28000,
+			split: "Only participants",
+			icon: "🧗",
+		},
+	],
+};
+
+export const MOCK_VIBE_MESSAGES: MockVibeMessage[] = [
+	{
+		id: "msg-1",
+		sender: "Areeba",
+		avatar: "https://i.pravatar.cc/80?img=5",
+		text: "Sunrise point confirmed. Meet at the hotel lobby by 5:10 AM.",
+		time: "09:12 AM",
+		isMine: false,
+		type: "text",
+	},
+	{
+		id: "msg-2",
+		sender: "You",
+		avatar: "",
+		text: "Perfect. I’ll bring the extra thermos for chai.",
+		time: "09:14 AM",
+		isMine: true,
+		type: "text",
+	},
+	{
+		id: "msg-3",
+		sender: "Zain",
+		avatar: "https://i.pravatar.cc/80?img=8",
+		text: "Vote for tomorrow’s post-hike stop.",
+		time: "09:20 AM",
+		isMine: false,
+		type: "poll",
+		poll: {
+			question: "Where should we stop after the ridge trail?",
+			options: [
+				{ label: "Altit Fort", votes: 46 },
+				{ label: "Baltit Cafe", votes: 34 },
+				{ label: "Duikar Viewpoint", votes: 20 },
+			],
+		},
+	},
+	{
+		id: "msg-4",
+		sender: "Maha",
+		avatar: "https://i.pravatar.cc/80?img=4",
+		text: "Captured this from yesterday’s pass ✨",
+		time: "09:32 AM",
+		isMine: false,
+		type: "image",
+		imageUrl: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=900&q=80",
+	},
+];
+
+export const MOCK_TRAVELER: MockTraveler = {
+	curationNo: "CURATION #118",
+	name: "Areeba Khan",
+	bio: "Route storyteller chasing mountain dawns, tea-house legends, and forgotten heritage lanes.",
+	avatar: "https://i.pravatar.cc/200?img=47",
+	destinations: 27,
+	passportAge: "8 Years",
+	travelStyle: "Slow + Heritage",
+	pace: "Balanced",
+	manifesto:
+		"Collect stories, not stamps. Every journey deserves local voices, patient mornings, and room for detours.",
+	tags: ["Heritage", "Tea Trails", "Photography", "High Altitude"],
+	currentCity: "Hunza, Pakistan",
+	latestFind: {
+		image: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1000&q=80",
+		title: "Eagle Nest Sunrise Point",
+		subtitle: "An early-hour ridge with panoramic Karakoram light.",
+	},
+	personaDNA: [
+		{ label: "Culture", value: 88, side: "Tradition" },
+		{ label: "Adventure", value: 74, side: "Thrill" },
+		{ label: "Comfort", value: 42, side: "Rustic" },
+		{ label: "Planning", value: 81, side: "Structured" },
+	],
 };

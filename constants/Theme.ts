@@ -7,6 +7,7 @@ export const Colors = {
   // Brand colors
   brand: "#371B17", // Rich mahogany primary
   accent: "#371B17", // Rich mahogany accent
+  brandLight: "#5B6BF5",
   
   // Background colors
   bg: "#EEEDE9", // Parchment background
@@ -21,6 +22,7 @@ export const Colors = {
   // Status colors
   error: "#B44747",
   success: "#2F6F5E",
+  match: "#5B6BF5",
   warning: "#A27245",
   danger: "#B44747", // Red error color
   dangerBg: "#F6E8E7", // Light red background

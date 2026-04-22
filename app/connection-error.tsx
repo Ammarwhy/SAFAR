@@ -1,49 +1,53 @@
-import { StyleSheet, Text, View } from "react-native";
-import { colors, radius, spacing } from "@/constants/colors";
+import React from "react";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Colors, Typography, Spacing, Radius, Shadow } from "../constants/Theme";
 
 export default function ConnectionErrorScreen() {
+	const router = useRouter();
 	return (
-		<View style={styles.container}>
-			<View style={styles.card}>
-				<Text style={styles.icon}>☁</Text>
-				<Text style={styles.title}>Sync Interrupted</Text>
-				<Text style={styles.body}>
-					Heritage sites often have weak signals. Your messages will be sent once we're back online.
-				</Text>
-				<View style={styles.button}>
-					<Text style={styles.buttonText}>TRY AGAIN</Text>
+		<SafeAreaView style={styles.safe}>
+			<View style={styles.container}>
+				<View style={styles.iconBox}>
+					<Text style={styles.icon}>🚫</Text>
 				</View>
-				<Text style={styles.link}>CHECK SAFETY KIT</Text>
+				<Text style={styles.title}>No Connection</Text>
+				<Text style={styles.desc}>
+					You seem to be offline. Your saved trips and expense ledger are still available. Reconnect to sync changes.
+				</Text>
+				<TouchableOpacity style={styles.retryBtn} onPress={() => router.back()}>
+					<Text style={styles.retryText}>Retry</Text>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={() => router.replace("/(tabs)/journeys")}>
+					<Text style={styles.offlineText}>Browse Offline Content</Text>
+				</TouchableOpacity>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: colors.backgroundCream,
-		padding: spacing.lg,
-		justifyContent: "center",
-	},
-	card: {
-		backgroundColor: colors.cardWhite,
-		borderRadius: radius.lg,
-		padding: spacing.lg,
-		borderWidth: 1,
-		borderColor: colors.borderSoft,
+	safe: { flex: 1, backgroundColor: Colors.bg },
+	container: { flex: 1, alignItems: "center", justifyContent: "center", padding: Spacing.lg },
+	iconBox: {
+		width: 80,
+		height: 80,
+		borderRadius: 20,
+		backgroundColor: Colors.dangerBg,
 		alignItems: "center",
+		justifyContent: "center",
+		marginBottom: 20,
 	},
-	icon: { fontSize: 42, color: colors.textMuted },
-	title: { marginTop: spacing.sm, color: colors.primaryBlue, fontSize: 28, fontWeight: "700" },
-	body: { marginTop: spacing.sm, color: colors.textMuted, textAlign: "center", lineHeight: 22 },
-	button: {
-		marginTop: spacing.md,
-		backgroundColor: colors.primaryBlue,
-		borderRadius: radius.pill,
-		paddingVertical: 11,
-		paddingHorizontal: spacing.xl,
+	icon: { fontSize: 36 },
+	title: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 10 },
+	desc: { ...Typography.body, color: Colors.textSecondary, textAlign: "center", lineHeight: 22, marginBottom: 28 },
+	retryBtn: {
+		backgroundColor: "#5B6BF5",
+		borderRadius: Radius.full,
+		paddingVertical: 14,
+		paddingHorizontal: 48,
+		marginBottom: 16,
 	},
-	buttonText: { color: colors.cardWhite, fontWeight: "700" },
-	link: { marginTop: spacing.sm, color: colors.textMuted, fontWeight: "600" },
+	retryText: { ...Typography.h4, color: "#fff" },
+	offlineText: { ...Typography.h4, color: "#5B6BF5" },
 });

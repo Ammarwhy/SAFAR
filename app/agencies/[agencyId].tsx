@@ -1,100 +1,272 @@
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import FrameBottomNav from "@/components/layouts/FrameBottomNav";
-import HeritageHeader from "@/components/layouts/HeritageHeader";
-import ArchCard from "@/components/ui/ArchCard";
-import { colors, radius, spacing } from "@/constants/colors";
+import React from "react";
+import {
+	Alert,
+	Image,
+	ImageBackground,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
+import { MOCK_AGENCY_DETAIL } from "../../constants/mockData";
+import BottomTabBar from "../../components/layouts/BottomTabBar";
 
-export default function AgencyProfileScreen() {
-	const { agencyId } = useLocalSearchParams<{ agencyId: string }>();
+function StarRow({ rating }: { rating: number }) {
+	return (
+		<View style={{ flexDirection: "row", gap: 2 }}>
+			{[1, 2, 3, 4, 5].map((i) => (
+				<Text key={i} style={{ color: i <= Math.round(rating) ? Colors.match : Colors.border, fontSize: 16 }}>
+					★
+				</Text>
+			))}
+		</View>
+	);
+}
+
+export default function AgencyDetailScreen() {
+	const router = useRouter();
+	useLocalSearchParams<{ agencyId: string }>();
+	const a = MOCK_AGENCY_DETAIL;
 
 	return (
-		<ScrollView style={styles.container} contentContainerStyle={styles.content}>
-			<HeritageHeader title="THE PREMIER COLLECTION" subtitle={(agencyId ?? "agency").toUpperCase()} />
-			<Text style={styles.title}>The Royal Curator</Text>
-			<Text style={styles.quote}>
-				"We do not merely plan journeys; we orchestrate temporal transitions into the heart of history."
-			</Text>
+		<SafeAreaView style={styles.safe}>
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<ImageBackground source={{ uri: a.heroImage }} style={styles.hero}>
+					<View style={styles.heroOverlay}>
+						<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+							<Text style={styles.backText}>←</Text>
+						</TouchableOpacity>
+						<View style={styles.heroContent}>
+							<Text style={styles.heroSuper}>FEATURED AGENCY</Text>
+							<Text style={styles.heroTitle}>{a.name}</Text>
+							<Text style={styles.heroTagline}>SCENIC TRAVEL DESTINATION</Text>
+						</View>
+					</View>
+				</ImageBackground>
 
-			<Text style={styles.heading}>Our Philosophy</Text>
-			<Text style={styles.body}>
-				Our practice blends narrative-led route design with deep heritage research to deliver journeys with context.
-			</Text>
+				<View style={styles.body}>
+					<View style={styles.ratingRow}>
+						<StarRow rating={a.rating} />
+						<Text style={styles.reviewCount}>
+							 {a.rating} ({a.reviewCount} reviews)
+						</Text>
+					</View>
 
-			<View style={styles.statBadge}>
-				<Text style={styles.statNumber}>12</Text>
-				<Text style={styles.statLabel}>UNESCO PARTNERS</Text>
-			</View>
+					<Text style={styles.sectionTitle}>Our Philosophy</Text>
+					<Text style={styles.philosophyText}>{a.philosophy}</Text>
 
-			<Text style={styles.heading}>Curated Itineraries</Text>
-			<ArchCard
-				imageUri="https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=900&q=80"
-				title="The Mughal Legacy"
-				subtitle="14 DAYS · NORTH INDIA"
-			/>
-			<View style={styles.cardGap} />
-			<ArchCard
-				imageUri="https://images.unsplash.com/photo-1606298855672-3efb63017be8?auto=format&fit=crop&w=900&q=80"
-				title="Vessels of Faith"
-				subtitle="10 DAYS · VARANASI"
-			/>
+					<View style={styles.certRow}>
+						<View style={styles.certCard}>
+							<View style={styles.certIconWrap}>
+								<Text style={styles.certIcon}>🌐</Text>
+							</View>
+							<View>
+								<Text style={styles.certLabel}>SPECIALIZATION</Text>
+								<Text style={styles.certVal}>{a.specialization}</Text>
+							</View>
+						</View>
+						<View style={styles.certCard}>
+							<View style={styles.certIconWrap}>
+								<Text style={styles.certIcon}>🛡</Text>
+							</View>
+							<View>
+								<Text style={styles.certLabel}>CERTIFIED</Text>
+								<Text style={styles.certVal}>{a.certification}</Text>
+							</View>
+						</View>
+					</View>
 
-			<View style={styles.ctaCard}>
-				<Text style={styles.ctaTitle}>Begin Your Personal Monograph</Text>
-				<View style={styles.primaryBtn}>
-					<Text style={styles.primaryText}>✉ Contact Agent</Text>
+					<Text style={styles.sectionTitle}>Featured Itineraries</Text>
+					{a.itineraries.map((it) => (
+						<TouchableOpacity key={it.id} style={styles.itineraryCard} activeOpacity={0.88}>
+							<Image source={{ uri: it.image }} style={styles.itineraryImg} />
+							<View style={styles.itineraryBody}>
+								<View style={styles.itineraryTitleRow}>
+									<Text style={styles.itineraryTitle}>{it.title}</Text>
+									<Text style={styles.itineraryPrice}>PKR {(it.price / 1000).toFixed(0)}K</Text>
+								</View>
+								<View style={styles.itineraryMeta}>
+									<Text style={styles.itineraryMetaText}>📅 {it.date}</Text>
+									<Text style={styles.itineraryMetaText}>  ⏱ {it.duration} Days</Text>
+								</View>
+								<View style={styles.tagsRow}>
+									{it.tags.map((tag) => (
+										<View key={tag} style={styles.tag}>
+											<Text style={styles.tagText}>{tag}</Text>
+										</View>
+									))}
+								</View>
+							</View>
+						</TouchableOpacity>
+					))}
+
+					<View style={styles.bookCard}>
+						<Text style={styles.bookPriceSuper}>STARTING FROM</Text>
+						<Text style={styles.bookPrice}>
+							PKR {(a.startingPrice / 1000).toFixed(0)}K
+							<Text style={styles.bookPriceSub}>/person</Text>
+						</Text>
+						<TouchableOpacity style={styles.bookBtn} onPress={() => Alert.alert("Booking", "Booking flow coming soon!")}>
+							<Text style={styles.bookBtnText}>Book Now</Text>
+						</TouchableOpacity>
+						<View style={styles.contactRow}>
+							<TouchableOpacity style={styles.contactBtn}>
+								<Text style={styles.contactBtnText}>💬  Contact</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.contactBtn}>
+								<Text style={styles.contactBtnText}>📞  Call Now</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+
+					<View style={styles.mapCard}>
+						<View style={styles.mapHeader}>
+							<Text style={styles.mapTitle}>Main Office</Text>
+							<Text style={styles.mapIcon}>🗺</Text>
+						</View>
+						<View style={styles.mapPlaceholder}>
+							<View style={styles.mapPin}>
+								<Text style={styles.mapPinText}>📍</Text>
+							</View>
+						</View>
+						<Text style={styles.mapAddress}>{a.officeAddress}</Text>
+					</View>
+
+					<View style={{ height: 20 }} />
 				</View>
-				<View style={styles.secondaryBtn}>
-					<Text style={styles.secondaryText}>Schedule a Call</Text>
-				</View>
-			</View>
-
-			<FrameBottomNav
-				items={[
-					{ label: "Compass" },
-					{ label: "People" },
-					{ label: "Person", active: true },
-					{ label: "Chat" },
-					{ label: "Profile" },
-				]}
-			/>
-		</ScrollView>
+			</ScrollView>
+			<BottomTabBar />
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: colors.backgroundCream },
-	content: { padding: spacing.md, paddingBottom: spacing.xl },
-	title: { marginTop: spacing.md, fontSize: 34, fontWeight: "700", color: colors.primaryBlue },
-	quote: { marginTop: spacing.sm, color: colors.textMuted, fontStyle: "italic", lineHeight: 22 },
-	heading: { marginTop: spacing.md, color: colors.primaryBlue, fontSize: 20, fontWeight: "700" },
-	body: { marginTop: 6, color: colors.textDark, lineHeight: 21 },
-	statBadge: {
-		marginTop: spacing.md,
-		backgroundColor: colors.primaryBlue,
-		borderRadius: radius.lg,
-		padding: spacing.md,
+	safe: { flex: 1, backgroundColor: Colors.bg },
+
+	hero: { height: 260, justifyContent: "flex-end" },
+	heroOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.35)", justifyContent: "space-between", padding: 16 },
+	backBtn: {
+		width: 38,
+		height: 38,
+		borderRadius: 19,
+		backgroundColor: "rgba(255,255,255,0.2)",
 		alignItems: "center",
+		justifyContent: "center",
 	},
-	statNumber: { color: colors.cardWhite, fontSize: 34, fontWeight: "700" },
-	statLabel: { color: colors.cardWhite, fontWeight: "700", letterSpacing: 1 },
-	cardGap: { height: spacing.sm },
-	ctaCard: {
-		marginTop: spacing.md,
-		backgroundColor: colors.primaryBlue,
-		borderRadius: radius.lg,
-		padding: spacing.md,
+	backText: { fontSize: 20, color: "#fff" },
+	heroContent: {},
+	heroSuper: { ...Typography.label, color: "rgba(255,255,255,0.75)", fontSize: 10, marginBottom: 4 },
+	heroTitle: { ...Typography.h1, color: "#fff", fontSize: 32, marginBottom: 4 },
+	heroTagline: { ...Typography.label, color: "rgba(255,255,255,0.65)", letterSpacing: 1.5 },
+
+	body: { paddingHorizontal: Spacing.screen, paddingTop: 16 },
+
+	ratingRow: { flexDirection: "row", alignItems: "center", marginBottom: 14 },
+	reviewCount: { ...Typography.bodyMd, color: Colors.textSecondary },
+
+	sectionTitle: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 8 },
+	philosophyText: { ...Typography.body, color: Colors.textSecondary, lineHeight: 22, marginBottom: 16 },
+
+	certRow: { gap: 10, marginBottom: 20 },
+	certCard: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 12,
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.lg,
+		padding: 14,
+		...Shadow.sm,
 	},
-	ctaTitle: { color: colors.cardWhite, fontSize: 18, fontWeight: "700", marginBottom: spacing.sm },
-	primaryBtn: { backgroundColor: colors.primaryBlue, borderRadius: 999, paddingVertical: 11, alignItems: "center" },
-	primaryText: { color: colors.cardWhite, fontWeight: "700" },
-	secondaryBtn: {
-		marginTop: spacing.sm,
+	certIconWrap: {
+		width: 40,
+		height: 40,
+		borderRadius: Radius.md,
+		backgroundColor: Colors.bgMuted,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	certIcon: { fontSize: 18 },
+	certLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
+	certVal: { ...Typography.h4, color: Colors.textPrimary },
+
+	itineraryCard: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.lg,
+		overflow: "hidden",
+		marginBottom: 12,
+		...Shadow.sm,
+	},
+	itineraryImg: { width: "100%", height: 150 },
+	itineraryBody: { padding: 12 },
+	itineraryTitleRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
+	itineraryTitle: { ...Typography.h4, color: Colors.textPrimary, flex: 1 },
+	itineraryPrice: { ...Typography.h4, color: Colors.textPrimary },
+	itineraryMeta: { flexDirection: "row", marginBottom: 8 },
+	itineraryMetaText: { ...Typography.caption, color: Colors.textSecondary },
+	tagsRow: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
+	tag: {
+		backgroundColor: Colors.bgMuted,
+		borderRadius: Radius.full,
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+	},
+	tagText: { ...Typography.label, color: Colors.textSecondary, fontSize: 9 },
+
+	bookCard: {
+		backgroundColor: Colors.brand,
+		borderRadius: Radius.xl,
+		padding: 20,
+		marginBottom: 12,
+	},
+	bookPriceSuper: { ...Typography.label, color: "rgba(255,255,255,0.65)", fontSize: 10, marginBottom: 4 },
+	bookPrice: { ...Typography.h1, color: "#fff", fontSize: 36, marginBottom: 14 },
+	bookPriceSub: { fontSize: 18, fontWeight: "400" },
+	bookBtn: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.full,
+		paddingVertical: 14,
+		alignItems: "center",
+		marginBottom: 10,
+	},
+	bookBtnText: { ...Typography.h4, color: Colors.brand },
+	contactRow: { flexDirection: "row", gap: 10 },
+	contactBtn: {
+		flex: 1,
 		borderWidth: 1,
-		borderColor: colors.cardWhite,
-		borderRadius: 999,
+		borderColor: "rgba(255,255,255,0.4)",
+		borderRadius: Radius.full,
 		paddingVertical: 11,
 		alignItems: "center",
 	},
-	secondaryText: { color: colors.cardWhite, fontWeight: "700" },
+	contactBtnText: { ...Typography.h4, color: "#fff", fontSize: 13 },
+
+	mapCard: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.lg,
+		overflow: "hidden",
+		marginBottom: 8,
+		...Shadow.sm,
+	},
+	mapHeader: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingHorizontal: 14,
+		paddingVertical: 12,
+	},
+	mapTitle: { ...Typography.h4, color: Colors.textPrimary },
+	mapIcon: { fontSize: 18 },
+	mapPlaceholder: {
+		height: 120,
+		backgroundColor: Colors.bgMuted,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	mapPin: {},
+	mapPinText: { fontSize: 36 },
+	mapAddress: { ...Typography.bodyMd, color: Colors.textSecondary, padding: 12, paddingTop: 8 },
 });

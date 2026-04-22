@@ -140,6 +140,30 @@ export type MockAgency = {
 	avatars?: string[];
 };
 
+export type MockAgencyItinerary = {
+	id: string;
+	title: string;
+	image: string;
+	price: number;
+	date: string;
+	duration: number;
+	tags: string[];
+};
+
+export type MockAgencyDetail = {
+	id: string;
+	name: string;
+	heroImage: string;
+	rating: number;
+	reviewCount: number;
+	philosophy: string;
+	specialization: string;
+	certification: string;
+	startingPrice: number;
+	officeAddress: string;
+	itineraries: MockAgencyItinerary[];
+};
+
 export const destinations: Destination[] = [
 	{
 		id: "samarkand",
@@ -515,3 +539,37 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		startingPrice: 149000,
 	},
 ];
+
+export const MOCK_AGENCY_DETAIL: MockAgencyDetail = {
+	id: "atlas-nomad-co",
+	name: "Atlas Nomad Co.",
+	heroImage: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1400&q=80",
+	rating: 4.9,
+	reviewCount: 268,
+	philosophy:
+		"We design expedition narratives that balance safety, altitude rhythm, and cultural depth so every route feels intentional and deeply local.",
+	specialization: "High Altitude Expeditions",
+	certification: "IATA + Local Tourism Board",
+	startingPrice: 185000,
+	officeAddress: "Old Fort Road, Karimabad, Hunza, Gilgit-Baltistan",
+	itineraries: [
+		{
+			id: "it-1",
+			title: "Hunza Heritage Traverse",
+			image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
+			price: 189000,
+			date: "12 Aug 2026",
+			duration: 8,
+			tags: ["Culture", "Scenic", "Moderate"],
+		},
+		{
+			id: "it-2",
+			title: "K2 Base Orientation Route",
+			image: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=1000&q=80",
+			price: 265000,
+			date: "03 Sep 2026",
+			duration: 12,
+			tags: ["Adventure", "Altitude", "Guided"],
+		},
+	],
+};

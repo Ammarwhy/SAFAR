@@ -1,61 +1,88 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import FrameBottomNav from "@/components/layouts/FrameBottomNav";
-import HeritageHeader from "@/components/layouts/HeritageHeader";
-import { colors, radius, spacing } from "@/constants/colors";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/Theme";
+import BottomTabBar from "../../../components/layouts/BottomTabBar";
 
 export default function NewJourneyScreen() {
+	const router = useRouter();
+	const [title, setTitle] = useState("");
+	const [dest, setDest] = useState("");
+	const [dates, setDates] = useState("");
+
 	return (
-		<ScrollView style={styles.container} contentContainerStyle={styles.content}>
-			<HeritageHeader title="CURATED JOURNEYS" subtitle="New Journey" />
-			<Text style={styles.title}>New Journey</Text>
-			<Text style={styles.caption}>Create a curated expedition with destination and date range.</Text>
+		<SafeAreaView style={styles.safe}>
+			<View style={styles.header}>
+				<TouchableOpacity onPress={() => router.back()}>
+					<Text style={styles.backText}>←</Text>
+				</TouchableOpacity>
+				<Text style={styles.headerTitle}>New Journey</Text>
+				<View style={{ width: 36 }} />
+			</View>
+			<ScrollView contentContainerStyle={styles.content}>
+				<Text style={styles.sectionLabel}>JOURNEY DETAILS</Text>
+				{[
+					{ label: "Journey Title", val: title, set: setTitle, placeholder: "e.g. Karakoram Expedition" },
+					{ label: "Destination", val: dest, set: setDest, placeholder: "e.g. Gilgit-Baltistan" },
+					{ label: "Travel Dates", val: dates, set: setDates, placeholder: "e.g. Aug 12 – Aug 28" },
+				].map((f) => (
+					<View key={f.label} style={styles.fieldGroup}>
+						<Text style={styles.fieldLabel}>{f.label}</Text>
+						<TextInput
+							style={styles.input}
+							placeholder={f.placeholder}
+							placeholderTextColor={Colors.textMuted}
+							value={f.val}
+							onChangeText={f.set}
+						/>
+					</View>
+				))}
 
-			<View style={styles.field}>
-				<Text style={styles.label}>Journey Title</Text>
-				<View style={styles.inputStub} />
-			</View>
-			<View style={styles.field}>
-				<Text style={styles.label}>Destination</Text>
-				<View style={styles.inputStub} />
-			</View>
-			<View style={styles.field}>
-				<Text style={styles.label}>Date Range</Text>
-				<View style={styles.inputStub} />
-			</View>
-
-			<FrameBottomNav
-				items={[
-					{ label: "Explore" },
-					{ label: "Journeys", active: true },
-					{ label: "Guild" },
-					{ label: "Messages" },
-					{ label: "Profile" },
-				]}
-			/>
-		</ScrollView>
+				<TouchableOpacity
+					style={styles.createBtn}
+					onPress={() => {
+						router.replace("/(tabs)/journeys");
+					}}
+				>
+					<Text style={styles.createBtnText}>Create Journey →</Text>
+				</TouchableOpacity>
+			</ScrollView>
+			<BottomTabBar />
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: { flex: 1, backgroundColor: colors.backgroundCream },
-	content: { padding: spacing.md, paddingBottom: spacing.xl },
-	title: { marginTop: spacing.md, fontSize: 30, fontWeight: "700", color: colors.primaryBlue },
-	caption: { marginTop: 8, color: colors.textMuted, marginBottom: spacing.md, lineHeight: 21 },
-	field: {
-		marginBottom: spacing.md,
-		backgroundColor: colors.cardWhite,
-		borderRadius: radius.lg,
-		padding: spacing.md,
-		borderWidth: 1,
-		borderColor: colors.borderSoft,
+	safe: { flex: 1, backgroundColor: Colors.bg },
+	header: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		paddingHorizontal: Spacing.screen,
+		paddingTop: 10,
+		paddingBottom: 8,
 	},
-	label: {
-		color: colors.primaryBlue,
-		fontWeight: "700",
-		marginBottom: spacing.sm,
+	backText: { fontSize: 22, color: Colors.textPrimary },
+	headerTitle: { ...Typography.h3, color: Colors.textPrimary },
+	content: { padding: Spacing.screen, gap: 4 },
+	sectionLabel: { ...Typography.label, color: Colors.textMuted, marginBottom: 12 },
+	fieldGroup: { marginBottom: 14 },
+	fieldLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 6 },
+	input: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.md,
+		paddingHorizontal: 14,
+		paddingVertical: 13,
+		...Typography.body,
+		color: Colors.textPrimary,
+		...Shadow.sm,
 	},
-	inputStub: {
-		height: 2,
-		backgroundColor: colors.borderSoft,
+	createBtn: {
+		backgroundColor: Colors.brand,
+		borderRadius: Radius.full,
+		paddingVertical: 16,
+		alignItems: "center",
+		marginTop: 12,
 	},
+	createBtnText: { ...Typography.h4, color: "#fff", fontSize: 16 },
 });

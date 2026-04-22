@@ -33,10 +33,16 @@ export default function MatchesScreen() {
           <Text style={styles.heroSuper}>ADVENTURE AWAITS</Text>
           <Text style={styles.heroTitle}>Your Potential{"\n"}Travel Partners</Text>
           <View style={styles.filterRow}>
-            <TouchableOpacity style={styles.filterBtn}>
+            <TouchableOpacity
+              style={styles.filterBtn}
+              onPress={() => router.push('/flows/community-filters')}
+            >
               <Text style={styles.filterBtnText}>⚙ Filters</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.personaTag}>
+            <TouchableOpacity
+              style={styles.personaTag}
+              onPress={() => router.push('/flows/community-persona')}
+            >
               <Text style={styles.personaTagText}>⛰ Mountain Seekers</Text>
             </TouchableOpacity>
           </View>

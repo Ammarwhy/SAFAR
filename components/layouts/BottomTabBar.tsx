@@ -9,19 +9,19 @@ export default function BottomTabBar() {
     : pathname.includes("/messages")
       ? "Messages"
       : pathname.includes("/community")
-        ? "People"
-        : pathname.includes("/explore")
-          ? "Search"
-          : "Compass";
+        ? "Community"
+        : pathname.includes("/explore") || pathname.includes("/traveler") || pathname.includes("/agencies")
+          ? "Explore"
+          : "Journeys";
 
   return (
     <FrameBottomNav
       items={[
-        { label: "Compass", active: activeLabel === "Compass" },
-        { label: "Search", active: activeLabel === "Search" },
-        { label: "People", active: activeLabel === "People" },
-        { label: "Messages", active: activeLabel === "Messages" },
-        { label: "Profile", active: activeLabel === "Profile" },
+        { label: "Explore", icon: "◇", href: "/(tabs)/explore", active: activeLabel === "Explore" },
+        { label: "Journeys", icon: "▣", href: "/(tabs)/journeys", active: activeLabel === "Journeys" },
+        { label: "Community", icon: "◌", href: "/(tabs)/community", active: activeLabel === "Community" },
+        { label: "Messages", icon: "✉", href: "/(tabs)/messages", active: activeLabel === "Messages" },
+        { label: "Profile", icon: "◉", href: "/(tabs)/profile", active: activeLabel === "Profile" },
       ]}
     />
   );

@@ -71,7 +71,10 @@ export default function JourneysScreen() {
             </View>
           </View>
           <Text style={styles.gearText}>{j1.gearAdvisory}</Text>
-          <TouchableOpacity style={styles.gearBtn}>
+          <TouchableOpacity
+            style={styles.gearBtn}
+            onPress={() => router.push('/flows/gear-list')}
+          >
             <Text style={styles.gearBtnText}>Check Gear List</Text>
           </TouchableOpacity>
         </View>
@@ -108,7 +111,7 @@ export default function JourneysScreen() {
           <Text style={styles.extendDesc}>
             Discover hidden tea houses in the Marsyangdi Valley, just 4 hours from your Annapurna route.
           </Text>
-          <TouchableOpacity style={styles.extendBtn}>
+          <TouchableOpacity style={styles.extendBtn} onPress={() => router.push('/(tabs)/explore')}>
             <Text style={styles.extendBtnText}>Explore Detours</Text>
           </TouchableOpacity>
         </View>

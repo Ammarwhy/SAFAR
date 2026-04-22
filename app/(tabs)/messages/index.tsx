@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import FrameBottomNav from "@/components/layouts/FrameBottomNav";
+import BottomTabBar from "@/components/layouts/BottomTabBar";
 import HeritageHeader from "@/components/layouts/HeritageHeader";
 import ChatBubble from "@/components/ui/ChatBubble";
 import { colors, spacing } from "@/constants/colors";
@@ -36,15 +36,7 @@ export default function MessagesScreen() {
         <Text style={styles.inputSend}>➤</Text>
       </View>
 
-      <FrameBottomNav
-        items={[
-          { label: "Explore" },
-          { label: "Journey" },
-          { label: "Peers" },
-          { label: "Chat", active: true },
-          { label: "Profile" },
-        ]}
-      />
+      <BottomTabBar />
     </ScrollView>
   );
 }

@@ -112,7 +112,10 @@ export default function LoginScreen() {
               onChangeText={setPassword}
               secureTextEntry
             />
-            <TouchableOpacity style={styles.forgotBtn}>
+            <TouchableOpacity
+              style={styles.forgotBtn}
+              onPress={() => router.push('/flows/forgot-password')}
+            >
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
@@ -148,7 +151,12 @@ export default function LoginScreen() {
         {/* Footer */}
         <Text style={styles.createRow}>
           Don't have an account?{'  '}
-          <Text style={styles.createLink}>Create Account</Text>
+          <Text
+            style={styles.createLink}
+            onPress={() => router.push('/flows/create-account')}
+          >
+            Create Account
+          </Text>
         </Text>
 
         <View style={styles.footer}>

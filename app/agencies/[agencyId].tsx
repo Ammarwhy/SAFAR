@@ -1,6 +1,5 @@
 import React from "react";
 import {
-	Alert,
 	Image,
 	ImageBackground,
 	SafeAreaView,
@@ -29,7 +28,7 @@ function StarRow({ rating }: { rating: number }) {
 
 export default function AgencyDetailScreen() {
 	const router = useRouter();
-	useLocalSearchParams<{ agencyId: string }>();
+	const { agencyId } = useLocalSearchParams<{ agencyId: string }>();
 	const a = MOCK_AGENCY_DETAIL;
 
 	return (
@@ -82,7 +81,12 @@ export default function AgencyDetailScreen() {
 
 					<Text style={styles.sectionTitle}>Featured Itineraries</Text>
 					{a.itineraries.map((it) => (
-						<TouchableOpacity key={it.id} style={styles.itineraryCard} activeOpacity={0.88}>
+						<TouchableOpacity
+							key={it.id}
+							style={styles.itineraryCard}
+							activeOpacity={0.88}
+							onPress={() => router.push(`/flows/agency-booking?name=${encodeURIComponent(it.title)}`)}
+						>
 							<Image source={{ uri: it.image }} style={styles.itineraryImg} />
 							<View style={styles.itineraryBody}>
 								<View style={styles.itineraryTitleRow}>
@@ -110,14 +114,20 @@ export default function AgencyDetailScreen() {
 							PKR {(a.startingPrice / 1000).toFixed(0)}K
 							<Text style={styles.bookPriceSub}>/person</Text>
 						</Text>
-						<TouchableOpacity style={styles.bookBtn} onPress={() => Alert.alert("Booking", "Booking flow coming soon!")}>
+						<TouchableOpacity style={styles.bookBtn} onPress={() => router.push(`/flows/agency-booking?name=${encodeURIComponent(a.name)}`)}>
 							<Text style={styles.bookBtnText}>Book Now</Text>
 						</TouchableOpacity>
 						<View style={styles.contactRow}>
-							<TouchableOpacity style={styles.contactBtn}>
+							<TouchableOpacity
+								style={styles.contactBtn}
+								onPress={() => router.push(`/flows/agency-contact?name=${encodeURIComponent(agencyId ?? a.name)}`)}
+							>
 								<Text style={styles.contactBtnText}>💬  Contact</Text>
 							</TouchableOpacity>
-							<TouchableOpacity style={styles.contactBtn}>
+							<TouchableOpacity
+								style={styles.contactBtn}
+								onPress={() => router.push(`/flows/agency-call?name=${encodeURIComponent(agencyId ?? a.name)}`)}
+							>
 								<Text style={styles.contactBtnText}>📞  Call Now</Text>
 							</TouchableOpacity>
 						</View>
@@ -144,7 +154,7 @@ export default function AgencyDetailScreen() {
 	);
 }
 
-const styles = StyleSheet.create({
+	const styles = StyleSheet.create({
 	safe: { flex: 1, backgroundColor: Colors.bg },
 
 	hero: { height: 260, justifyContent: "flex-end" },

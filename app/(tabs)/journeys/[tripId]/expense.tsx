@@ -62,7 +62,7 @@ export default function ExpenseScreen() {
 				<View style={styles.section}>
 					<View style={styles.sectionHeader}>
 						<Text style={styles.sectionTitle}>Recent Activity</Text>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => router.push('/flows/activity-history')}>
 							<Text style={styles.viewAllText}>VIEW ALL</Text>
 						</TouchableOpacity>
 					</View>

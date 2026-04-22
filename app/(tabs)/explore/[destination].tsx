@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import FrameBottomNav from "@/components/layouts/FrameBottomNav";
+import BottomTabBar from "@/components/layouts/BottomTabBar";
 import HeritageHeader from "@/components/layouts/HeritageHeader";
 import ArchCard from "@/components/ui/ArchCard";
 import { colors, spacing } from "@/constants/colors";
@@ -47,15 +47,7 @@ export default function DestinationDetailScreen() {
 				<Text style={styles.archiveText}>Forgotten Kingdoms</Text>
 			</View>
 
-			<FrameBottomNav
-				items={[
-					{ label: "Explore", active: true },
-					{ label: "Community" },
-					{ label: "People" },
-					{ label: "Messages" },
-					{ label: "Profile" },
-				]}
-			/>
+			<BottomTabBar />
 		</ScrollView>
 	);
 }

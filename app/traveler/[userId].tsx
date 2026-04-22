@@ -104,10 +104,13 @@ export default function TravelerProfileScreen() {
 				</View>
 
 				<View style={styles.ctaRow}>
-					<TouchableOpacity style={styles.connectBtn}>
+					<TouchableOpacity
+						style={styles.connectBtn}
+						onPress={() => router.push('/flows/community-persona')}
+					>
 						<Text style={styles.connectBtnText}>♥  Connect</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.msgBtn}>
+					<TouchableOpacity style={styles.msgBtn} onPress={() => router.push('/(tabs)/messages')}>
 						<Text style={styles.msgBtnText}>💬  Message</Text>
 					</TouchableOpacity>
 				</View>

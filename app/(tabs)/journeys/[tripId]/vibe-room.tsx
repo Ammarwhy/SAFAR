@@ -84,7 +84,7 @@ export default function VibeRoomScreen() {
 							<Text style={styles.pinnedTitle}>Karakoram Expedition</Text>
 							<Text style={styles.pinnedMeta}>14 Days • High Altitude</Text>
 						</View>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => router.push('/flows/vibe-map')}>
 							<Text style={styles.viewMapText}>VIEW MAP</Text>
 						</TouchableOpacity>
 					</View>
@@ -110,7 +110,10 @@ export default function VibeRoomScreen() {
 				</ScrollView>
 
 				<View style={styles.inputBar}>
-					<TouchableOpacity style={styles.attachBtn}>
+					<TouchableOpacity
+						style={styles.attachBtn}
+						onPress={() => router.push('/flows/attach-media')}
+					>
 						<Text style={styles.attachIcon}>⊕</Text>
 					</TouchableOpacity>
 					<TextInput
@@ -121,7 +124,10 @@ export default function VibeRoomScreen() {
 						onChangeText={setInput}
 						multiline
 					/>
-					<TouchableOpacity style={styles.emojiBtn}>
+					<TouchableOpacity
+						style={styles.emojiBtn}
+						onPress={() => router.push('/flows/emoji-reactions')}
+					>
 						<Text>🙂</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.sendBtn} onPress={sendMessage}>

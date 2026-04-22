@@ -4,6 +4,7 @@ import {
   Image, Switch, SafeAreaView, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_USER } from '../../../constants/mockData';
 import SafarHeader from '../../../components/layouts/SafarHeader';
@@ -15,28 +16,28 @@ export default function ProfileScreen() {
   const [isFaceID, setFaceID] = useState(MOCK_USER.isFaceIDEnabled);
 
   const handleLogout = () => {
-    Alert.alert('Log Out', 'Are you sure you want to log out of SAFAR?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Log Out', style: 'destructive', onPress: () => router.replace('/(auth)/login') },
-    ]);
+    router.push('/flows/logout-confirm');
   };
 
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader showAvatar={false} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.avatarSection}>
+        <Animated.View entering={FadeInDown.duration(420).springify()} style={styles.avatarSection}>
           <View style={styles.avatarWrap}>
             <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
-            <TouchableOpacity style={styles.editBadge}>
+            <TouchableOpacity
+              style={styles.editBadge}
+              onPress={() => router.push('/flows/profile-photo')}
+            >
               <Text style={styles.editIcon}>✏</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.name}>{MOCK_USER.name}</Text>
           <Text style={styles.title}>{MOCK_USER.title}</Text>
-        </View>
+        </Animated.View>
 
-        <View style={styles.statsCard}>
+        <Animated.View entering={FadeInUp.delay(70).springify()} style={styles.statsCard}>
           {[
             { val: MOCK_USER.countries, label: 'COUNTRIES' },
             { val: MOCK_USER.trips, label: 'TRIPS' },
@@ -50,34 +51,45 @@ export default function ProfileScreen() {
               </View>
             </React.Fragment>
           ))}
-        </View>
+        </Animated.View>
 
-        <View style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(110).springify()} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>ACCOUNT PREFERENCES</Text>
           {[
-            { icon: '👤', label: 'Personal Information' },
-            { icon: '💳', label: 'Payments & Payouts' },
+            {
+              icon: '👤',
+              label: 'Personal Information',
+              onPress: () => router.push('/flows/personal-info'),
+            },
+            {
+              icon: '💳',
+              label: 'Payments & Payouts',
+              onPress: () => router.push('/flows/payments-payouts'),
+            },
           ].map((item) => (
-            <TouchableOpacity key={item.label} style={styles.menuRow}>
+            <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
               <Text style={styles.menuIcon}>{item.icon}</Text>
               <Text style={styles.menuLabel}>{item.label}</Text>
               <Text style={styles.menuChevron}>›</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </Animated.View>
 
-        <View style={styles.membershipCard}>
+        <Animated.View entering={FadeInUp.delay(150).springify()} style={styles.membershipCard}>
           <Text style={styles.sectionLabel}>MEMBERSHIP</Text>
           <Text style={styles.membershipStatus}>Not Verified</Text>
           <Text style={styles.membershipDesc}>
             Get verified to enjoy personalized matching, vibe-based rooms, and exclusive stays.
           </Text>
-          <TouchableOpacity style={styles.verifyBtn}>
+          <TouchableOpacity
+            style={styles.verifyBtn}
+            onPress={() => router.push('/flows/verification')}
+          >
             <Text style={styles.verifyBtnText}>Verify</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(190).springify()} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>SECURITY</Text>
           <View style={styles.toggleRow}>
             <Text style={styles.toggleLabel}>Two-Factor</Text>
@@ -97,24 +109,30 @@ export default function ProfileScreen() {
               thumbColor="#fff"
             />
           </View>
-        </View>
+        </Animated.View>
 
-        <View style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(230).springify()} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>SUPPORT & TRANSPARENCY</Text>
           {[
-            { icon: '❓', label: 'Get Help' },
-            { icon: '📄', label: 'Privacy Policy' },
+            { icon: '❓', label: 'Get Help', onPress: () => router.push('/safety') },
+            {
+              icon: '📄',
+              label: 'Privacy Policy',
+              onPress: () => router.push('/flows/privacy-policy'),
+            },
           ].map((item) => (
-            <TouchableOpacity key={item.label} style={styles.menuRow}>
+            <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
               <Text style={styles.menuIcon}>{item.icon}</Text>
               <Text style={styles.menuLabel}>{item.label}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </Animated.View>
 
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+        <Animated.View entering={FadeInUp.delay(270).springify()}>
+          <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={styles.logoutText}>LOG OUT OF SAFAR</Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Animated.View>
 
         <Text style={styles.versionText}>VERSION 1.0.0 (ARCHES)</Text>
         <View style={{ height: 20 }} />

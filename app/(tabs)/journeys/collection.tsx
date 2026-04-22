@@ -53,7 +53,10 @@ export default function CollectionScreen() {
                 >
                   <Text style={styles.heroActionText}>View{'\n'}Itinerary</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.heroActionBtn, styles.heroActionDark]}>
+                <TouchableOpacity
+                  style={[styles.heroActionBtn, styles.heroActionDark]}
+                  onPress={() => router.push('/flows/manage-docs')}
+                >
                   <Text style={[styles.heroActionText, { color: '#fff' }]}>Manage{'\n'}Docs</Text>
                 </TouchableOpacity>
               </View>
@@ -83,7 +86,7 @@ export default function CollectionScreen() {
             </View>
             <View style={styles.archiveFooter}>
               <Text style={styles.stopsText}>{trip.stops} STOPS</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push(`/(tabs)/journeys/${trip.id}/itinerary`)}>
                 <Text style={styles.recallText}>Recall →</Text>
               </TouchableOpacity>
             </View>
@@ -96,7 +99,7 @@ export default function CollectionScreen() {
               <Text style={styles.draftsSuper}>IN PROGRESS</Text>
               <Text style={styles.draftsTitle}>Drafted{'\n'}Explorations</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/journeys/new-journey')}>
               <Text style={styles.seeAllDrafts}>SEE ALL{'\n'}DRAFTS</Text>
             </TouchableOpacity>
           </View>
@@ -106,7 +109,11 @@ export default function CollectionScreen() {
               { title: 'Andean Peaks', sub: 'PERU EXPEDITION', collab: true },
               { title: 'Namib Dunes', sub: 'DESERT ODYSSEY', collab: false },
             ].map((draft) => (
-              <TouchableOpacity key={draft.title} style={styles.draftCard}>
+              <TouchableOpacity
+                key={draft.title}
+                style={styles.draftCard}
+                onPress={() => router.push('/(tabs)/journeys/new-journey')}
+              >
                 <Text style={styles.draftTitle}>{draft.title}</Text>
                 <Text style={styles.draftSub}>{draft.sub}</Text>
                 {draft.collab && (

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Alert, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
 import SafarHeader from "../../components/layouts/SafarHeader";
 import BottomTabBar from "../../components/layouts/BottomTabBar";
@@ -37,27 +38,35 @@ const SAFETY_TOOLS = [
 ];
 
 export default function SafetyCenterScreen() {
-	useRouter();
+	const router = useRouter();
 	const [sosActive, setSosActive] = useState(false);
 	const [confirmModal, setConfirmModal] = useState(false);
 	const [countdown, setCountdown] = useState(5);
 	const [liveShare, setLiveShare] = useState(false);
+	const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+	const clearCountdown = () => {
+		if (countdownRef.current) {
+			clearInterval(countdownRef.current);
+			countdownRef.current = null;
+		}
+	};
+
+	useEffect(() => clearCountdown, []);
 
 	const handleSOSPress = () => {
+		clearCountdown();
+		setCountdown(5);
 		setConfirmModal(true);
 		let c = 5;
-		const interval = setInterval(() => {
+		countdownRef.current = setInterval(() => {
 			c -= 1;
 			setCountdown(c);
 			if (c <= 0) {
-				clearInterval(interval);
+				clearCountdown();
 				setConfirmModal(false);
 				setSosActive(true);
-				Alert.alert(
-					"🚨 SOS Activated",
-					"Emergency contacts and local authorities have been notified with your live location.",
-					[{ text: "Cancel SOS", onPress: () => setSosActive(false) }],
-				);
+				router.push('/flows/sos-activated');
 			}
 		}, 1000);
 	};
@@ -73,7 +82,7 @@ export default function SafetyCenterScreen() {
 					</Text>
 				</View>
 
-				<View style={[styles.sosCard, sosActive && styles.sosCardActive]}>
+				<Animated.View entering={FadeInDown.duration(420).springify()} style={[styles.sosCard, sosActive && styles.sosCardActive]}>
 					<View style={styles.sosTop}>
 						<View style={styles.sosBadge}>
 							<Text style={styles.sosBadgeIcon}>📡</Text>
@@ -92,15 +101,28 @@ export default function SafetyCenterScreen() {
 						<Text style={styles.sosBtnLabel}>SOS</Text>
 						<Text style={styles.sosBtnText}>{sosActive ? "TAP TO CANCEL SOS" : "ACTIVATE SOS"}</Text>
 					</TouchableOpacity>
-				</View>
+				</Animated.View>
 
 				<Text style={styles.toolsLabel}>ACTIVE SAFETY TOOLS</Text>
 				{SAFETY_TOOLS.map((tool) => (
+					<Animated.View key={tool.id} entering={FadeInUp.delay(60).springify()}>
 					<TouchableOpacity
 						key={tool.id}
 						style={styles.toolCard}
 						onPress={() => {
-							if (tool.id === "live") setLiveShare(!liveShare);
+							if (tool.id === "live") {
+								setLiveShare(!liveShare);
+								return;
+							}
+							if (tool.id === "checkin") {
+								router.push('/flows/safety-checkin');
+								return;
+							}
+							if (tool.id === "local") {
+								router.push('/flows/safety-local-services');
+								return;
+							}
+							router.push('/flows/safety-legal-help');
 						}}
 						activeOpacity={0.8}
 					>
@@ -113,9 +135,10 @@ export default function SafetyCenterScreen() {
 							</Text>
 						</View>
 					</TouchableOpacity>
+					</Animated.View>
 				))}
 
-				<View style={styles.reportCard}>
+				<Animated.View entering={FadeInUp.delay(220).springify()} style={styles.reportCard}>
 					<View style={styles.reportLeft}>
 						<Text style={styles.reportIcon}>⚠</Text>
 					</View>
@@ -124,14 +147,14 @@ export default function SafetyCenterScreen() {
 						<Text style={styles.reportDesc}>
 							Found a location that feels unsafe? Help the community by reporting it anonymously.
 						</Text>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => router.push('/flows/safety-report')}>
 							<Text style={styles.reportAction}>SUBMIT REPORT</Text>
 						</TouchableOpacity>
 					</View>
-				</View>
+				</Animated.View>
 
 				<Text style={styles.toolsLabel}>CURRENT LOCATION SAFETY</Text>
-				<View style={styles.safetyRatingCard}>
+				<Animated.View entering={FadeInUp.delay(260).springify()} style={styles.safetyRatingCard}>
 					<View style={styles.safetyRatingOverlay}>
 						<View style={styles.safetyRatingContent}>
 							<Text style={styles.safetyRatingCity}>MARRAKECH</Text>
@@ -156,7 +179,7 @@ export default function SafetyCenterScreen() {
 							</View>
 						))}
 					</View>
-				</View>
+				</Animated.View>
 
 				<View style={{ height: 20 }} />
 			</ScrollView>
@@ -174,6 +197,7 @@ export default function SafetyCenterScreen() {
 						<TouchableOpacity
 							style={styles.cancelSosBtn}
 							onPress={() => {
+								clearCountdown();
 								setConfirmModal(false);
 								setCountdown(5);
 							}}

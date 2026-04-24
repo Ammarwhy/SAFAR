@@ -12,6 +12,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../../constants/Theme";
 import { MOCK_VIBE_MESSAGES } from "../../../../constants/mockData";
@@ -52,7 +53,7 @@ export default function VibeRoomScreen() {
 			<KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
 				<View style={styles.header}>
 					<TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-						<Text style={styles.backText}>←</Text>
+						<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 					</TouchableOpacity>
 					<View style={styles.headerCenter}>
 						<Text style={styles.headerSuper}>ACTIVE SESSION</Text>
@@ -76,7 +77,7 @@ export default function VibeRoomScreen() {
 
 				<View style={styles.pinnedCard}>
 					<View style={styles.pinnedHeader}>
-						<Text style={styles.pinnedIcon}>📌</Text>
+						<Ionicons name="pin-outline" size={12} color={Colors.textMuted} />
 						<Text style={styles.pinnedLabel}>PINNED ITINERARY</Text>
 					</View>
 					<View style={styles.pinnedBody}>
@@ -114,7 +115,7 @@ export default function VibeRoomScreen() {
 						style={styles.attachBtn}
 						onPress={() => router.push('/flows/attach-media')}
 					>
-						<Text style={styles.attachIcon}>⊕</Text>
+						<Ionicons name="add-circle-outline" size={22} color={Colors.textSecondary} />
 					</TouchableOpacity>
 					<TextInput
 						style={styles.textInput}
@@ -128,10 +129,10 @@ export default function VibeRoomScreen() {
 						style={styles.emojiBtn}
 						onPress={() => router.push('/flows/emoji-reactions')}
 					>
-						<Text>🙂</Text>
+						<Ionicons name="happy-outline" size={22} color={Colors.textSecondary} />
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.sendBtn} onPress={sendMessage}>
-						<Text style={styles.sendIcon}>▶</Text>
+						<Ionicons name="send" size={16} color="#fff" />
 					</TouchableOpacity>
 				</View>
 
@@ -169,7 +170,7 @@ function TextBubble({ msg }: { msg: any }) {
 					<Text style={[bubbleStyles.text, msg.isMine && bubbleStyles.myText]}>{msg.text}</Text>
 				</View>
 				<Text style={[bubbleStyles.time, msg.isMine && bubbleStyles.myTime]}>
-					{msg.time} {msg.isMine && "✓✓"}
+					{msg.time} {msg.isMine && "✓"}
 				</Text>
 			</View>
 		</View>
@@ -185,7 +186,7 @@ function PollBubble({ msg }: { msg: any }) {
 				<Text style={bubbleStyles.senderName}>{msg.sender}</Text>
 				<View style={bubbleStyles.pollCard}>
 					<View style={bubbleStyles.pollHeader}>
-						<Text style={bubbleStyles.pollIcon}>📋</Text>
+						<Ionicons name="list-outline" size={16} color={Colors.textSecondary} />
 						<Text style={bubbleStyles.pollQuestion}>{msg.poll.question}</Text>
 					</View>
 					{msg.poll.options.map((opt: any, i: number) => (
@@ -237,7 +238,6 @@ const styles = StyleSheet.create({
 		gap: 10,
 	},
 	backBtn: { paddingTop: 4 },
-	backText: { fontSize: 22, color: Colors.textPrimary },
 	headerCenter: { flex: 1 },
 	headerSuper: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
 	headerTitle: { ...Typography.h1, color: Colors.textPrimary, lineHeight: 30 },
@@ -268,7 +268,6 @@ const styles = StyleSheet.create({
 		...Shadow.sm,
 	},
 	pinnedHeader: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 6 },
-	pinnedIcon: { fontSize: 12 },
 	pinnedLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 9 },
 	pinnedBody: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
 	pinnedTitle: { ...Typography.h4, color: Colors.textPrimary },
@@ -290,7 +289,6 @@ const styles = StyleSheet.create({
 		gap: 8,
 	},
 	attachBtn: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
-	attachIcon: { fontSize: 22, color: Colors.textSecondary },
 	textInput: {
 		flex: 1,
 		...Typography.body,
@@ -307,8 +305,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	sendIcon: { color: "#fff", fontSize: 14 },
-
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: "rgba(0,0,0,0.4)",
@@ -373,7 +369,6 @@ const bubbleStyles = StyleSheet.create({
 		...Shadow.sm,
 	},
 	pollHeader: { flexDirection: "row", gap: 8, alignItems: "center", marginBottom: 10 },
-	pollIcon: { fontSize: 16 },
 	pollQuestion: { ...Typography.h4, color: Colors.textPrimary },
 	pollOption: {
 		flexDirection: "row",

@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_USER } from '../../../constants/mockData';
 import SafarHeader from '../../../components/layouts/SafarHeader';
@@ -16,14 +17,14 @@ export default function ProfileScreen() {
   const [isFaceID, setFaceID] = useState(MOCK_USER.isFaceIDEnabled);
 
   const handleLogout = () => {
-    router.push('/flows/logout-confirm');
+    router.replace('/(auth)/index');
   };
 
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader showAvatar={false} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Animated.View entering={FadeInDown.duration(420).springify()} style={styles.avatarSection}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <Animated.View entering={FadeInDown.duration(280)} style={styles.avatarSection}>
           <View style={styles.avatarWrap}>
             <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
             <TouchableOpacity
@@ -37,7 +38,7 @@ export default function ProfileScreen() {
           <Text style={styles.title}>{MOCK_USER.title}</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(70).springify()} style={styles.statsCard}>
+        <Animated.View entering={FadeInUp.delay(70).duration(280)} style={styles.statsCard}>
           {[
             { val: MOCK_USER.countries, label: 'COUNTRIES' },
             { val: MOCK_USER.trips, label: 'TRIPS' },
@@ -53,29 +54,29 @@ export default function ProfileScreen() {
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(110).springify()} style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(110).duration(280)} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>ACCOUNT PREFERENCES</Text>
           {[
             {
-              icon: '👤',
+              ionName: 'person-outline',
               label: 'Personal Information',
               onPress: () => router.push('/flows/personal-info'),
             },
             {
-              icon: '💳',
+              ionName: 'card-outline',
               label: 'Payments & Payouts',
               onPress: () => router.push('/flows/payments-payouts'),
             },
           ].map((item) => (
             <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
-              <Text style={styles.menuIcon}>{item.icon}</Text>
+              <Ionicons name={item.ionName as any} size={18} color={Colors.textSecondary} style={{ width: 24 }} />
               <Text style={styles.menuLabel}>{item.label}</Text>
               <Text style={styles.menuChevron}>›</Text>
             </TouchableOpacity>
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(150).springify()} style={styles.membershipCard}>
+        <Animated.View entering={FadeInUp.delay(150).duration(280)} style={styles.membershipCard}>
           <Text style={styles.sectionLabel}>MEMBERSHIP</Text>
           <Text style={styles.membershipStatus}>Not Verified</Text>
           <Text style={styles.membershipDesc}>
@@ -89,7 +90,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(190).springify()} style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(190).duration(280)} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>SECURITY</Text>
           <View style={styles.toggleRow}>
             <Text style={styles.toggleLabel}>Two-Factor</Text>
@@ -111,24 +112,24 @@ export default function ProfileScreen() {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(230).springify()} style={styles.sectionCard}>
+        <Animated.View entering={FadeInUp.delay(230).duration(280)} style={styles.sectionCard}>
           <Text style={styles.sectionLabel}>SUPPORT & TRANSPARENCY</Text>
           {[
-            { icon: '❓', label: 'Get Help', onPress: () => router.push('/safety') },
+            { ionName: 'help-circle-outline', label: 'Get Help', onPress: () => router.push('/safety') },
             {
-              icon: '📄',
+              ionName: 'document-text-outline',
               label: 'Privacy Policy',
               onPress: () => router.push('/flows/privacy-policy'),
             },
           ].map((item) => (
             <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
-              <Text style={styles.menuIcon}>{item.icon}</Text>
+              <Ionicons name={item.ionName as any} size={18} color={Colors.textSecondary} style={{ width: 24 }} />
               <Text style={styles.menuLabel}>{item.label}</Text>
             </TouchableOpacity>
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(270).springify()}>
+        <Animated.View entering={FadeInUp.delay(270).duration(280)}>
           <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={styles.logoutText}>LOG OUT OF SAFAR</Text>
           </TouchableOpacity>
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: Colors.border,
   },
-  menuIcon: { fontSize: 18, width: 24 },
   menuLabel: { ...Typography.h4, color: Colors.textPrimary, flex: 1 },
   menuChevron: { fontSize: 20, color: Colors.textMuted },
 

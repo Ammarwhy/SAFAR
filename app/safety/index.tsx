@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
@@ -9,28 +10,28 @@ import BottomTabBar from "../../components/layouts/BottomTabBar";
 const SAFETY_TOOLS = [
 	{
 		id: "checkin",
-		icon: "🛡",
+		ionName: "shield-outline",
 		title: "Safety Check-in",
 		desc: "Set a timer for your journey. We'll check on you if it expires.",
 		action: "CONFIGURE ›",
 	},
 	{
 		id: "live",
-		icon: "📍",
+		ionName: "location-outline",
 		title: "Live Sharing",
 		desc: "Share your real-time path with trusted friends or family.",
 		action: "MANAGE CIRCLES ›",
 	},
 	{
 		id: "local",
-		icon: "🏥",
+		ionName: "medical-outline",
 		title: "Local Services",
 		desc: "Quick access to local police, medical, and fire departments.",
 		action: "VIEW LIST ›",
 	},
 	{
 		id: "legal",
-		icon: "⚖",
+		ionName: "briefcase-outline",
 		title: "Legal Help",
 		desc: "24/7 access to legal assistance and consular services.",
 		action: "GET SUPPORT ›",
@@ -74,7 +75,7 @@ export default function SafetyCenterScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<SafarHeader />
-			<ScrollView showsVerticalScrollIndicator={false}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<View style={styles.titleSection}>
 					<Text style={styles.pageTitle}>Safety Center</Text>
 					<Text style={styles.pageDesc}>
@@ -82,10 +83,10 @@ export default function SafetyCenterScreen() {
 					</Text>
 				</View>
 
-				<Animated.View entering={FadeInDown.duration(420).springify()} style={[styles.sosCard, sosActive && styles.sosCardActive]}>
+				<Animated.View entering={FadeInDown.duration(280)} style={[styles.sosCard, sosActive && styles.sosCardActive]}>
 					<View style={styles.sosTop}>
 						<View style={styles.sosBadge}>
-							<Text style={styles.sosBadgeIcon}>📡</Text>
+							<Ionicons name="radio-outline" size={14} color="rgba(255,255,255,0.7)" />
 							<Text style={styles.sosBadgeText}>EMERGENCY PROTOCOLS</Text>
 						</View>
 						<Text style={styles.sosTitle}>Emergency SOS</Text>
@@ -105,7 +106,7 @@ export default function SafetyCenterScreen() {
 
 				<Text style={styles.toolsLabel}>ACTIVE SAFETY TOOLS</Text>
 				{SAFETY_TOOLS.map((tool) => (
-					<Animated.View key={tool.id} entering={FadeInUp.delay(60).springify()}>
+					<Animated.View key={tool.id} entering={FadeInUp.delay(60).duration(280)}>
 					<TouchableOpacity
 						key={tool.id}
 						style={styles.toolCard}
@@ -126,7 +127,7 @@ export default function SafetyCenterScreen() {
 						}}
 						activeOpacity={0.8}
 					>
-						<Text style={styles.toolIcon}>{tool.icon}</Text>
+						<Ionicons name={tool.ionName as any} size={22} color={Colors.brand} style={{ marginTop: 2 }} />
 						<View style={styles.toolBody}>
 							<Text style={styles.toolTitle}>{tool.title}</Text>
 							<Text style={styles.toolDesc}>{tool.desc}</Text>
@@ -138,9 +139,9 @@ export default function SafetyCenterScreen() {
 					</Animated.View>
 				))}
 
-				<Animated.View entering={FadeInUp.delay(220).springify()} style={styles.reportCard}>
+				<Animated.View entering={FadeInUp.delay(220).duration(280)} style={styles.reportCard}>
 					<View style={styles.reportLeft}>
-						<Text style={styles.reportIcon}>⚠</Text>
+						<Ionicons name="warning-outline" size={18} color={Colors.warning} />
 					</View>
 					<View style={styles.reportBody}>
 						<Text style={styles.reportTitle}>Report a Concern</Text>
@@ -154,7 +155,7 @@ export default function SafetyCenterScreen() {
 				</Animated.View>
 
 				<Text style={styles.toolsLabel}>CURRENT LOCATION SAFETY</Text>
-				<Animated.View entering={FadeInUp.delay(260).springify()} style={styles.safetyRatingCard}>
+				<Animated.View entering={FadeInUp.delay(260).duration(280)} style={styles.safetyRatingCard}>
 					<View style={styles.safetyRatingOverlay}>
 						<View style={styles.safetyRatingContent}>
 							<Text style={styles.safetyRatingCity}>MARRAKECH</Text>
@@ -227,10 +228,9 @@ const styles = StyleSheet.create({
 		padding: 20,
 		...Shadow.md,
 	},
-	sosCardActive: { backgroundColor: "#8B0000" },
+	sosCardActive: { backgroundColor: Colors.dangerDark },
 	sosTop: { marginBottom: 16 },
 	sosBadge: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 10 },
-	sosBadgeIcon: { fontSize: 14 },
 	sosBadgeText: { ...Typography.label, color: "rgba(255,255,255,0.7)", fontSize: 10 },
 	sosTitle: { ...Typography.h2, color: "#fff", marginBottom: 6 },
 	sosDesc: { ...Typography.bodyMd, color: "rgba(255,255,255,0.8)" },
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		gap: 10,
 	},
-	sosBtnActive: { backgroundColor: "#FF6B6B" },
+	sosBtnActive: { backgroundColor: Colors.danger },
 	sosBtnLabel: {
 		...Typography.label,
 		color: "#fff",
@@ -271,7 +271,6 @@ const styles = StyleSheet.create({
 		gap: 14,
 		...Shadow.sm,
 	},
-	toolIcon: { fontSize: 22, marginTop: 2 },
 	toolBody: { flex: 1 },
 	toolTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 4 },
 	toolDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 8 },
@@ -295,7 +294,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	reportIcon: { fontSize: 18 },
 	reportBody: { flex: 1 },
 	reportTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 2 },
 	reportDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 6 },
@@ -309,7 +307,7 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 	},
 	safetyRatingOverlay: {
-		backgroundColor: Colors.brandLight,
+		backgroundColor: Colors.success,
 		padding: 16,
 		flexDirection: "row",
 		justifyContent: "space-between",

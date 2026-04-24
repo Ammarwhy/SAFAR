@@ -9,6 +9,7 @@ import {
 	TextInput,
 	SafeAreaView,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../../constants/Theme";
 import { MOCK_EXPENSES } from "../../../../constants/mockData";
@@ -24,8 +25,8 @@ export default function ExpenseScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()}>
-					<Text style={styles.backText}>←</Text>
+				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+					<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 				</TouchableOpacity>
 				<View style={styles.headerTitle}>
 					<Text style={styles.headerSuper}>{MOCK_EXPENSES.tripTitle.toUpperCase()}</Text>
@@ -36,17 +37,17 @@ export default function ExpenseScreen() {
 				</TouchableOpacity>
 			</View>
 
-			<ScrollView showsVerticalScrollIndicator={false}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<View style={styles.totalCard}>
 					<View style={styles.totalIconRow}>
-						<Text style={styles.totalIcon}>💳</Text>
+						<Ionicons name="card-outline" size={22} color={Colors.textSecondary} />
 					</View>
 					<Text style={styles.totalLabel}>TOTAL GROUP SPEND</Text>
 					<Text style={styles.totalAmount}>PKR {MOCK_EXPENSES.totalGroupSpend.toLocaleString()}</Text>
 				</View>
 
 				<View style={styles.balanceCard}>
-					<Text style={styles.balanceIcon}>💳</Text>
+					<Ionicons name="wallet-outline" size={22} color={Colors.textSecondary} style={{ marginBottom: 6 }} />
 					<Text style={styles.balanceLabel}>YOUR BALANCE</Text>
 					<Text style={[styles.balanceAmount, { color: Colors.success }]}>+PKR {MOCK_EXPENSES.yourBalance.toLocaleString()}</Text>
 					<Text style={styles.pendingText}>{MOCK_EXPENSES.pendingSettlements} Pending settlements</Text>
@@ -131,7 +132,6 @@ const styles = StyleSheet.create({
 		paddingBottom: 8,
 		gap: 12,
 	},
-	backText: { fontSize: 22, color: Colors.textPrimary },
 	headerTitle: { flex: 1 },
 	headerSuper: { ...Typography.label, color: Colors.textMuted, fontSize: 10 },
 	headerMain: { ...Typography.h1, color: Colors.textPrimary },
@@ -148,12 +148,11 @@ const styles = StyleSheet.create({
 	totalCard: {
 		marginHorizontal: Spacing.screen,
 		marginBottom: 12,
-		backgroundColor: "#DDD4CD",
+		backgroundColor: Colors.bgMuted,
 		borderRadius: Radius.xl,
 		padding: 20,
 	},
 	totalIconRow: { marginBottom: 8 },
-	totalIcon: { fontSize: 22 },
 	totalLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 8 },
 	totalAmount: { ...Typography.h1, color: Colors.textPrimary, fontSize: 32 },
 
@@ -165,7 +164,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 		...Shadow.sm,
 	},
-	balanceIcon: { fontSize: 22, marginBottom: 6 },
 	balanceLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 8 },
 	balanceAmount: { ...Typography.h1, fontSize: 28, marginBottom: 4 },
 	pendingText: { ...Typography.bodyMd, color: Colors.textSecondary },

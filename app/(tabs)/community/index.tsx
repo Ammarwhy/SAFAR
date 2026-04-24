@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   Image, SafeAreaView,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_MATCHES } from '../../../constants/mockData';
@@ -10,9 +11,9 @@ import SafarHeader from '../../../components/layouts/SafarHeader';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
 
 const WHY_ITEMS = [
-  { icon: '🤖', color: '#FFF3CD', title: 'AI Compatibility', desc: 'Our neural engine analyzes over 50 travel preferences to find your ideal nomad companion.' },
-  { icon: '🛡', color: '#FFF8E1', title: 'Safety First', desc: 'All profiles are verified with a multi-step identity check before matching.' },
-  { icon: '🗺', color: '#F5F5F5', title: 'Route Sync', desc: 'We match travelers whose routes overlap, making spontaneous meetups possible.' },
+  { ionName: 'sparkles-outline', color: '#F4EFE8', title: 'AI Compatibility', desc: 'Our neural engine analyzes over 50 travel preferences to find your ideal nomad companion.' },
+  { ionName: 'shield-checkmark-outline', color: '#EFF4F1', title: 'Safety First', desc: 'All profiles are verified with a multi-step identity check before matching.' },
+  { ionName: 'map-outline', color: '#F0ECE8', title: 'Route Sync', desc: 'We match travelers whose routes overlap, making spontaneous meetups possible.' },
 ];
 
 export default function MatchesScreen() {
@@ -28,7 +29,7 @@ export default function MatchesScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader title="AI MATCH" subtitle="Discovery" />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={styles.heroSection}>
           <Text style={styles.heroSuper}>ADVENTURE AWAITS</Text>
           <Text style={styles.heroTitle}>Your Potential{"\n"}Travel Partners</Text>
@@ -43,7 +44,7 @@ export default function MatchesScreen() {
               style={styles.personaTag}
               onPress={() => router.push('/flows/community-persona')}
             >
-              <Text style={styles.personaTagText}>⛰ Mountain Seekers</Text>
+              <Text style={styles.personaTagText}>Mountain Seekers</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -53,7 +54,6 @@ export default function MatchesScreen() {
             <View style={styles.imgWrap}>
               <Image source={{ uri: match.avatar }} style={styles.matchImg} />
               <View style={styles.matchBadge}>
-                <Text style={styles.matchBadgeIcon}>⚡</Text>
                 <Text style={styles.matchBadgeText}>{match.matchPct}% Match</Text>
               </View>
             </View>
@@ -61,7 +61,7 @@ export default function MatchesScreen() {
             <View style={styles.matchBody}>
               <Text style={styles.matchName}>{match.name}, {match.age}</Text>
               <View style={styles.locationRow}>
-                <Text style={styles.locationPin}>📍</Text>
+                <Ionicons name="location-outline" size={13} color={Colors.textSecondary} />
                 <Text style={styles.locationText}>{match.location}</Text>
               </View>
               <Text style={styles.matchBio}>{match.bio}</Text>
@@ -76,14 +76,14 @@ export default function MatchesScreen() {
 
               <View style={styles.actionsRow}>
                 <TouchableOpacity style={styles.skipBtn} onPress={() => skip(match.id)}>
-                  <Text style={styles.skipText}>✕  Skip</Text>
+                  <Text style={styles.skipText}>Skip</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.connectBtn, connected.includes(match.id) && styles.connectBtnActive]}
                   onPress={() => connect(match.id)}
                 >
                   <Text style={styles.connectText}>
-                    {connected.includes(match.id) ? '✓ Connected' : '♥  Connect'}
+                    {connected.includes(match.id) ? 'Connected' : 'Connect'}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -93,7 +93,7 @@ export default function MatchesScreen() {
 
         {visible.length === 0 && (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyIcon}>🏔</Text>
+            <Ionicons name="compass-outline" size={48} color={Colors.textMuted} style={{ marginBottom: 12 }} />
             <Text style={styles.emptyTitle}>All caught up!</Text>
             <Text style={styles.emptyDesc}>Refresh to find more travelers heading your way.</Text>
           </View>
@@ -103,7 +103,7 @@ export default function MatchesScreen() {
           <Text style={styles.whyTitle}>Why These Matches?</Text>
           {WHY_ITEMS.map((item) => (
             <View key={item.title} style={[styles.whyCard, { backgroundColor: item.color }]}>
-              <Text style={styles.whyIcon}>{item.icon}</Text>
+              <Ionicons name={item.ionName as any} size={20} color={Colors.brand} />
               <View style={styles.whyBody}>
                 <Text style={styles.whyCardTitle}>{item.title}</Text>
                 <Text style={styles.whyCardDesc}>{item.desc}</Text>
@@ -112,7 +112,6 @@ export default function MatchesScreen() {
           ))}
         </View>
 
-        <View style={{ height: 20 }} />
       </ScrollView>
       <BottomTabBar />
     </SafeAreaView>
@@ -148,13 +147,11 @@ const styles = StyleSheet.create({
     borderRadius: Radius.pill, paddingHorizontal: 10, paddingVertical: 5,
     flexDirection: 'row', alignItems: 'center', gap: 4,
   },
-  matchBadgeIcon: { fontSize: 11 },
   matchBadgeText: { ...Typography.label, color: Colors.brand, fontSize: 11 },
 
   matchBody: { padding: 16 },
   matchName: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 4 },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginBottom: 8 },
-  locationPin: { fontSize: 12 },
   locationText: { ...Typography.bodyMd, color: Colors.textSecondary },
   matchBio: { ...Typography.bodyMd, color: Colors.textSecondary, lineHeight: 20, marginBottom: 12 },
 
@@ -179,7 +176,6 @@ const styles = StyleSheet.create({
   connectText: { ...Typography.h4, color: '#fff' },
 
   emptyState: { alignItems: 'center', padding: 40 },
-  emptyIcon: { fontSize: 48, marginBottom: 12 },
   emptyTitle: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 6 },
   emptyDesc: { ...Typography.body, color: Colors.textSecondary, textAlign: 'center' },
 
@@ -189,7 +185,6 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg, padding: 14, marginBottom: 10,
     flexDirection: 'row', alignItems: 'flex-start', gap: 12,
   },
-  whyIcon: { fontSize: 20, marginTop: 2 },
   whyBody: { flex: 1 },
   whyCardTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 4 },
   whyCardDesc: { ...Typography.bodyMd, color: Colors.textSecondary },

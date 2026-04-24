@@ -1,11 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import Animated, { FadeInUp, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 import { Colors, Spacing } from "@/constants/Theme";
 
 type NavItem = {
 	label: string;
-	icon?: string;
+	iconName?: string;
 	href?: string;
 	onPress?: () => void;
 	active?: boolean;
@@ -26,7 +27,7 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 		}));
 
 		return (
-			<Animated.View entering={FadeInUp.delay(index * 35).springify()} style={[styles.itemWrap, animatedStyle]}>
+			<Animated.View entering={FadeInUp.delay(index * 35).duration(280)} style={[styles.itemWrap, animatedStyle]}>
 				<Pressable
 					onPress={() => {
 						if (item.onPress) {
@@ -45,7 +46,7 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 					}}
 					style={({ pressed }) => [styles.item, item.active && styles.itemActive, pressed && styles.itemPressed]}
 				>
-					<Text style={[styles.icon, item.active ? styles.active : undefined]}>{item.icon ?? "◦"}</Text>
+					<Ionicons name={item.iconName as any} size={20} color={item.active ? Colors.brand : Colors.textMuted} />
 					<Text style={[styles.label, item.active ? styles.active : undefined]}>{item.label}</Text>
 				</Pressable>
 			</Animated.View>
@@ -63,19 +64,18 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 
 const styles = StyleSheet.create({
 	wrap: {
-		marginTop: Spacing.md,
 		marginHorizontal: 12,
-		marginBottom: 10,
+		marginBottom: 8,
 		borderWidth: 1,
 		borderColor: Colors.border,
 		borderRadius: 24,
 		backgroundColor: Colors.bgCard,
-		paddingVertical: 10,
+		paddingVertical: 8,
 		paddingHorizontal: 8,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		shadowColor: "#000",
+		shadowColor: "#371B17",
 		shadowOffset: { width: 0, height: 6 },
 		shadowOpacity: 0.08,
 		shadowRadius: 16,
@@ -87,16 +87,13 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		gap: 3,
 		paddingVertical: 8,
+		paddingHorizontal: 12,
 		borderRadius: 18,
 	},
 	itemActive: { backgroundColor: Colors.bgMuted },
 	itemPressed: { opacity: 0.9 },
-	icon: {
-		fontSize: 13,
-		color: Colors.textMuted,
-	},
 	label: {
-		fontSize: 9,
+		fontSize: 10,
 		color: Colors.textMuted,
 		fontWeight: "600",
 		letterSpacing: 0.6,

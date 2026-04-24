@@ -220,7 +220,7 @@ export const MOCK_EXPLORE = {
 		region: "NORTHERN PAKISTAN",
 		badge: "TRENDING",
 		image:
-			"https://images.unsplash.com/photo-1556736750-4f05b48c9ab0?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1609184807049-a8b2e6acda0f?auto=format&fit=crop&w=1200&q=80",
 	},
 	categories: ["MOUNTAINS", "HERITAGE", "DESERT", "LAKES", "CITY"],
 	journeys: [
@@ -228,14 +228,14 @@ export const MOCK_EXPLORE = {
 			title: "Karakoram Chronicle",
 			description: "High passes, glacier viewpoints, and curated lodge stops.",
 			image:
-				"https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1000&q=80",
+				"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=80",
 			matchCount: 18,
 		},
 		{
 			title: "Desert Caravan Nights",
 			description: "Sandstone routes, stargazing camps, and craft bazaar detours.",
 			image:
-				"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1000&q=80",
+				"https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1000&q=80",
 			subtitle: "SINDH • THAR BELT",
 			matchCount: 12,
 		},
@@ -317,7 +317,7 @@ export const MOCK_TRIPS: MockTrip[] = [
 		title: "Karakoram Expedition",
 		destination: "Hunza Valley",
 		heroImage:
-			"https://images.unsplash.com/photo-1615897577435-47d898f65f97?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
 		dates: "12–19 May 2026",
 		daysLeft: 12,
 		year: "2026",
@@ -330,7 +330,7 @@ export const MOCK_TRIPS: MockTrip[] = [
 		title: "Murree Retreat",
 		destination: "Murree",
 		heroImage:
-			"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+			"https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=80",
 		dates: "08–11 Jan 2025",
 		daysLeft: 0,
 		year: "2025",
@@ -343,7 +343,7 @@ export const MOCK_TRIPS: MockTrip[] = [
 		title: "Naran Valley",
 		destination: "Kaghan",
 		heroImage:
-			"https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=900&q=80",
+			"https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=900&q=80",
 		dates: "17–22 Jul 2024",
 		daysLeft: 0,
 		year: "2024",
@@ -359,7 +359,7 @@ export const MOCK_JOURNEYS: MockJourney[] = [
 		title: "Karakoram Expedition",
 		status: "ACTIVE",
 		heroImage:
-			"https://images.unsplash.com/photo-1615897577435-47d898f65f97?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
 		dates: "AUG 12 – AUG 28",
 		destination: "Gilgit-Baltistan",
 		distanceKM: 1240,
@@ -371,7 +371,7 @@ export const MOCK_JOURNEYS: MockJourney[] = [
 		title: "Annapurna Circuit",
 		status: "BOOKING",
 		heroImage:
-			"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
 		dates: "SEP 04 – SEP 18",
 		destination: "Nepal",
 		gearAdvisory: "Monsoon shoulder season expected. Include rain shell and waterproof trail boots.",
@@ -486,7 +486,7 @@ export const MOCK_TRAVELER: MockTraveler = {
 	tags: ["Heritage", "Tea Trails", "Photography", "High Altitude"],
 	currentCity: "Hunza, Pakistan",
 	latestFind: {
-		image: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1000&q=80",
+		image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=80",
 		title: "Eagle Nest Sunrise Point",
 		subtitle: "An early-hour ridge with panoramic Karakoram light.",
 	},
@@ -505,7 +505,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		region: "Gilgit-Baltistan",
 		rating: 4.9,
 		heroImage:
-			"https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1609184807049-a8b2e6acda0f?auto=format&fit=crop&w=1200&q=80",
 		startingPrice: 185000,
 		description: "Altitude-focused expeditions with veteran local guides and small curated groups.",
 		avatars: [
@@ -520,7 +520,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		region: "Skardu & Hunza",
 		rating: 4.8,
 		heroImage:
-			"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
 		startingPrice: 162000,
 		description: "Story-led journeys across heritage corridors with culture-first itinerary design.",
 		avatars: [
@@ -535,7 +535,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		region: "Northern Pakistan",
 		rating: 4.7,
 		heroImage:
-			"https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=1200&q=80",
+			"https://images.unsplash.com/photo-1531501410720-c8d437636169?auto=format&fit=crop&w=1200&q=80",
 		startingPrice: 149000,
 	},
 ];
@@ -543,7 +543,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 export const MOCK_AGENCY_DETAIL: MockAgencyDetail = {
 	id: "atlas-nomad-co",
 	name: "Atlas Nomad Co.",
-	heroImage: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1400&q=80",
+	heroImage: "https://images.unsplash.com/photo-1609184807049-a8b2e6acda0f?auto=format&fit=crop&w=1400&q=80",
 	rating: 4.9,
 	reviewCount: 268,
 	philosophy:
@@ -556,7 +556,7 @@ export const MOCK_AGENCY_DETAIL: MockAgencyDetail = {
 		{
 			id: "it-1",
 			title: "Hunza Heritage Traverse",
-			image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
+			image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1000&q=80",
 			price: 189000,
 			date: "12 Aug 2026",
 			duration: 8,
@@ -565,7 +565,7 @@ export const MOCK_AGENCY_DETAIL: MockAgencyDetail = {
 		{
 			id: "it-2",
 			title: "K2 Base Orientation Route",
-			image: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=1000&q=80",
+			image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1000&q=80",
 			price: 265000,
 			date: "03 Sep 2026",
 			duration: 12,

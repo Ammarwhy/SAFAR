@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
 import { MOCK_AGENCY_DETAIL } from "../../constants/mockData";
@@ -33,11 +34,11 @@ export default function AgencyDetailScreen() {
 
 	return (
 		<SafeAreaView style={styles.safe}>
-			<ScrollView showsVerticalScrollIndicator={false}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<ImageBackground source={{ uri: a.heroImage }} style={styles.hero}>
 					<View style={styles.heroOverlay}>
 						<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-							<Text style={styles.backText}>←</Text>
+							<Ionicons name="arrow-back" size={22} color="#fff" />
 						</TouchableOpacity>
 						<View style={styles.heroContent}>
 							<Text style={styles.heroSuper}>FEATURED AGENCY</Text>
@@ -61,7 +62,7 @@ export default function AgencyDetailScreen() {
 					<View style={styles.certRow}>
 						<View style={styles.certCard}>
 							<View style={styles.certIconWrap}>
-								<Text style={styles.certIcon}>🌐</Text>
+								<Ionicons name="globe-outline" size={18} color={Colors.brand} />
 							</View>
 							<View>
 								<Text style={styles.certLabel}>SPECIALIZATION</Text>
@@ -70,7 +71,7 @@ export default function AgencyDetailScreen() {
 						</View>
 						<View style={styles.certCard}>
 							<View style={styles.certIconWrap}>
-								<Text style={styles.certIcon}>🛡</Text>
+								<Ionicons name="shield-checkmark-outline" size={18} color={Colors.brand} />
 							</View>
 							<View>
 								<Text style={styles.certLabel}>CERTIFIED</Text>
@@ -94,7 +95,7 @@ export default function AgencyDetailScreen() {
 									<Text style={styles.itineraryPrice}>PKR {(it.price / 1000).toFixed(0)}K</Text>
 								</View>
 								<View style={styles.itineraryMeta}>
-									<Text style={styles.itineraryMetaText}>📅 {it.date}</Text>
+									<Ionicons name="calendar-outline" size={11} color={Colors.textSecondary} /><Text style={styles.itineraryMetaText}> {it.date}</Text>
 									<Text style={styles.itineraryMetaText}>  ⏱ {it.duration} Days</Text>
 								</View>
 								<View style={styles.tagsRow}>
@@ -122,13 +123,13 @@ export default function AgencyDetailScreen() {
 								style={styles.contactBtn}
 								onPress={() => router.push(`/flows/agency-contact?name=${encodeURIComponent(agencyId ?? a.name)}`)}
 							>
-								<Text style={styles.contactBtnText}>💬  Contact</Text>
+								<Text style={styles.contactBtnText}>Contact</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={styles.contactBtn}
 								onPress={() => router.push(`/flows/agency-call?name=${encodeURIComponent(agencyId ?? a.name)}`)}
 							>
-								<Text style={styles.contactBtnText}>📞  Call Now</Text>
+								<Text style={styles.contactBtnText}>Call Now</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -136,11 +137,11 @@ export default function AgencyDetailScreen() {
 					<View style={styles.mapCard}>
 						<View style={styles.mapHeader}>
 							<Text style={styles.mapTitle}>Main Office</Text>
-							<Text style={styles.mapIcon}>🗺</Text>
+							<Ionicons name="map-outline" size={18} color={Colors.textSecondary} />
 						</View>
 						<View style={styles.mapPlaceholder}>
 							<View style={styles.mapPin}>
-								<Text style={styles.mapPinText}>📍</Text>
+								<Ionicons name="location" size={36} color={Colors.brand} />
 							</View>
 						</View>
 						<Text style={styles.mapAddress}>{a.officeAddress}</Text>
@@ -167,7 +168,6 @@ export default function AgencyDetailScreen() {
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	backText: { fontSize: 20, color: "#fff" },
 	heroContent: {},
 	heroSuper: { ...Typography.label, color: "rgba(255,255,255,0.75)", fontSize: 10, marginBottom: 4 },
 	heroTitle: { ...Typography.h1, color: "#fff", fontSize: 32, marginBottom: 4 },
@@ -199,7 +199,6 @@ export default function AgencyDetailScreen() {
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	certIcon: { fontSize: 18 },
 	certLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
 	certVal: { ...Typography.h4, color: Colors.textPrimary },
 
@@ -269,7 +268,6 @@ export default function AgencyDetailScreen() {
 		paddingVertical: 12,
 	},
 	mapTitle: { ...Typography.h4, color: Colors.textPrimary },
-	mapIcon: { fontSize: 18 },
 	mapPlaceholder: {
 		height: 120,
 		backgroundColor: Colors.bgMuted,
@@ -277,6 +275,5 @@ export default function AgencyDetailScreen() {
 		justifyContent: "center",
 	},
 	mapPin: {},
-	mapPinText: { fontSize: 36 },
 	mapAddress: { ...Typography.bodyMd, color: Colors.textSecondary, padding: 12, paddingTop: 8 },
 });

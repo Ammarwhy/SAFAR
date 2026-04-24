@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_EXPLORE } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
@@ -12,17 +13,24 @@ import BottomTabBar from '../../../components/layouts/BottomTabBar';
 export default function ExploreScreen() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('MOUNTAINS');
+  const [searchQuery, setSearchQuery] = useState('');
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
+
+  const filteredJourneys = searchQuery.trim()
+    ? journeys.filter((j) => j.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : journeys;
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Animated.View entering={FadeInDown.duration(420).springify()} style={styles.searchWrap}>
-          <Text style={styles.searchIcon}>⌕</Text>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <Animated.View entering={FadeInDown.duration(280)} style={styles.searchWrap}>
+          <Ionicons name="search-outline" size={16} color={Colors.textMuted} style={{ marginRight: 8 }} />
           <TextInput
             style={styles.searchInput}
             placeholder="Where is your soul heading?"
             placeholderTextColor={Colors.textMuted}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </Animated.View>
 
@@ -45,11 +53,11 @@ export default function ExploreScreen() {
         </ScrollView>
 
         <Text style={styles.sectionLabel}>FEATURED ESCAPE</Text>
-        <Animated.View entering={FadeInUp.delay(80).springify()}>
+        <Animated.View entering={FadeInUp.delay(80).duration(280)}>
         <TouchableOpacity
           style={styles.featuredCard}
           activeOpacity={0.9}
-          onPress={() => router.push('/(tabs)/explore/hunza-valley')}
+          onPress={() => router.push('/(tabs)/explore/hunza-valley' as never)}
         >
           <ImageBackground
             source={{ uri: featured.image }}
@@ -68,7 +76,7 @@ export default function ExploreScreen() {
                   style={styles.wishlistBtn}
                   onPress={() => router.push('/flows/wishlist')}
                 >
-                  <Text style={{ fontSize: 18 }}>♡</Text>
+                  <Ionicons name="heart-outline" size={20} color={Colors.textMuted} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.joinBtn} onPress={() => router.push('/(tabs)/journeys/new-journey')}>
                   <Text style={styles.joinText}>Join Expedition</Text>
@@ -86,41 +94,50 @@ export default function ExploreScreen() {
           </TouchableOpacity>
         </View>
 
-        <Animated.View entering={FadeInUp.delay(140).springify()}>
+        {filteredJourneys.length === 0 && (
+          <View style={styles.emptyState}>
+            <Ionicons name="compass-outline" size={36} color={Colors.textMuted} style={{ marginBottom: 8 }} />
+            <Text style={styles.emptyTitle}>No journeys found</Text>
+            <Text style={styles.emptyDesc}>Try a different search term.</Text>
+          </View>
+        )}
+        {filteredJourneys[0] && (
+        <Animated.View entering={FadeInUp.delay(140).duration(280)}>
         <TouchableOpacity
           style={styles.journeyCard}
           activeOpacity={0.88}
-          onPress={() => router.push('/(tabs)/explore/karakoram-chronicle')}
+          onPress={() => router.push('/(tabs)/explore/karakoram-chronicle' as never)}
         >
-          <Image source={{ uri: journeys[0].image }} style={styles.journeyImg} />
+          <Image source={{ uri: filteredJourneys[0].image }} style={styles.journeyImg} />
           <View style={styles.journeyBody}>
             <View style={styles.journeyTitleRow}>
-              <Text style={styles.journeyTitle}>{journeys[0].title}</Text>
+              <Text style={styles.journeyTitle}>{filteredJourneys[0].title}</Text>
               <View style={styles.matchCountBadge}>
-                <Text style={styles.matchCountText}>+{journeys[0].matchCount}</Text>
+                <Text style={styles.matchCountText}>+{filteredJourneys[0].matchCount}</Text>
               </View>
             </View>
-            <Text style={styles.journeyDesc}>{journeys[0].description}</Text>
+            <Text style={styles.journeyDesc}>{filteredJourneys[0].description}</Text>
             <View style={styles.journeyActions}>
               <TouchableOpacity
                 style={styles.journeyActionBtn}
                 onPress={() => router.push('/(tabs)/community')}
               >
-                <Text style={styles.journeyActionText}>⊙ MATCH</Text>
+                <Text style={styles.journeyActionText}>MATCH</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.journeyActionBtn}
                 onPress={() => router.push('/flows/travel-tips')}
               >
-                <Text style={styles.journeyActionText}>💡 TIPS</Text>
+                <Text style={styles.journeyActionText}>TIPS</Text>
               </TouchableOpacity>
             </View>
           </View>
         </TouchableOpacity>
         </Animated.View>
+        )}
 
-        <Animated.View entering={FadeInUp.delay(180).springify()} style={styles.winterCard}>
-          <Text style={styles.winterIcon}>✳</Text>
+        <Animated.View entering={FadeInUp.delay(180).duration(280)} style={styles.winterCard}>
+          <Ionicons name="snow-outline" size={24} color={Colors.brand} style={{ marginRight: 12 }} />
           <View style={styles.winterBody}>
             <Text style={styles.winterTitle}>Winter Treks</Text>
             <Text style={styles.winterDesc}>Master the art of cold exploration.</Text>
@@ -131,32 +148,33 @@ export default function ExploreScreen() {
               <Text style={styles.browseBtnText}>BROWSE GUIDE</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.winterFigure}>🏔</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(220).springify()}>
+        {filteredJourneys[1] && (
+        <Animated.View entering={FadeInUp.delay(220).duration(280)}>
         <TouchableOpacity
           style={styles.fullImgCard}
           activeOpacity={0.9}
-          onPress={() => router.push('/(tabs)/explore/desert-caravan-nights')}
+          onPress={() => router.push('/(tabs)/explore/desert-caravan-nights' as never)}
         >
           <ImageBackground
-            source={{ uri: journeys[1].image }}
+            source={{ uri: filteredJourneys[1].image }}
             style={styles.fullImgBg}
             imageStyle={{ borderRadius: Radius.lg }}
           >
             <View style={styles.fullImgOverlay}>
-              <Text style={styles.fullImgTitle}>{journeys[1].title}</Text>
-              {journeys[1].subtitle && (
-                <Text style={styles.fullImgSub}>{journeys[1].subtitle}</Text>
+              <Text style={styles.fullImgTitle}>{filteredJourneys[1].title}</Text>
+              {filteredJourneys[1].subtitle && (
+                <Text style={styles.fullImgSub}>{filteredJourneys[1].subtitle}</Text>
               )}
             </View>
           </ImageBackground>
         </TouchableOpacity>
         </Animated.View>
+        )}
 
         <Text style={styles.vicinityLabel}>TRAVELERS IN YOUR VICINITY</Text>
-        <Animated.View entering={FadeInUp.delay(260).springify()} style={styles.vicinityRow}>
+        <Animated.View entering={FadeInUp.delay(260).duration(280)} style={styles.vicinityRow}>
           {vicinityTravelers.map((t) => (
             <TouchableOpacity key={t.id} style={styles.vicinityItem}
               onPress={() => router.push(`/traveler/${t.id}`)}>
@@ -171,7 +189,6 @@ export default function ExploreScreen() {
           <Text style={styles.fabText}>+</Text>
         </TouchableOpacity>
 
-        <View style={{ height: 20 }} />
       </ScrollView>
       <BottomTabBar />
     </SafeAreaView>
@@ -190,7 +207,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 12,
     ...Shadow.sm,
   },
-  searchIcon: { marginRight: 8, fontSize: 15 },
   searchInput: { flex: 1, ...Typography.body, color: Colors.textPrimary },
 
   categoriesRow: { paddingHorizontal: Spacing.screen, paddingBottom: 4, gap: 8 },
@@ -254,7 +270,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgMuted, borderRadius: Radius.lg,
     padding: 16, flexDirection: 'row', alignItems: 'center',
   },
-  winterIcon: { fontSize: 24, marginRight: 12 },
   winterBody: { flex: 1 },
   winterTitle: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 2 },
   winterDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 10 },
@@ -263,8 +278,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 7, alignSelf: 'flex-start',
   },
   browseBtnText: { ...Typography.label, color: '#fff', fontSize: 10 },
-  winterFigure: { fontSize: 40, opacity: 0.2 },
-
   fullImgCard: { marginHorizontal: Spacing.screen, marginBottom: 8, borderRadius: Radius.lg, overflow: 'hidden', height: 180 },
   fullImgBg: { flex: 1, justifyContent: 'flex-end' },
   fullImgOverlay: { padding: 14, backgroundColor: 'rgba(0,0,0,0.4)' },
@@ -285,4 +298,8 @@ const styles = StyleSheet.create({
     ...Shadow.md,
   },
   fabText: { ...Typography.h2, color: '#fff', fontSize: 26, lineHeight: 28 },
+
+  emptyState: { alignItems: 'center', padding: 32 },
+  emptyTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 4 },
+  emptyDesc: { ...Typography.bodyMd, color: Colors.textSecondary },
 });

@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
 import { MOCK_AGENCIES } from "../../constants/mockData";
@@ -12,7 +13,7 @@ export default function AgenciesScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<SafarHeader />
-			<ScrollView showsVerticalScrollIndicator={false}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<View style={styles.titleSection}>
 					<Text style={styles.super}>CURATION</Text>
 					<Text style={styles.pageTitle}>Agencies</Text>
@@ -38,7 +39,7 @@ export default function AgenciesScreen() {
 								<View style={styles.cardLeft}>
 									<Text style={styles.agencyName}>{agency.name}</Text>
 									<View style={styles.regionRow}>
-										<Text style={styles.regionPin}>📍</Text>
+										<Ionicons name="location-outline" size={12} color={Colors.textSecondary} />
 										<Text style={styles.regionText}>{agency.region}</Text>
 									</View>
 								</View>
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
 	cardLeft: { flex: 1 },
 	agencyName: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 4 },
 	regionRow: { flexDirection: "row", alignItems: "center", gap: 3 },
-	regionPin: { fontSize: 12 },
 	regionText: { ...Typography.bodyMd, color: Colors.textSecondary },
 	priceWrap: { alignItems: "flex-end" },
 	priceLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 9, marginBottom: 2 },

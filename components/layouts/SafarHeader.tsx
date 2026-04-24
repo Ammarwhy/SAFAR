@@ -14,7 +14,7 @@ export default function SafarHeader({
   showAvatar = true,
 }: SafarHeaderProps) {
   return (
-    <Animated.View entering={FadeInDown.duration(400).springify()} style={styles.wrap}>
+    <Animated.View entering={FadeInDown.duration(280)} style={styles.wrap}>
       <View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -30,22 +30,15 @@ export default function SafarHeader({
 
 const styles = StyleSheet.create({
   wrap: {
-    marginHorizontal: Spacing.screen,
-    marginTop: Spacing.md,
-    backgroundColor: Colors.bgCard,
+    marginHorizontal: 16,
+    marginTop: 12,
+    backgroundColor: Colors.bg,
     borderRadius: Radius.lg,
     paddingHorizontal: Spacing.md,
-    paddingVertical: 12,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: Colors.border,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
   },
   title: {
     color: Colors.textPrimary,
@@ -61,9 +54,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: Colors.bgMuted,
     alignItems: "center",
     justifyContent: "center",

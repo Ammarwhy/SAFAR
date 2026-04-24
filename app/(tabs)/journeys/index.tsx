@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/Theme";
 import { MOCK_JOURNEYS } from "../../../constants/mockData";
@@ -16,7 +17,7 @@ export default function JourneysScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={styles.titleSection}>
           <Text style={styles.super}>YOUR EXPEDITIONS</Text>
           <Text style={styles.pageTitle}>The Nomad&apos;s{"\n"}Journey</Text>
@@ -44,11 +45,11 @@ export default function JourneysScreen() {
               <Text style={styles.mainCardTitle}>{j1.title}</Text>
               <View style={styles.mainCardMeta}>
                 <View style={styles.metaItem}>
-                  <Text style={styles.metaIcon}>📅</Text>
+                  <Ionicons name="calendar-outline" size={13} color="rgba(255,255,255,0.85)" />
                   <Text style={styles.metaText}>{j1.dates}</Text>
                 </View>
                 <View style={styles.metaItem}>
-                  <Text style={styles.metaIcon}>📍</Text>
+                  <Ionicons name="location-outline" size={13} color="rgba(255,255,255,0.85)" />
                   <Text style={styles.metaText}>{j1.destination}</Text>
                 </View>
               </View>
@@ -64,7 +65,7 @@ export default function JourneysScreen() {
 
         <View style={styles.gearCard}>
           <View style={styles.gearHeader}>
-            <Text style={styles.gearIcon}>⛰</Text>
+            <Ionicons name="triangle-outline" size={24} color={Colors.textPrimary} />
             <View>
               <Text style={styles.gearDistance}>{j1.distanceKM?.toLocaleString()} KM</Text>
               <Text style={styles.gearSub}>to your next summit</Text>
@@ -116,7 +117,6 @@ export default function JourneysScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: 20 }} />
       </ScrollView>
       <BottomTabBar />
     </SafeAreaView>
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
   mainCardTitle: { ...Typography.h1, color: "#fff", marginBottom: 8 },
   mainCardMeta: { flexDirection: "row", gap: 14, marginBottom: 12 },
   metaItem: { flexDirection: "row", alignItems: "center", gap: 4 },
-  metaIcon: { fontSize: 13 },
   metaText: { ...Typography.bodyMd, color: "rgba(255,255,255,0.85)" },
   viewItineraryBtn: {
     borderWidth: 1,
@@ -165,12 +164,11 @@ const styles = StyleSheet.create({
   gearCard: {
     marginHorizontal: Spacing.screen,
     marginBottom: 12,
-    backgroundColor: "#F9EEF0",
+    backgroundColor: Colors.dangerBg,
     borderRadius: Radius.lg,
     padding: 16,
   },
   gearHeader: { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 8 },
-  gearIcon: { fontSize: 24 },
   gearDistance: { ...Typography.h2, color: Colors.textPrimary },
   gearSub: { ...Typography.bodyMd, color: Colors.textSecondary },
   gearText: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 12 },

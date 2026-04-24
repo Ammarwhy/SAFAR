@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   ImageBackground, Image, SafeAreaView,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_TRIPS } from '../../../constants/mockData';
@@ -42,7 +43,8 @@ export default function CollectionScreen() {
               </View>
               <Text style={styles.heroTitle}>{upcoming.title}</Text>
               <View style={styles.heroMeta}>
-                <Text style={styles.heroMetaText}>📍 {upcoming.destination}</Text>
+                <Ionicons name="location-outline" size={13} color="rgba(255,255,255,0.85)" />
+                <Text style={styles.heroMetaText}>{upcoming.destination}</Text>
                 <Text style={styles.heroMetaText}>  •  </Text>
                 <Text style={styles.heroMetaText}>{upcoming.dates}</Text>
               </View>
@@ -77,10 +79,10 @@ export default function CollectionScreen() {
                 <Text style={styles.archiveTitle}>{trip.title}</Text>
                 <Text style={styles.archiveSubtitle}>{trip.subtitle}</Text>
                 <View style={styles.archiveDetail}>
-                  <Text style={styles.archiveDetailText}>📅  {trip.dates}</Text>
+                  <Text style={styles.archiveDetailText}>{trip.dates}</Text>
                 </View>
                 <View style={styles.archiveDetail}>
-                  <Text style={styles.archiveDetailText}>🛏  {trip.hotel}</Text>
+                  <Text style={styles.archiveDetailText}>{trip.hotel}</Text>
                 </View>
               </View>
             </View>

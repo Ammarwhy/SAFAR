@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { Colors, Typography, Spacing, Radius } from "../../../../constants/Theme";
 import BottomTabBar from "../../../../components/layouts/BottomTabBar";
 
@@ -20,8 +21,8 @@ export default function ItineraryScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()}>
-					<Text style={styles.backText}>←</Text>
+				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+					<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 				</TouchableOpacity>
 				<Text style={styles.headerTitle}>Itinerary</Text>
 				<TouchableOpacity onPress={() => router.push(`/(tabs)/journeys/${tripId}/vibe-room`)}>
@@ -52,13 +53,13 @@ export default function ItineraryScreen() {
 						style={styles.expenseBtn}
 						onPress={() => router.push(`/(tabs)/journeys/${tripId}/expense`)}
 					>
-						<Text style={styles.expenseBtnText}>💳  Expense Ledger</Text>
+						<Text style={styles.expenseBtnText}>Expense Ledger</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={styles.vibeBtn}
 						onPress={() => router.push(`/(tabs)/journeys/${tripId}/vibe-room`)}
 					>
-						<Text style={styles.vibeBtnText}>💬  Vibe Room</Text>
+						<Text style={styles.vibeBtnText}>Vibe Room</Text>
 					</TouchableOpacity>
 				</View>
 				<View style={{ height: 20 }} />
@@ -78,7 +79,6 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 		paddingBottom: 8,
 	},
-	backText: { fontSize: 22, color: Colors.textPrimary },
 	headerTitle: { ...Typography.h3, color: Colors.textPrimary },
 	chatLink: { ...Typography.h4, color: Colors.brand, fontSize: 14 },
 	content: { paddingHorizontal: Spacing.screen, paddingBottom: 20 },

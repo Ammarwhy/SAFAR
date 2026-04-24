@@ -1,5 +1,7 @@
 import React from "react";
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
 import { MOCK_TRAVELER } from "../../constants/mockData";
@@ -29,26 +31,26 @@ export default function TravelerProfileScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()}>
-					<Text style={styles.backText}>←</Text>
+				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+					<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 				</TouchableOpacity>
 				<View style={styles.headerAvatar}>
 					<Image source={{ uri: "https://i.pravatar.cc/80?img=11" }} style={styles.headerAvatarImg} />
 				</View>
 			</View>
 
-			<ScrollView showsVerticalScrollIndicator={false}>
-				<View style={styles.heroSection}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+				<Animated.View entering={FadeInDown.duration(350)} style={styles.heroSection}>
 					<View style={styles.avatarWrap}>
 						<Image source={{ uri: t.avatar }} style={styles.avatar} />
 						<View style={styles.verifiedBadge}>
-							<Text style={styles.verifiedIcon}>✓</Text>
+							<Ionicons name="checkmark" size={11} color="#fff" />
 						</View>
 					</View>
 					<Text style={styles.curation}>{t.curationNo}</Text>
 					<Text style={styles.name}>{t.name}</Text>
 					<Text style={styles.bio}>{t.bio}</Text>
-				</View>
+				</Animated.View>
 
 				<View style={styles.statsGrid}>
 					<View style={styles.statBox}>
@@ -85,7 +87,7 @@ export default function TravelerProfileScreen() {
 					<Text style={styles.locationTitle}>Currently In</Text>
 					<Text style={styles.locationCity}>{t.currentCity}</Text>
 					<View style={styles.mapPlaceholder}>
-						<Text style={styles.mapIcon}>🧭</Text>
+						<Ionicons name="compass" size={32} color="rgba(255,255,255,0.6)" />
 					</View>
 				</View>
 
@@ -108,10 +110,10 @@ export default function TravelerProfileScreen() {
 						style={styles.connectBtn}
 						onPress={() => router.push('/flows/community-persona')}
 					>
-						<Text style={styles.connectBtnText}>♥  Connect</Text>
+						<Text style={styles.connectBtnText}>Connect</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.msgBtn} onPress={() => router.push('/(tabs)/messages')}>
-						<Text style={styles.msgBtnText}>💬  Message</Text>
+						<Text style={styles.msgBtnText}>Message</Text>
 					</TouchableOpacity>
 				</View>
 
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 		paddingBottom: 4,
 	},
-	backText: { fontSize: 22, color: Colors.textPrimary },
 	headerAvatar: {},
 	headerAvatarImg: { width: 34, height: 34, borderRadius: 17, borderWidth: 2, borderColor: Colors.border },
 
@@ -152,7 +153,6 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderColor: Colors.bg,
 	},
-	verifiedIcon: { color: "#fff", fontSize: 11 },
 	curation: { ...Typography.label, color: Colors.textMuted, marginBottom: 4 },
 	name: { ...Typography.h1, color: Colors.textPrimary, marginBottom: 6 },
 	bio: { ...Typography.body, color: Colors.textSecondary, lineHeight: 22 },
@@ -217,8 +217,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	mapIcon: { fontSize: 32 },
-
 	sectionLabel: { ...Typography.label, color: Colors.textMuted, marginHorizontal: Spacing.screen, marginBottom: 8 },
 	findCard: {
 		marginHorizontal: Spacing.screen,

@@ -134,10 +134,10 @@ Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 
 ## Latest Notes (2026-04-25)
 
-- What changed: Six UI pain points fixed — Explore category pills now drive content via a `CATEGORY_DATA` map; Hunza Valley featured image fixed (ImageBackground overflow/borderRadius moved to the correct element); Journeys tabs (Upcoming / Past Trips / Wishlist) now render distinct content; Latest Update card avatar stack and action buttons properly aligned; Vibe Room enriched with a collapsible Today's Brief card, Quick Actions strip, and emoji reactions; Profile completely overhauled with hero cover, achievement badges, followers preview, recent journeys scroll, and polished menu sections.
-- Why it changed: The app needed to read and feel like a production-quality travel app, not a prototype — users should see immediately that tapping a pill does something and that the profile belongs to a real traveler.
-- How verified: `npx tsc --noEmit --skipLibCheck` passed with zero errors; IDE diagnostics showed only pre-existing SafeAreaView deprecation hints.
-- Core idea: Functional polish means state changes must visibly change UI output (data wiring), combined with visual patterns users already recognise from apps they trust (cover photo profiles, overlapping avatar stacks, emoji reactions).
+- What changed: Featured Escape now uses fallback image handling and includes duration + highlight chips; mock data updated accordingly; all markdown docs synced to Entry 011.
+- Why it changed: The hero card must never render blank; adding resilience and richer context improves trust and scanability.
+- How verified: Not run in this session (visual check pending).
+- Core idea: Make key visual surfaces robust and information-rich so failures do not break the experience.
 
 ## Phase 6 — Offline & Reliability Hardening
 

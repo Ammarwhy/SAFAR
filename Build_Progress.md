@@ -399,6 +399,81 @@ Current primary testing workflow: Web variant via `npx expo start --web --clear`
 
 ---
 
+## Entry 010 — 2026-04-25
+
+### Goal
+- Complete the UI quality pass across Explore, Journeys, Vibe Room, and Profile so the app feels production-ready.
+
+### Changes Made
+- Wired Explore category pills to a real `CATEGORY_DATA` map and updated section headline rendering.
+- Fixed Hunza Valley Featured Escape image rendering and refined card layout.
+- Made Journeys tabs render distinct Upcoming / Past Trips / Wishlist content.
+- Corrected Latest Update avatar stacking and action buttons.
+- Enriched Vibe Room with Today's Brief, quick actions, and emoji reactions.
+- Overhauled Profile with hero cover, achievements, followers preview, and recent journeys scroll.
+
+### Files Changed
+- `app/(tabs)/explore/index.tsx`
+- `app/(tabs)/journeys/index.tsx`
+- `app/(tabs)/journeys/collection.tsx`
+- `app/(tabs)/journeys/[tripId]/vibe-room.tsx`
+- `app/(tabs)/profile/index.tsx`
+- `constants/mockData.ts`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+
+### Verification
+- `npx tsc --noEmit --skipLibCheck` reported zero errors.
+- IDE diagnostics showed only pre-existing SafeAreaView deprecation hints.
+
+### Known Issues / Follow-ups
+- Backend and realtime wiring remain pending for these UI surfaces.
+
+### Reasoning
+- The app needed consistent, production-grade visual fidelity before backend wiring to avoid layout churn later.
+
+### Core Idea
+- Lock the product surface with data-reactive UI first, then attach business logic to stable screens.
+
+---
+
+## Entry 011 — 2026-04-25
+
+### Goal
+- Make the Featured Escape image render reliably and improve the card content hierarchy.
+
+### Changes Made
+- Added Featured Escape image fallback handling and display metadata (duration + highlight chips).
+- Updated mock data to include a fallback image URL and highlight metadata.
+- Synchronized all project markdown files with the latest change.
+
+### Files Changed
+- `app/(tabs)/explore/index.tsx`
+- `constants/mockData.ts`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+- `.expo/README.md`
+
+### Verification
+- Not run in this session (UI check pending).
+
+### Known Issues / Follow-ups
+- If the remote image URL fails on specific networks, consider hosting critical hero images locally or in Supabase Storage.
+
+### Reasoning
+- A broken hero image undermines credibility; the fallback and metadata make the card resilient and more informative.
+
+### Core Idea
+- Design for reliability: critical visual surfaces should degrade gracefully without losing context.
+
+---
+
 ## Entry 010 — UI Quality Pass: Categories, Image Fix, Tabs, Vibe Room, Profile Overhaul (2026-04-25)
 
 ### Goal

@@ -220,6 +220,10 @@ export const MOCK_EXPLORE = {
 		badge: "TRENDING",
 		image:
 			"https://images.unsplash.com/photo-1609184807049-a8b2e6acda0f?auto=format&fit=crop&w=1200&q=80",
+		fallbackImage:
+			"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+		duration: "7 DAYS",
+		highlights: ["Glacier-fed lakes", "Heritage trails", "Autumn glow"],
 	},
 	categories: ["MOUNTAINS", "HERITAGE", "DESERT", "LAKES", "CITY"],
 	journeys: [

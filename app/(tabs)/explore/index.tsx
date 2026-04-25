@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   TextInput, Image, ImageBackground, SafeAreaView,
@@ -110,6 +110,16 @@ export default function ExploreScreen() {
   const [activeCategory, setActiveCategory] = useState('MOUNTAINS');
   const [searchQuery, setSearchQuery] = useState('');
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
+  const [isFeaturedFallback, setIsFeaturedFallback] = useState(false);
+
+  const featuredFallbackUri = featured.fallbackImage ?? featured.image;
+  const featuredImageSource = useMemo(() => {
+    if (isFeaturedFallback && featuredFallbackUri) {
+      return featuredFallbackUri;
+    }
+    return featured.image;
+  }, [featured.image, featuredFallbackUri, isFeaturedFallback]);
+  const featuredHighlights = featured.highlights?.slice(0, 3) ?? [];
 
   const baseJourneys = CATEGORY_DATA[activeCategory]?.journeys ?? journeys;
   const sectionHeadline = CATEGORY_DATA[activeCategory]?.headline ?? 'Curated Journeys';
@@ -157,15 +167,37 @@ export default function ExploreScreen() {
           onPress={() => router.push('/(tabs)/explore/hunza-valley' as never)}
         >
           <ImageBackground
-            source={{ uri: featured.image }}
+            source={{ uri: featuredImageSource }}
             style={styles.featuredImg}
             imageStyle={styles.featuredImgStyle}
+            resizeMode="cover"
+            onError={() => {
+              if (!isFeaturedFallback && featuredFallbackUri && featuredFallbackUri !== featured.image) {
+                setIsFeaturedFallback(true);
+              }
+            }}
           >
             <View style={styles.featuredOverlay}>
-              <View style={styles.trendingBadge}>
-                <Text style={styles.trendingText}>{featured.badge}</Text>
-                <Text style={styles.trendingRegion}>  {featured.region}</Text>
+              <View style={styles.featuredTopRow}>
+                <View style={styles.trendingBadge}>
+                  <Text style={styles.trendingText}>{featured.badge}</Text>
+                  <Text style={styles.trendingRegion}>  {featured.region}</Text>
+                </View>
+                {featured.duration ? (
+                  <View style={styles.featuredMeta}>
+                    <Text style={styles.featuredMetaText}>{featured.duration}</Text>
+                  </View>
+                ) : null}
               </View>
+              {featuredHighlights.length > 0 ? (
+                <View style={styles.featuredHighlights}>
+                  {featuredHighlights.map((item) => (
+                    <View key={item} style={styles.featuredChip}>
+                      <Text style={styles.featuredChipText}>{item}</Text>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
               <Text style={styles.featuredTitle}>{featured.title}</Text>
               <Text style={styles.featuredDesc}>{featured.description}</Text>
               <View style={styles.featuredActions}>
@@ -322,9 +354,10 @@ const styles = StyleSheet.create({
   viewAll: { ...Typography.label, color: Colors.textSecondary, fontSize: 10 },
 
   featuredCard: { marginHorizontal: Spacing.screen, marginBottom: 8, borderRadius: Radius.lg, ...Shadow.md },
-  featuredImg: { width: '100%', height: 280, justifyContent: 'flex-end', borderRadius: Radius.lg, overflow: 'hidden' },
+  featuredImg: { width: '100%', height: 280, justifyContent: 'flex-end', borderRadius: Radius.lg, overflow: 'hidden', backgroundColor: Colors.bgMuted },
   featuredImgStyle: { borderRadius: Radius.lg },
   featuredOverlay: { padding: 16, paddingTop: 80, backgroundColor: 'rgba(0,0,0,0.38)', borderBottomLeftRadius: Radius.lg, borderBottomRightRadius: Radius.lg },
+  featuredTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
   trendingBadge: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: Colors.bgCard, borderRadius: Radius.pill,
@@ -332,6 +365,21 @@ const styles = StyleSheet.create({
   },
   trendingText: { ...Typography.label, color: Colors.brand, fontSize: 10 },
   trendingRegion: { ...Typography.label, color: Colors.textSecondary, fontSize: 10 },
+  featuredMeta: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: Radius.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  featuredMetaText: { ...Typography.label, color: '#fff', fontSize: 10, letterSpacing: 0.6 },
+  featuredHighlights: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
+  featuredChip: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderRadius: Radius.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  featuredChipText: { ...Typography.label, color: '#fff', fontSize: 9, letterSpacing: 0.4 },
   featuredTitle: { ...Typography.h1, color: '#fff', marginBottom: 4 },
   featuredDesc: { ...Typography.bodyMd, color: 'rgba(255,255,255,0.85)', marginBottom: 12 },
   featuredActions: { flexDirection: 'row', gap: 10, alignItems: 'center' },

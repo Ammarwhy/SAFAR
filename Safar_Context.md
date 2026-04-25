@@ -5,13 +5,13 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Full UI quality pass complete as of 2026-04-25 (Entry 010). All main tab screens are visually polished, category-reactive, and tab-content-aware. Profile, Vibe Room, and Journeys are at production UI fidelity. Backend/realtime wiring is the next phase. See `Build_Progress.md` Entry 010 for full details.
+Current implementation status note: Featured Escape card hardening complete as of 2026-04-25 (Entry 011). The hero image now includes fallback handling plus duration/highlight metadata. Backend/realtime wiring remains the next phase. See `Build_Progress.md` Entry 011 for full details.
 
-### Latest Checkpoint (Entry 010 — 2026-04-25)
-- What changed: Explore category pills now drive `CATEGORY_DATA` journeys and section headline; Hunza Valley ImageBackground display fixed (overflow/borderRadius moved to the image element); Journeys tabs render distinct Upcoming / Past Trips / Wishlist content; Latest Update card has proper avatar stacking and action buttons; Vibe Room has Today's Brief, Quick Actions strip, and emoji reactions; Profile completely overhauled (hero cover, achievements, followers, recent journeys, polished menus).
-- Why it changed: The app needed to cross the threshold from "functional prototype" to "top-quality app experience" across its most-visited screens.
-- How verified: `npx tsc --noEmit --skipLibCheck` → zero errors; IDE diagnostics → only pre-existing SafeAreaView deprecation hints.
-- Core idea: Every interactive element must visibly respond to user input (data wiring), and every screen must present patterns familiar from premium apps so users feel immediate trust.
+### Latest Checkpoint (Entry 011 — 2026-04-25)
+- What changed: Featured Escape now uses fallback image handling and includes duration + highlight chips; mock data updated accordingly; docs synced to Entry 011.
+- Why it changed: The hero card must never render blank; adding resilience and richer context improves trust and scanability.
+- How verified: Not run in this session (visual check pending).
+- Core idea: Make key visual surfaces robust and information-rich so failures do not break the experience.
 
 ---
 

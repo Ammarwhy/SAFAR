@@ -1,7 +1,8 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Colors, Typography, Spacing, Radius, Shadow } from "../constants/Theme";
+import { Colors, Typography, Spacing, Radius } from "../constants/Theme";
 
 export default function ConnectionErrorScreen() {
 	const router = useRouter();
@@ -9,7 +10,7 @@ export default function ConnectionErrorScreen() {
 		<SafeAreaView style={styles.safe}>
 			<View style={styles.container}>
 				<View style={styles.iconBox}>
-					<Text style={styles.icon}>🚫</Text>
+					<Ionicons name="wifi-outline" size={36} color={Colors.danger} />
 				</View>
 				<Text style={styles.title}>No Connection</Text>
 				<Text style={styles.desc}>
@@ -38,16 +39,15 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		marginBottom: 20,
 	},
-	icon: { fontSize: 36 },
 	title: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 10 },
 	desc: { ...Typography.body, color: Colors.textSecondary, textAlign: "center", lineHeight: 22, marginBottom: 28 },
 	retryBtn: {
-		backgroundColor: "#5B6BF5",
+		backgroundColor: Colors.brand,
 		borderRadius: Radius.full,
 		paddingVertical: 14,
 		paddingHorizontal: 48,
 		marginBottom: 16,
 	},
 	retryText: { ...Typography.h4, color: "#fff" },
-	offlineText: { ...Typography.h4, color: "#5B6BF5" },
+	offlineText: { ...Typography.h4, color: Colors.brand },
 });

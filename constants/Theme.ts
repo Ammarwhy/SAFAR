@@ -1,37 +1,32 @@
-/**
- * Unified design system theme constants
- * Includes Colors, Typography, Spacing, and Radius
- */
+import { Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
+export const scale = (size: number) => (width / 390) * size;
 
 export const Colors = {
-  // Brand colors
-  brand: "#371B17", // Rich mahogany primary
-  accent: "#371B17", // Rich mahogany accent
-  brandLight: "#5B6BF5",
-  
-  // Background colors
-  bg: "#EEEDE9", // Parchment background
-  bgMuted: "#E5E1DA", // Muted parchment for decorative elements
-  bgCard: "#FFFFFF", // Card background
-  
-  // Text colors
-  textPrimary: "#251816", // Dark warm text
-  textSecondary: "#625654", // Muted warm text
-  textMuted: "#7B716D", // Light muted warm text
-  
-  // Status colors
+  brand: "#371B17",
+  accent: "#371B17",
+  brandLight: "#8A5E4A",
+
+  bg: "#EEEDE9",
+  bgMuted: "#E5E1DA",
+  bgCard: "#FAFAF8",
+
+  textPrimary: "#251816",
+  textSecondary: "#625654",
+  textMuted: "#7B716D",
+
   error: "#B44747",
   success: "#2F6F5E",
   match: "#5B6BF5",
   warning: "#A27245",
-  danger: "#B44747", // Red error color
-  dangerBg: "#F6E8E7", // Light red background
-  
-  // Card & surface colors
-  card: "#FFFFFF",
-  surface: "#FAFAFA",
-  
-  // Border colors
+  danger: "#B44747",
+  dangerDark: "#8B2020",
+  dangerBg: "#F6E8E7",
+
+  card: "#FAFAF8",
+  surface: "#FAFAF8",
+
   border: "#D6D2CC",
   borderDark: "#BFB6AE",
 };
@@ -118,7 +113,7 @@ export const Typography = {
 };
 
 export const Spacing = {
-  screen: 16, // Standard screen padding
+  screen: 16,
   xs: 6,
   sm: 10,
   md: 16,
@@ -138,23 +133,23 @@ export const Radius = {
 
 export const Shadow = {
   sm: {
-    shadowColor: "#000",
+    shadowColor: "#371B17",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.07,
     shadowRadius: 6,
     elevation: 2,
   },
   md: {
-    shadowColor: "#000",
+    shadowColor: "#371B17",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.09,
     shadowRadius: 12,
     elevation: 4,
   },
   lg: {
-    shadowColor: "#000",
+    shadowColor: "#371B17",
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.16,
+    shadowOpacity: 0.12,
     shadowRadius: 20,
     elevation: 8,
   },

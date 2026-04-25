@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { Platform, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Colors } from "@/constants/Theme";
 
 export default function RootLayout() {
   return (
@@ -22,16 +23,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E6E4DF",
+    backgroundColor: Colors.bgMuted,
   },
   mobileFrame: {
     width: "100%",
     maxWidth: Platform.OS === "web" ? 420 : undefined,
     height: "100%",
-    backgroundColor: "#EEEDE9",
+    backgroundColor: Colors.bg,
     borderRadius: Platform.OS === "web" ? 24 : 0,
     overflow: "hidden",
     borderWidth: Platform.OS === "web" ? 1 : 0,
-    borderColor: "#D6D2CC",
+    borderColor: Colors.border,
   },
 });

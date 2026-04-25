@@ -5,13 +5,13 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Shared UI component layer plus additional core screen rewrites are now in place, with palette migration to parchment (`#EEEDE9`) + rich mahogany (`#371B17`) and mobile-style web viewport rendering (see Entry 009 in `Build_Progress.md`).
+Current implementation status note: Full UI quality pass complete as of 2026-04-25 (Entry 010). All main tab screens are visually polished, category-reactive, and tab-content-aware. Profile, Vibe Room, and Journeys are at production UI fidelity. Backend/realtime wiring is the next phase. See `Build_Progress.md` Entry 010 for full details.
 
-### Latest Checkpoint (Entry 009)
-- What changed: Splash, Login, Explore, Match Discovery, and Profile were updated to the latest frame style; `SafarHeader` and route-aware `BottomTabBar` were added; mock datasets were expanded (`MOCK_EXPLORE`, `MOCK_MATCHES`, `MOCK_USER`); color tokens were migrated to parchment + rich mahogany.
-- Why it changed: Prototype parity and color-system consistency were required before backend/realtime wiring.
-- How verified: Diagnostics on edited files returned no errors; Expo web startup was re-run and reported no blocking runtime failures.
-- Core idea: Use token-driven design and reusable screen scaffolding to lock visual contracts before data/state integration.
+### Latest Checkpoint (Entry 010 — 2026-04-25)
+- What changed: Explore category pills now drive `CATEGORY_DATA` journeys and section headline; Hunza Valley ImageBackground display fixed (overflow/borderRadius moved to the image element); Journeys tabs render distinct Upcoming / Past Trips / Wishlist content; Latest Update card has proper avatar stacking and action buttons; Vibe Room has Today's Brief, Quick Actions strip, and emoji reactions; Profile completely overhauled (hero cover, achievements, followers, recent journeys, polished menus).
+- Why it changed: The app needed to cross the threshold from "functional prototype" to "top-quality app experience" across its most-visited screens.
+- How verified: `npx tsc --noEmit --skipLibCheck` → zero errors; IDE diagnostics → only pre-existing SafeAreaView deprecation hints.
+- Core idea: Every interactive element must visibly respond to user input (data wiring), and every screen must present patterns familiar from premium apps so users feel immediate trust.
 
 ---
 
@@ -98,15 +98,11 @@ safar/
 │       └── index.tsx             # Safety Center (GUI-13)
 ├── components/
 │   ├── ui/
-│   │   ├── ArchCard.tsx          # Reusable arched image card
-│   │   ├── RadarChart.tsx        # Travel Persona DNA radar chart
-│   │   ├── SOSButton.tsx         # Safety center SOS button
-│   │   ├── ExpenseRow.tsx        # Transaction list item
-│   │   ├── AgencyCard.tsx        # Agency directory card
-│   │   ├── ChatBubble.tsx        # Vibe room message bubble
-│   │   └── OfflineBanner.tsx     # Offline mode indicator
+│   │   └── ArchCard.tsx          # Reusable arched image card (heritage arch-top image frame)
 │   └── layouts/
-│       └── HeritageHeader.tsx    # Rich mahogany top bar (logo + avatar)
+│       ├── SafarHeader.tsx       # Primary top bar with logo, optional avatar + subtitle
+│       ├── BottomTabBar.tsx      # Route-aware bottom tab navigation bar
+│       └── HeritageHeader.tsx    # Legacy top bar (retained, not primary)
 ├── lib/
 │   ├── supabase.ts               # Supabase client config
 │   ├── matchEngine.ts            # MatchEngine scoring algorithm

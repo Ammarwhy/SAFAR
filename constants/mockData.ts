@@ -83,7 +83,6 @@ export type MockExpenseItem = {
 	category: string;
 	amount: number;
 	split: string;
-	icon: string;
 };
 
 export type MockExpenses = {
@@ -275,7 +274,7 @@ export const MOCK_MATCHES: MatchProfile[] = [
 			"https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
 		matchPct: 94,
 		bio: "Seeking a fellow traveler for a deep-dive into the Silk Road's architectural evolution. I prioritize historical context over standard tourist traps.",
-		tags: ["🏛 History Buff", "🎨 Visual Arts"],
+		tags: ["History Buff", "Visual Arts"],
 	},
 	{
 		id: "zain",
@@ -286,7 +285,7 @@ export const MOCK_MATCHES: MatchProfile[] = [
 			"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80",
 		matchPct: 88,
 		bio: "Prefer slow routes, mountain silence, and tea stops with good company.",
-		tags: ["⛰ Mountain Seekers", "☕ Tea Trail"],
+		tags: ["Mountain Seekers", "Tea Trail"],
 	},
 	{
 		id: "maha",
@@ -297,7 +296,7 @@ export const MOCK_MATCHES: MatchProfile[] = [
 			"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=900&q=80",
 		matchPct: 91,
 		bio: "I build itineraries around food markets, heritage streets, and local stories.",
-		tags: ["🍲 Food Explorer", "🗺 Route Sync"],
+		tags: ["Food Explorer", "Route Sync"],
 	},
 ];
 
@@ -392,7 +391,6 @@ export const MOCK_EXPENSES: MockExpenses = {
 			category: "Dining",
 			amount: 18500,
 			split: "Split equally",
-			icon: "🍽",
 		},
 		{
 			id: "exp-2",
@@ -401,7 +399,6 @@ export const MOCK_EXPENSES: MockExpenses = {
 			category: "Transport",
 			amount: 46000,
 			split: "Split equally",
-			icon: "⛽",
 		},
 		{
 			id: "exp-3",
@@ -410,7 +407,6 @@ export const MOCK_EXPENSES: MockExpenses = {
 			category: "Stay",
 			amount: 92000,
 			split: "By room",
-			icon: "🛏",
 		},
 		{
 			id: "exp-4",
@@ -419,7 +415,6 @@ export const MOCK_EXPENSES: MockExpenses = {
 			category: "Activity",
 			amount: 28000,
 			split: "Only participants",
-			icon: "🧗",
 		},
 	],
 };

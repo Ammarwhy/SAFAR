@@ -396,3 +396,149 @@ Current primary testing workflow: Web variant via `npx expo start --web --clear`
 
 ### Core Idea
 - Establish one authoritative visual language (token-driven parchment + mahogany system) and one reusable layout pattern, then layer business logic onto stable UI contracts.
+
+---
+
+## Entry 010 — UI Quality Pass: Categories, Image Fix, Tabs, Vibe Room, Profile Overhaul (2026-04-25)
+
+### Goal
+Bring six specific pain points up to "top 500 app" visual and interaction quality: non-functional category pills on Explore, broken Hunza Valley image, Journeys tabs showing identical content, misaligned avatar/button row on the Latest Update card, an empty-feeling Vibe Room, and an unprofessional Profile page.
+
+### What Changed
+
+**Explore (`app/(tabs)/explore/index.tsx`)**
+- Added a `CATEGORY_DATA` map with two curated journeys per category (MOUNTAINS / HERITAGE / DESERT / LAKES / CITY). Each entry provides `{ headline, journeys[] }`.
+- Category pill taps now drive `baseJourneys` (which two journey cards are displayed) and `sectionHeadline` (section title above the cards). Previously the pills updated state but nothing in the UI depended on it.
+- Fixed the Hunza Valley featured card: moved `overflow: 'hidden'` + `borderRadius` from the parent `TouchableOpacity` to the `ImageBackground` style directly, which resolves the Android clipping bug that prevented the background image from rendering.
+- Added `featuredImgStyle` as a named style for the `imageStyle` prop to keep it type-safe.
+
+**Journeys (`app/(tabs)/journeys/index.tsx`)**
+- Imported `MOCK_TRIPS` alongside `MOCK_JOURNEYS`.
+- **Upcoming tab**: unchanged — shows the two active/booking journeys (Karakoram + Annapurna).
+- **Past Trips tab**: new layout — filters `MOCK_TRIPS` by `daysLeft === 0` and renders each as a card with hero image, year badge, destination, a `Completed` chip, meta chips (dates/stops/hotel), and a "View Journal →" link.
+- **Wishlist tab**: new layout — 3 hardcoded wish destinations rendered as hero `ImageBackground` cards with heart badge and best-window notes; dashed "Discover more" add button at bottom.
+- **Latest Update card**: replaced the broken `position: 'relative'` + `left` offset avatar approach (which doesn't work in RN Flexbox) with `marginLeft: -10` stacking on real avatar images; added `Notify All` (filled) and `View All` (outlined) action buttons aligned to the right of the stack.
+
+**Vibe Room (`app/(tabs)/journeys/[tripId]/vibe-room.tsx`)**
+- Added a collapsible **TODAY'S BRIEF** card (between pinned itinerary and messages): shows temperature, sunset time, next stop, and days remaining — expands/collapses via `briefExpanded` state.
+- Added a horizontal **Quick Actions** strip (Photo, Location, Poll, Event, Docs) with icon + label, each navigating to the appropriate flow screen.
+- Added a horizontal **emoji reaction strip** (🔥 Hot, 👀 Noted, ✅ On it, ❤️ Love it, ⚡ Let's go) above the input bar.
+
+**Profile (`app/(tabs)/profile/index.tsx`)**
+- Full hero redesign: `ImageBackground` cover photo (Karakoram landscape), dark overlay, 96px avatar with brand-color ring, camera edit badge, name/title/quote in white text.
+- Follow / Share / Message action row below the hero.
+- Stats card now shows icons per stat (earth, compass, people).
+- Horizontal scrollable **Achievement badges** row (5 chips).
+- **Followers preview** card with real overlapping avatar stack and context line.
+- **Recent Journeys** horizontal card scroll from `MOCK_TRIPS` with image, title, destination, dates, and active pill.
+- **Membership card** redesigned with icon, label hierarchy, and a proper CTA row.
+- All menu rows now have tinted icon backgrounds, a description subtitle, and `chevron-forward` arrow.
+- Security section uses the same icon-row pattern with descriptions.
+- Logout button has icon + text, version string beneath it.
+
+### Files Changed
+- `app/(tabs)/explore/index.tsx`
+- `app/(tabs)/journeys/index.tsx`
+- `app/(tabs)/journeys/[tripId]/vibe-room.tsx`
+- `app/(tabs)/profile/index.tsx`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+
+### Verification
+- `npx tsc --noEmit --skipLibCheck` → zero type errors across all changed files.
+- IDE diagnostics: only pre-existing `SafeAreaView` deprecation hints (severity: Hint, not Error) consistent with the rest of the codebase.
+- Read-through of every JSX block to confirm no missed imports or undefined references.
+- `CATEGORY_DATA` keys match the `MOCK_EXPLORE.categories` array exactly (`MOUNTAINS / HERITAGE / DESERT / LAKES / CITY`).
+
+### Reasoning
+- **ImageBackground + overflow**: In React Native, `overflow: 'hidden'` on a `TouchableOpacity` parent can cause Android to clip the child image to nothing when elevation (shadow) is also present. Moving both `overflow: 'hidden'` and `borderRadius` to the `ImageBackground` itself is the correct platform-safe pattern.
+- **Journeys tabs**: The simplest correct approach was to keep all tab content in the same `ScrollView` component, gated by an `if` (tab === …) block — no tab navigator needed, consistent with the existing one-screen architecture.
+- **Avatar stack**: `marginLeft: -10` is the standard React Native approach for overlapping avatar stacks. `position: 'relative'` with `left` offset doesn't move elements in RN Flexbox the way it does in CSS — only `position: 'absolute'` with `left` works, and that requires a defined-height parent container.
+- **Profile hero**: A full-bleed cover photo with a dark overlay and centered avatar is the established pattern for social/travel apps at this quality tier. Using an `ImageBackground` with an rgba overlay View avoids the need for `expo-linear-gradient`.
+
+### Core Idea
+Functional polish requires two things together: data wiring (state actually driving the visible output) and visual credibility (patterns the user recognises from apps they already trust). This pass addressed both — every pill now changes content, every tab shows unique data, and the profile follows the cover-photo + stats + section-cards pattern used by Airbnb, Strava, and Instagram.
+
+### Known Issues / Follow-ups
+- Vibe Room Quick Action routes (`/flows/share-location`, `/flows/create-poll`, etc.) resolve to the catch-all `flows/[flow].tsx` — no dead link, but those flow screens are stubs.
+- `CATEGORY_DATA` journeys are hardcoded inline; a future pass could move them into `mockData.ts` alongside `MOCK_EXPLORE`.
+- `borderStyle: "dashed"` on the Wishlist add-button is not supported on Android (RN limitation) — it will render as solid. Known cosmetic issue.
+
+---
+
+## Entry 3 — UI/UX Audit & Polish Pass (2026-04-24)
+
+### What Changed
+
+**Dead Code Cleanup**
+- Removed 5 unused component files: `SOSButton.tsx`, `OfflineBanner.tsx`, `RadarChart.tsx`, `AgencyCard.tsx`, `ExpenseRow.tsx` — none were imported anywhere in the app.
+- Removed unused `Image` import from `login.tsx`.
+- Replaced all hardcoded hex values in screen files with Theme token references.
+- Removed redundant `<View style={{ height: 20 }} />` spacers now covered by `contentContainerStyle.paddingBottom`.
+
+**Theme Tokens Fixed**
+- `Colors.bgCard` and `Colors.card` changed from `#FFFFFF` to `#FAFAF8` (warm white per spec).
+- `Colors.brandLight` changed from cold blue `#5B6BF5` to warm mahogany-derived `#8A5E4A`.
+- `Colors.dangerDark` added (`#8B2020`) for SOS active state.
+- All `Shadow.*` values changed from black (`#000`) shadow color to mahogany (`#371B17`), opacity 0.07–0.12.
+- Added `scale(size)` utility exported from `Theme.ts` for responsive font sizing.
+- Updated `colors.ts` cardWhite from `#FFFFFF` to `#FAFAF8`.
+
+**Splash Screen — Full Redesign**
+- Replaced mountain logo + stats + Urdu tagline with: SAFAR wordmark centered on parchment, subtle arch motif (thin arched border), tagline "Every journey tells a story."
+- Wordmark fades in at 0ms (800ms, ease-in-out). Tagline fades in at 400ms delay (600ms).
+- Full screen fades out at 2.2s → navigates to login via `router.replace`.
+- Uses RN `Animated` API with `useRef` to avoid re-creating values. No Reanimated dependency added.
+
+**Responsive / Layout**
+- Added `contentContainerStyle={{ paddingBottom: 100 }}` to every tab-screen ScrollView (Explore, Journeys, Community, Safety, Profile, Traveler, Agencies).
+- `_layout.tsx` hardcoded hex values replaced with `Colors.bg`, `Colors.bgMuted`, `Colors.border`.
+- `SafarHeader` avatar size fixed to 44×44pt (was 30×30pt — below touch target spec).
+
+**Navigation**
+- Profile logout now calls `router.replace('/(auth)/index')` instead of pushing to `/flows/logout-confirm`.
+- `explore/index.tsx` explore card routes wrapped with `as never` to satisfy Expo Router typed paths.
+- `explore/[destination].tsx` rewritten to use Theme tokens, SafarHeader, SafeAreaView, and proper BottomTabBar placement.
+- Back buttons on deep screens (`expense`, `itinerary`, `new-journey`, `traveler`) have `hitSlop={{ top:8, bottom:8, left:8, right:8 }}`.
+
+**HCI / Interactions**
+- `login.tsx` `KeyboardAvoidingView` behavior corrected: iOS → `'height'`, Android → `'padding'`.
+- Explore search bar wired to `searchQuery` state; `filteredJourneys` drives card rendering; empty state shown when no match.
+- Explore category chip toggle working via `setActiveCategory`.
+- `messages/index.tsx` fully rewritten: `BottomTabBar` moved outside `ScrollView`, `HeritageHeader` replaced with `SafarHeader`, `SafeAreaView` wrapper added, all hardcoded hex values replaced.
+
+**Animations**
+- `traveler/[userId].tsx` hero section gains `FadeInDown.duration(350)` entrance animation.
+- FrameBottomNav already has press-scale animation via Reanimated; shadow color corrected.
+
+**Component Updates**
+- `ArchCard.tsx` migrated from `colors.ts` tokens to `Theme.ts` tokens.
+- `FrameBottomNav.tsx` shadow changed from black to mahogany.
+- `SafarHeader.tsx` shadow changed from black to mahogany.
+- `safety/index.tsx` safety rating overlay background changed from cold blue (`brandLight`) to `Colors.success` (warm teal — semantically correct for a safety score).
+
+### Why
+
+- Warm card white removes the cold clinical look that clashed with the heritage aesthetic.
+- Mahogany shadow tones keep elevation cues inside the warm palette rather than breaking it.
+- Proper `scale()` function in Theme.ts makes responsive font sizing available app-wide.
+- Splash redesign matches the "handcrafted travel journal" identity — minimal, typographic, intentional.
+- Profile logout to `/(auth)/index` is the correct UX flow; the flows catch-all was wrong.
+
+### How Verified
+
+- `npx tsc --noEmit --ignoreDeprecations 5.0` → zero errors.
+- `npx expo start --web --clear` → server starts, HTML served without crash.
+- Manual read-through of every edited file for missed hex values and import consistency.
+
+### Follow-ups (Skipped / Budget)
+
+- `scale()` applied to font sizes in all screen files — currently only Theme typography defines base sizes; applying `scale()` inline across every `fontSize` reference would require touching ~40 style definitions. Recommend a follow-up pass.
+- SOS pulse animation (radial shadow) on the SOS button — deferred; requires Reanimated `withRepeat` loop.
+- Staggered list card entrance animations on Community and Agencies screens — partial (hero section only on Traveler); full stagger for all list items is a follow-up.
+- `collection.tsx` and `new-journey.tsx` `View style={{ height: 20 }}` spacers not removed (already have paddingBottom on those ScrollViews; low risk).
+- ChatBubble still uses `colors.ts` tokens rather than `Theme.ts`; functional but inconsistent — migrate in a follow-up.
+- `app/(tabs)/journeys/collection.tsx` and `app/(tabs)/journeys/new-journey.tsx` ScrollViews still using default contentContainerStyle without explicit `paddingBottom: 100` — add in next pass.

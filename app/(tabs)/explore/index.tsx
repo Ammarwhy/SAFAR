@@ -7,8 +7,103 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
-import { MOCK_EXPLORE } from '../../../constants/mockData';
+import { MOCK_EXPLORE, ExploreJourney } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
+
+type CategoryEntry = { headline: string; journeys: ExploreJourney[] };
+
+const CATEGORY_DATA: Record<string, CategoryEntry> = {
+  MOUNTAINS: {
+    headline: 'Alpine Expeditions',
+    journeys: [
+      {
+        title: 'Karakoram Chronicle',
+        description: 'High passes, glacier viewpoints, and curated lodge stops.',
+        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=80',
+        matchCount: 18,
+      },
+      {
+        title: 'Nanga Parbat Base',
+        description: "Face the world's ninth-highest peak at its dramatic base camp.",
+        image: 'https://images.unsplash.com/photo-1580654712603-eb43273aff33?auto=format&fit=crop&w=1000&q=80',
+        subtitle: 'DIAMIR FACE',
+        matchCount: 7,
+      },
+    ],
+  },
+  HERITAGE: {
+    headline: 'Cultural Corridors',
+    journeys: [
+      {
+        title: 'Lahore Mughal Trail',
+        description: "Follow the footsteps of emperors through Old Lahore's layered streets.",
+        image: 'https://images.unsplash.com/photo-1561361058-c24cecae35ca?auto=format&fit=crop&w=1000&q=80',
+        matchCount: 14,
+      },
+      {
+        title: 'Taxila Excavation Route',
+        description: '2,500-year-old Buddhist ruins along the ancient Silk Road.',
+        image: 'https://images.unsplash.com/photo-1706980062378-ee1160f15195?auto=format&fit=crop&w=1000&q=80',
+        subtitle: 'RAWALPINDI DISTRICT',
+        matchCount: 9,
+      },
+    ],
+  },
+  DESERT: {
+    headline: 'Desert Routes',
+    journeys: [
+      {
+        title: 'Desert Caravan Nights',
+        description: 'Sandstone routes, stargazing camps, and craft bazaar detours.',
+        image: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1000&q=80',
+        subtitle: 'SINDH • THAR BELT',
+        matchCount: 12,
+      },
+      {
+        title: 'Cholistan Fortress Loop',
+        description: 'Desert forts, nomadic culture, and golden dune ridges at dusk.',
+        image: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=1000&q=80',
+        matchCount: 6,
+      },
+    ],
+  },
+  LAKES: {
+    headline: 'Lakeside Trails',
+    journeys: [
+      {
+        title: 'Attabad Lake Route',
+        description: 'Turquoise waters carved by history, with boats departing at dawn.',
+        image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1000&q=80',
+        matchCount: 11,
+      },
+      {
+        title: 'Saif-ul-Malook Trek',
+        description: 'Magical high-altitude lake beneath the Malika Parbat peak.',
+        image: 'https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1000&q=80',
+        subtitle: 'KAGHAN VALLEY',
+        matchCount: 8,
+      },
+    ],
+  },
+  CITY: {
+    headline: 'Urban Explorations',
+    journeys: [
+      {
+        title: 'Lahore Old City Wander',
+        description: 'Food streets, Mughal monuments, and buzzing evening bazaars.',
+        image: 'https://images.unsplash.com/photo-1596881324451-600e1cb9f9d4?auto=format&fit=crop&w=1000&q=80',
+        matchCount: 22,
+      },
+      {
+        title: 'Karachi Coastal Loop',
+        description: 'Clifton, Seaview, and the colonial quarter traced on foot.',
+        image: 'https://images.unsplash.com/photo-1531501410720-c8d437636169?auto=format&fit=crop&w=1000&q=80',
+        subtitle: 'SINDH COASTLINE',
+        matchCount: 15,
+      },
+    ],
+  },
+};
 
 export default function ExploreScreen() {
   const router = useRouter();
@@ -16,9 +111,11 @@ export default function ExploreScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
 
+  const baseJourneys = CATEGORY_DATA[activeCategory]?.journeys ?? journeys;
+  const sectionHeadline = CATEGORY_DATA[activeCategory]?.headline ?? 'Curated Journeys';
   const filteredJourneys = searchQuery.trim()
-    ? journeys.filter((j) => j.title.toLowerCase().includes(searchQuery.toLowerCase()))
-    : journeys;
+    ? baseJourneys.filter((j) => j.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : baseJourneys;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -62,7 +159,7 @@ export default function ExploreScreen() {
           <ImageBackground
             source={{ uri: featured.image }}
             style={styles.featuredImg}
-            imageStyle={{ borderRadius: Radius.lg }}
+            imageStyle={styles.featuredImgStyle}
           >
             <View style={styles.featuredOverlay}>
               <View style={styles.trendingBadge}>
@@ -88,7 +185,7 @@ export default function ExploreScreen() {
         </Animated.View>
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Curated Journeys</Text>
+          <Text style={styles.sectionTitle}>{sectionHeadline}</Text>
           <TouchableOpacity onPress={() => router.push('/(tabs)/journeys/collection')}>
             <Text style={styles.viewAll}>VIEW ALL</Text>
           </TouchableOpacity>
@@ -224,9 +321,10 @@ const styles = StyleSheet.create({
   sectionTitle: { ...Typography.h2, color: Colors.textPrimary },
   viewAll: { ...Typography.label, color: Colors.textSecondary, fontSize: 10 },
 
-  featuredCard: { marginHorizontal: Spacing.screen, marginBottom: 8, borderRadius: Radius.lg, overflow: 'hidden', ...Shadow.md },
-  featuredImg: { width: '100%', height: 260, justifyContent: 'flex-end' },
-  featuredOverlay: { padding: 16, backgroundColor: 'rgba(0,0,0,0.35)', borderRadius: Radius.lg },
+  featuredCard: { marginHorizontal: Spacing.screen, marginBottom: 8, borderRadius: Radius.lg, ...Shadow.md },
+  featuredImg: { width: '100%', height: 280, justifyContent: 'flex-end', borderRadius: Radius.lg, overflow: 'hidden' },
+  featuredImgStyle: { borderRadius: Radius.lg },
+  featuredOverlay: { padding: 16, paddingTop: 80, backgroundColor: 'rgba(0,0,0,0.38)', borderBottomLeftRadius: Radius.lg, borderBottomRightRadius: Radius.lg },
   trendingBadge: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: Colors.bgCard, borderRadius: Radius.pill,

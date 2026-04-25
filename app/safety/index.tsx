@@ -131,9 +131,14 @@ export default function SafetyCenterScreen() {
 						<View style={styles.toolBody}>
 							<Text style={styles.toolTitle}>{tool.title}</Text>
 							<Text style={styles.toolDesc}>{tool.desc}</Text>
-							<Text style={styles.toolAction}>
-								{tool.id === "live" && liveShare ? "🟢 ACTIVE — STOP SHARING ›" : tool.action}
-							</Text>
+							{tool.id === "live" && liveShare ? (
+							<View style={styles.liveActiveRow}>
+								<View style={styles.liveDot} />
+								<Text style={styles.toolAction}>ACTIVE — STOP SHARING ›</Text>
+							</View>
+						) : (
+							<Text style={styles.toolAction}>{tool.action}</Text>
+						)}
 						</View>
 					</TouchableOpacity>
 					</Animated.View>
@@ -275,6 +280,8 @@ const styles = StyleSheet.create({
 	toolTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 4 },
 	toolDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 8 },
 	toolAction: { ...Typography.label, color: Colors.brand, fontSize: 10 },
+	liveActiveRow: { flexDirection: "row", alignItems: "center", gap: 5 },
+	liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success },
 
 	reportCard: {
 		marginHorizontal: Spacing.screen,

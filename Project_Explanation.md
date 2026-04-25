@@ -6,7 +6,7 @@ Every change explanation must clearly include: what was changed, why it was chan
 
 Current primary testing mode is the web variant: `npx expo start --web --clear`.
 
-Latest update reference: Entry 009 in `Build_Progress.md`.
+Latest update reference: Entry 010 in `Build_Progress.md`.
 
 ## Simple Summary
 
@@ -32,6 +32,8 @@ It helps with:
 - Implemented additional production-style screen rewrites for Splash, Login, Explore, Match Discovery, and Profile.
 - Added shared `SafarHeader` and route-aware `BottomTabBar` for consistent screen scaffolding.
 - Completed palette migration to parchment background + rich mahogany primary across major components and updated project docs accordingly.
+- Completed a thorough audit-and-polish pass: removed dead component files, fixed token gaps, redesigned splash, added scroll padding, fixed back button hit areas, and corrected keyboard behaviour.
+- **UI quality pass (2026-04-25):** Made Explore category pills drive real content via a `CATEGORY_DATA` map; fixed Hunza Valley image display bug; made Journeys tabs (Upcoming / Past Trips / Wishlist) render distinct content; fixed Latest Update card avatar stack and action buttons; enriched Vibe Room with a group brief card, quick actions strip, and emoji reactions; completely overhauled the Profile page with a hero cover photo, achievement badges, followers preview, and recent journeys scroll.
 
 ## Why These Changes Matter
 
@@ -64,9 +66,9 @@ For every new code change, documentation must answer four things in simple words
 - Connect the app to Supabase.
 - Make Explore, Journeys, Chat, Expense, Safety, and Profile fully functional.
 
-## Latest Change Summary (2026-04-21)
+## Latest Change Summary (2026-04-25)
 
-- What changed: New core screens and shared layout utilities were integrated, mock datasets were expanded, a runtime syntax issue was fixed, and the color system was standardized to parchment (`#EEEDE9`) and rich mahogany (`#371B17`).
-- Why it changed: We needed a professional, consistent UI foundation and accurate screen parity before backend/state wiring.
-- How it was verified: Diagnostics on edited files returned no errors, and Expo web startup was re-run with no blocking runtime failures.
-- Core idea: Finalize reusable visual contracts and tokenized theming first, then attach realtime/data behavior on top of stable UI primitives.
+- What changed: Explore category pills now filter content; Hunza Valley card shows its image; Journeys tabs show three distinct views (Upcoming / Past Trips / Wishlist); the Latest Update card has a properly layered avatar stack and two action buttons; the Vibe Room has a collapsible group brief, quick media/poll/event actions, and emoji reaction chips; the Profile page has a full hero cover, achievement badges, follower preview, and recent journeys horizontal scroll.
+- Why it changed: The app needed to feel like a real, polished product — every interactive element must visibly respond and every screen must match what users expect from a well-designed travel app.
+- How it was verified: TypeScript compilation passed with zero errors; all changed files were reviewed for import consistency and missing style references.
+- Core idea: Functional polish = data wiring (state changes drive visible output) + visual credibility (patterns familiar from apps users already trust — hero covers, stat cards, badge rows, avatar stacks).

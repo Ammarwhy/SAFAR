@@ -23,6 +23,7 @@ export default function VibeRoomScreen() {
 	const [messages, setMessages] = useState(MOCK_VIBE_MESSAGES);
 	const [input, setInput] = useState("");
 	const [showError, setShowError] = useState(false);
+	const [briefExpanded, setBriefExpanded] = useState(false);
 	const scrollRef = useRef<ScrollView>(null);
 
 	const sendMessage = () => {
@@ -91,6 +92,57 @@ export default function VibeRoomScreen() {
 					</View>
 				</View>
 
+				<TouchableOpacity style={styles.briefCard} activeOpacity={0.85} onPress={() => setBriefExpanded(!briefExpanded)}>
+					<View style={styles.briefTop}>
+						<View style={styles.briefLeft}>
+							<Ionicons name="partly-sunny-outline" size={16} color={Colors.brand} />
+							<Text style={styles.briefTitle}>TODAY'S BRIEF</Text>
+						</View>
+						<View style={styles.briefRight}>
+							<View style={styles.activeDot} />
+							<Text style={styles.briefActive}>5 active now</Text>
+							<Ionicons name={briefExpanded ? "chevron-up" : "chevron-down"} size={14} color={Colors.textMuted} />
+						</View>
+					</View>
+					{briefExpanded && (
+						<View style={styles.briefGrid}>
+							{[
+								{ icon: "thermometer-outline" as const, label: "TEMP", val: "4°C" },
+								{ icon: "sunny-outline" as const, label: "SUNSET", val: "6:42 PM" },
+								{ icon: "location-outline" as const, label: "NEXT STOP", val: "Eagle Nest" },
+								{ icon: "time-outline" as const, label: "DAYS LEFT", val: "5 days" },
+							].map((item) => (
+								<View key={item.label} style={styles.briefStat}>
+									<Ionicons name={item.icon} size={14} color={Colors.textSecondary} />
+									<Text style={styles.briefStatLabel}>{item.label}</Text>
+									<Text style={styles.briefStatVal}>{item.val}</Text>
+								</View>
+							))}
+						</View>
+					)}
+				</TouchableOpacity>
+
+				<ScrollView
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					contentContainerStyle={styles.quickActionsRow}
+				>
+					{[
+						{ icon: "image-outline" as const, label: "Photo", route: '/flows/attach-media' },
+						{ icon: "location-outline" as const, label: "Location", route: '/flows/share-location' },
+						{ icon: "stats-chart-outline" as const, label: "Poll", route: '/flows/create-poll' },
+						{ icon: "calendar-outline" as const, label: "Event", route: '/flows/create-event' },
+						{ icon: "document-text-outline" as const, label: "Docs", route: '/flows/trip-docs' },
+					].map((action) => (
+						<TouchableOpacity key={action.label} style={styles.quickAction} onPress={() => router.push(action.route as never)}>
+							<View style={styles.quickActionIcon}>
+								<Ionicons name={action.icon} size={18} color={Colors.brand} />
+							</View>
+							<Text style={styles.quickActionLabel}>{action.label}</Text>
+						</TouchableOpacity>
+					))}
+				</ScrollView>
+
 				<ScrollView
 					ref={scrollRef}
 					style={styles.messagesList}
@@ -108,6 +160,14 @@ export default function VibeRoomScreen() {
 						}
 						return <TextBubble key={msg.id} msg={msg} />;
 					})}
+				</ScrollView>
+
+				<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
+					{["🔥 Hot", "👀 Noted", "✅ On it", "❤️ Love it", "⚡ Let's go"].map((reaction) => (
+						<TouchableOpacity key={reaction} style={styles.emojiChip}>
+							<Text style={styles.emojiChipText}>{reaction}</Text>
+						</TouchableOpacity>
+					))}
 				</ScrollView>
 
 				<View style={styles.inputBar}>
@@ -140,7 +200,7 @@ export default function VibeRoomScreen() {
 					<View style={styles.modalOverlay}>
 						<View style={styles.errorModal}>
 							<View style={styles.errorIconBox}>
-								<Text style={styles.errorEmoji}>🚫</Text>
+								<Ionicons name="close-circle-outline" size={32} color={Colors.danger} />
 							</View>
 							<Text style={styles.errorTitle}>Message could not be sent</Text>
 							<Text style={styles.errorDesc}>
@@ -274,6 +334,50 @@ const styles = StyleSheet.create({
 	pinnedMeta: { ...Typography.caption, color: Colors.textSecondary },
 	viewMapText: { ...Typography.label, color: Colors.brand, fontSize: 10 },
 
+	briefCard: {
+		marginHorizontal: Spacing.screen,
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.md,
+		padding: 12,
+		marginBottom: 8,
+		borderWidth: 1,
+		borderColor: Colors.border,
+	},
+	briefTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+	briefLeft: { flexDirection: "row", alignItems: "center", gap: 6 },
+	briefTitle: { ...Typography.label, color: Colors.brand, fontSize: 10 },
+	briefRight: { flexDirection: "row", alignItems: "center", gap: 6 },
+	activeDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success },
+	briefActive: { ...Typography.caption, color: Colors.textSecondary },
+	briefGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 },
+	briefStat: {
+		flex: 1, minWidth: "40%",
+		backgroundColor: Colors.bgMuted, borderRadius: Radius.sm,
+		padding: 10, gap: 2,
+	},
+	briefStatLabel: { ...Typography.caption, color: Colors.textMuted, fontSize: 9 },
+	briefStatVal: { ...Typography.h4, color: Colors.textPrimary, fontSize: 14 },
+
+	quickActionsRow: { paddingHorizontal: Spacing.screen, paddingBottom: 8, gap: 12, paddingTop: 4 },
+	quickAction: { alignItems: "center", gap: 4 },
+	quickActionIcon: {
+		width: 46, height: 46, borderRadius: 23,
+		backgroundColor: Colors.bgCard,
+		borderWidth: 1, borderColor: Colors.border,
+		alignItems: "center", justifyContent: "center",
+		...Shadow.sm,
+	},
+	quickActionLabel: { ...Typography.caption, color: Colors.textSecondary, fontSize: 10 },
+
+	emojiRow: { paddingHorizontal: Spacing.screen, gap: 8, paddingBottom: 8 },
+	emojiChip: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.pill,
+		paddingHorizontal: 12, paddingVertical: 6,
+		borderWidth: 1, borderColor: Colors.border,
+	},
+	emojiChipText: { ...Typography.caption, color: Colors.textSecondary, fontSize: 12 },
+
 	messagesList: { flex: 1 },
 	messagesContent: { padding: Spacing.screen, gap: 12, paddingBottom: 8 },
 	dateDivider: { ...Typography.label, color: Colors.textMuted, textAlign: "center", fontSize: 10, marginBottom: 8 },
@@ -329,7 +433,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		marginBottom: 16,
 	},
-	errorEmoji: { fontSize: 26 },
 	errorTitle: { ...Typography.h3, color: Colors.textPrimary, textAlign: "center", marginBottom: 8 },
 	errorDesc: { ...Typography.body, color: Colors.textSecondary, textAlign: "center", marginBottom: 20 },
 	retryBtn: {

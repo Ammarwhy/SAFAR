@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Radius, Shadow, Spacing, Typography } from "../../constants/Theme";
 
 type FlowConfig = {
-  icon: string;
+  icon: React.ComponentProps<typeof Ionicons>["name"];
   title: string;
   description: string;
   cta: string;
@@ -20,151 +21,151 @@ type FlowConfig = {
 
 const FLOWS: Record<string, FlowConfig> = {
   "profile-photo": {
-    icon: "🖼️",
+    icon: "image-outline",
     title: "Profile Photo",
     description: "Upload, crop, and sync your traveler profile image across the app.",
     cta: "Open Media Picker",
   },
   "personal-info": {
-    icon: "👤",
+    icon: "person-outline",
     title: "Personal Information",
     description: "Review and update your traveler details, contact info, and public profile fields.",
     cta: "Save Changes",
   },
   "payments-payouts": {
-    icon: "💳",
+    icon: "card-outline",
     title: "Payments & Payouts",
     description: "Connect your payment method and configure payout preferences for bookings.",
     cta: "Set Up Payments",
   },
   verification: {
-    icon: "✅",
+    icon: "shield-checkmark-outline",
     title: "Identity Verification",
     description: "Complete identity checks to unlock trusted matching and verified features.",
     cta: "Start Verification",
   },
   "privacy-policy": {
-    icon: "📄",
+    icon: "document-text-outline",
     title: "Privacy Policy",
     description: "Review how your data is processed, stored, and protected within SAFAR.",
     cta: "View Full Policy",
   },
   "manage-docs": {
-    icon: "🗂️",
+    icon: "folder-outline",
     title: "Trip Documents",
     description: "Organize permits, tickets, and IDs so your journey paperwork stays in one place.",
     cta: "Add Document",
   },
   "gear-list": {
-    icon: "🎒",
+    icon: "bag-outline",
     title: "Gear Checklist",
     description: "Track your expedition essentials and mark all items before departure.",
     cta: "Start Checklist",
   },
   wishlist: {
-    icon: "🤍",
+    icon: "heart-outline",
     title: "Wishlist",
     description: "Save this destination to your personal collection and revisit it anytime.",
     cta: "Save Destination",
   },
   "travel-tips": {
-    icon: "💡",
+    icon: "bulb-outline",
     title: "Travel Tips",
     description: "Get practical route advice, local etiquette notes, and timing recommendations.",
     cta: "Read Tips",
   },
   "winter-guide": {
-    icon: "❄️",
+    icon: "snow-outline",
     title: "Winter Guide",
     description: "Explore cold-weather safety practices and route preparation essentials.",
     cta: "Open Guide",
   },
   "activity-history": {
-    icon: "📜",
+    icon: "time-outline",
     title: "Activity History",
     description: "See your complete expense and settlement timeline with details per transaction.",
     cta: "Load Full Activity",
   },
   "vibe-map": {
-    icon: "🗺️",
+    icon: "map-outline",
     title: "Shared Route Map",
     description: "View your group’s pinned route and navigation markers in one live map.",
     cta: "Open Map",
   },
   "attach-media": {
-    icon: "📎",
+    icon: "attach-outline",
     title: "Attach Media",
     description: "Upload photos, clips, and notes directly into the current vibe conversation.",
     cta: "Choose File",
   },
   "emoji-reactions": {
-    icon: "🙂",
+    icon: "happy-outline",
     title: "Quick Reactions",
     description: "Pick emoji reactions for faster group responses without sending full messages.",
     cta: "Pick Reaction",
   },
   "community-filters": {
-    icon: "⚙️",
+    icon: "options-outline",
     title: "Match Filters",
     description: "Tune your matching preferences to discover travelers aligned with your goals.",
     cta: "Apply Filters",
   },
   "community-persona": {
-    icon: "⛰️",
+    icon: "person-circle-outline",
     title: "Persona Preferences",
     description: "Adjust the travel persona focus used by the matching engine.",
     cta: "Update Persona",
   },
   "agency-booking": {
-    icon: "📅",
+    icon: "calendar-outline",
     title: "Booking Request",
     description: "Confirm your dates and traveler count to send a booking inquiry to the agency.",
     cta: "Send Booking Request",
   },
   "agency-contact": {
-    icon: "💬",
+    icon: "chatbubble-outline",
     title: "Contact Agency",
     description: "Open direct messaging with this agency and discuss itinerary options.",
     cta: "Start Conversation",
   },
   "agency-call": {
-    icon: "📞",
+    icon: "call-outline",
     title: "Call Agency",
     description: "Request a direct callback or connect to the agency hotline.",
     cta: "Request Callback",
   },
   "safety-checkin": {
-    icon: "🛡️",
+    icon: "shield-outline",
     title: "Safety Check-in",
     description: "Set your expected return time and trigger auto-alerts if you miss check-in.",
     cta: "Configure Timer",
   },
   "safety-local-services": {
-    icon: "🏥",
+    icon: "medkit-outline",
     title: "Local Services",
     description: "Access nearby police, hospitals, and emergency response contacts.",
     cta: "View Nearby Services",
   },
   "safety-legal-help": {
-    icon: "⚖️",
+    icon: "briefcase-outline",
     title: "Legal Support",
     description: "Reach legal and consular support resources for urgent situations.",
     cta: "Request Legal Help",
   },
   "safety-report": {
-    icon: "⚠️",
+    icon: "warning-outline",
     title: "Report a Concern",
     description: "Submit a location concern report to help improve community safety.",
     cta: "Submit Report",
   },
   "logout-confirm": {
-    icon: "🚪",
+    icon: "log-out-outline",
     title: "Log Out",
     description: "You are about to end your SAFAR session and return to the login screen.",
     cta: "Log Out",
   },
   "sos-activated": {
-    icon: "🚨",
+    icon: "alert-circle-outline",
     title: "SOS Activated",
     description: "Emergency contacts and local authorities have been notified with your live location.",
     cta: "Return to Safety Center",
@@ -182,7 +183,7 @@ export default function FlowScreen() {
   const config = useMemo(
     () =>
       FLOWS[flowKey] ?? {
-        icon: "🚧",
+        icon: "construct-outline",
         title: "Flow Coming Soon",
         description: "This action is being finalized and will be available shortly.",
         cta: "Go Back",
@@ -195,8 +196,8 @@ export default function FlowScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.back}>←</Text>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Flow</Text>
         <View style={{ width: 24 }} />
@@ -204,7 +205,7 @@ export default function FlowScreen() {
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
-          <Text style={styles.icon}>{config.icon}</Text>
+          <Ionicons name={config.icon} size={32} color={Colors.brand} style={styles.icon} />
           <Text style={styles.title}>{config.title}</Text>
           <Text style={styles.desc}>{config.description}</Text>
         </View>
@@ -237,7 +238,7 @@ export default function FlowScreen() {
 
         {flowKey === "emoji-reactions" && (
           <View style={styles.formCard}>
-            <Text style={styles.infoText}>Quick reactions: 😀 ❤️ 🔥 🙌 🧭</Text>
+            <Text style={styles.infoText}>Tap a reaction to send it to the group instantly.</Text>
           </View>
         )}
 
@@ -303,7 +304,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 8,
   },
-  back: { fontSize: 22, color: Colors.textPrimary },
   headerTitle: { ...Typography.h3, color: Colors.textPrimary },
   content: { padding: Spacing.screen, gap: 12 },
   card: {
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     padding: 20,
     ...Shadow.sm,
   },
-  icon: { fontSize: 28, marginBottom: 10 },
+  icon: { marginBottom: 10 },
   title: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 8 },
   desc: { ...Typography.body, color: Colors.textSecondary, lineHeight: 22 },
   formCard: {

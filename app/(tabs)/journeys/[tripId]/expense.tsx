@@ -15,6 +15,13 @@ import { Colors, Typography, Spacing, Radius, Shadow } from "../../../../constan
 import { MOCK_EXPENSES } from "../../../../constants/mockData";
 import BottomTabBar from "../../../../components/layouts/BottomTabBar";
 
+const CATEGORY_ICON: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
+	Dining: "restaurant-outline",
+	Transport: "car-outline",
+	Stay: "bed-outline",
+	Activity: "bicycle-outline",
+};
+
 export default function ExpenseScreen() {
 	const router = useRouter();
 	const [settled, setSettled] = useState(false);
@@ -71,7 +78,11 @@ export default function ExpenseScreen() {
 					{MOCK_EXPENSES.items.map((item) => (
 						<View key={item.id} style={styles.expenseRow}>
 							<View style={styles.expenseIconWrap}>
-								<Text style={styles.expenseIcon}>{item.icon}</Text>
+								<Ionicons
+									name={CATEGORY_ICON[item.category] ?? "receipt-outline"}
+									size={20}
+									color={Colors.brand}
+								/>
 							</View>
 							<View style={styles.expenseInfo}>
 								<Text style={styles.expenseName}>{item.name}</Text>
@@ -200,7 +211,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	expenseIcon: { fontSize: 18 },
 	expenseInfo: { flex: 1 },
 	expenseName: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 2 },
 	expenseMeta: { ...Typography.caption, color: Colors.textSecondary },

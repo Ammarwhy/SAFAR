@@ -75,8 +75,9 @@ Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 - [ ] Login error state UI
 
 ### 5B Explore + Destination Detail
-- [ ] Destination list cards with filters/search
-- [ ] Destination detail with archives section
+- [x] Destination list cards with category filters/search (CATEGORY_DATA drives content per pill)
+- [x] Featured escape hero card with working image display
+- [ ] Destination detail with archives section (stub in [destination].tsx)
 
 ### 5C AI Match Discovery
 - [x] Candidate card + compatibility percentage
@@ -86,6 +87,8 @@ Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 
 ### 5D Journeys + Itinerary
 - [x] Journeys feed hero + status cards
+- [x] Tabs show distinct content: Upcoming (active journeys), Past Trips (completed from MOCK_TRIPS), Wishlist (saved destinations)
+- [x] Latest Update card: overlapping avatar stack + Notify All / View All action buttons
 - [x] Trips collection with cached labels
 - [ ] Trip itinerary details and structure
 
@@ -93,7 +96,10 @@ Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 - [ ] Room message fetch/send via Supabase
 - [ ] Realtime subscription + cleanup
 - [x] Pinned itinerary card
-- [ ] Poll create/vote
+- [x] Today's Brief collapsible card (temperature, sunset, next stop, days left)
+- [x] Quick Actions strip (Photo, Location, Poll, Event, Docs)
+- [x] Emoji reaction strip above input
+- [x] Poll UI (vote UI rendered from mock message data)
 - [x] Sync interrupted error state + retry (UI)
 
 ### 5F Expense Ledger
@@ -116,17 +122,22 @@ Latest completed UI milestone: Entry 009 in `Build_Progress.md`.
 - [x] Contact CTAs and map section (profile CTA area)
 
 ### 5I Profile & Settings
-- [x] Stats + persona chart (visual section)
-- [x] Preferences toggles (visual section)
-- [x] Privacy/security section
-- [x] Sign-out flow (UI action)
+- [x] Hero section: cover photo, large avatar with ring, name/title/quote
+- [x] Follow / Share / Message action row
+- [x] Stats card with icons (countries, expeditions, followers)
+- [x] Achievement badges horizontal scroll
+- [x] Followers preview with avatar stack
+- [x] Recent Journeys horizontal card scroll (from MOCK_TRIPS)
+- [x] Membership / verification CTA card
+- [x] Account preferences, security toggles, support sections — all with icon backgrounds + descriptions
+- [x] Sign-out flow (router.replace to auth index)
 
-## Latest Notes (2026-04-21)
+## Latest Notes (2026-04-25)
 
-- What changed: Implemented additional core screens (Splash, Login, Explore, Matches, Profile), added shared `SafarHeader` + `BottomTabBar`, expanded mock data, and migrated major UI surfaces to parchment (`#EEEDE9`) + rich mahogany (`#371B17`).
-- Why it changed: We needed prototype-faithful visuals and one unified palette system before wiring backend state.
-- How verified: Diagnostics were run on edited files with no reported errors; Expo web startup was tested after fixes with no blocking runtime issues.
-- Core idea: Keep the interface token-driven and component-first so future backend/realtime work plugs into a stable, consistent visual contract.
+- What changed: Six UI pain points fixed — Explore category pills now drive content via a `CATEGORY_DATA` map; Hunza Valley featured image fixed (ImageBackground overflow/borderRadius moved to the correct element); Journeys tabs (Upcoming / Past Trips / Wishlist) now render distinct content; Latest Update card avatar stack and action buttons properly aligned; Vibe Room enriched with a collapsible Today's Brief card, Quick Actions strip, and emoji reactions; Profile completely overhauled with hero cover, achievement badges, followers preview, recent journeys scroll, and polished menu sections.
+- Why it changed: The app needed to read and feel like a production-quality travel app, not a prototype — users should see immediately that tapping a pill does something and that the profile belongs to a real traveler.
+- How verified: `npx tsc --noEmit --skipLibCheck` passed with zero errors; IDE diagnostics showed only pre-existing SafeAreaView deprecation hints.
+- Core idea: Functional polish means state changes must visibly change UI output (data wiring), combined with visual patterns users already recognise from apps they trust (cover photo profiles, overlapping avatar stacks, emoji reactions).
 
 ## Phase 6 — Offline & Reliability Hardening
 

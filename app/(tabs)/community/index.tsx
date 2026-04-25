@@ -38,7 +38,8 @@ export default function MatchesScreen() {
               style={styles.filterBtn}
               onPress={() => router.push('/flows/community-filters')}
             >
-              <Text style={styles.filterBtnText}>⚙ Filters</Text>
+              <Ionicons name="options-outline" size={13} color={Colors.textPrimary} />
+              <Text style={styles.filterBtnText}>Filters</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.personaTag}
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
   filterBtn: {
     borderWidth: 1, borderColor: Colors.borderDark,
     borderRadius: Radius.pill, paddingHorizontal: 14, paddingVertical: 7,
+    flexDirection: "row", alignItems: "center", gap: 5,
   },
   filterBtnText: { ...Typography.label, color: Colors.textPrimary, fontSize: 11 },
   personaTag: {

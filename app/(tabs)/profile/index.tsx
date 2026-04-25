@@ -1,52 +1,92 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Image, Switch, SafeAreaView, Alert,
+  Image, Switch, SafeAreaView, ImageBackground,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
-import { MOCK_USER } from '../../../constants/mockData';
-import SafarHeader from '../../../components/layouts/SafarHeader';
+import { MOCK_USER, MOCK_TRIPS } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
+
+const COVER_IMAGE = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80';
+const AVATAR_URI = 'https://i.pravatar.cc/200?img=11';
+
+const ACHIEVEMENTS = [
+  { icon: 'earth-outline' as const, label: `${MOCK_USER.countries} Countries` },
+  { icon: 'map-outline' as const, label: 'Mountain Seeker' },
+  { icon: 'ribbon-outline' as const, label: 'Heritage Collector' },
+  { icon: 'star-outline' as const, label: 'Verified Guide' },
+  { icon: 'flash-outline' as const, label: 'Altitude Expert' },
+];
+
+const FOLLOWERS_AVATARS = ['3', '5', '8', '4', '22', '14'];
 
 export default function ProfileScreen() {
   const router = useRouter();
   const [is2FA, set2FA] = useState(MOCK_USER.is2FAEnabled);
   const [isFaceID, setFaceID] = useState(MOCK_USER.isFaceIDEnabled);
-
-  const handleLogout = () => {
-    router.replace('/(auth)/index');
-  };
+  const [isFollowing, setFollowing] = useState(false);
 
   return (
     <SafeAreaView style={styles.safe}>
-      <SafarHeader showAvatar={false} />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
-        <Animated.View entering={FadeInDown.duration(280)} style={styles.avatarSection}>
-          <View style={styles.avatarWrap}>
-            <Image source={{ uri: 'https://i.pravatar.cc/150?img=11' }} style={styles.avatar} />
-            <TouchableOpacity
-              style={styles.editBadge}
-              onPress={() => router.push('/flows/profile-photo')}
-            >
-              <Text style={styles.editIcon}>✏</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.name}>{MOCK_USER.name}</Text>
-          <Text style={styles.title}>{MOCK_USER.title}</Text>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
+
+        {/* Hero / Cover */}
+        <Animated.View entering={FadeInDown.duration(300)}>
+          <ImageBackground source={{ uri: COVER_IMAGE }} style={styles.coverBg}>
+            <View style={styles.coverOverlay}>
+              <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/flows/settings')}>
+                <Ionicons name="settings-outline" size={20} color="#fff" />
+              </TouchableOpacity>
+              <View style={styles.heroContent}>
+                <View style={styles.avatarRing}>
+                  <Image source={{ uri: AVATAR_URI }} style={styles.avatar} />
+                  <TouchableOpacity style={styles.editBadge} onPress={() => router.push('/flows/profile-photo')}>
+                    <Ionicons name="camera" size={11} color="#fff" />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.heroName}>{MOCK_USER.name}</Text>
+                <Text style={styles.heroTitle}>{MOCK_USER.title}</Text>
+                <Text style={styles.heroQuote}>"Collect stories, not stamps."</Text>
+              </View>
+            </View>
+          </ImageBackground>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(70).duration(280)} style={styles.statsCard}>
+        {/* Action Row */}
+        <Animated.View entering={FadeInUp.delay(60).duration(280)} style={styles.actionRow}>
+          <TouchableOpacity
+            style={[styles.actionBtn, isFollowing && styles.actionBtnActive]}
+            onPress={() => setFollowing(!isFollowing)}
+          >
+            <Ionicons name={isFollowing ? 'checkmark' : 'person-add-outline'} size={15} color={isFollowing ? '#fff' : Colors.brand} />
+            <Text style={[styles.actionBtnText, isFollowing && styles.actionBtnTextActive]}>
+              {isFollowing ? 'Following' : 'Follow'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/flows/share-profile')}>
+            <Ionicons name="share-social-outline" size={15} color={Colors.brand} />
+            <Text style={styles.actionBtnText}>Share</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/flows/messages')}>
+            <Ionicons name="chatbubble-outline" size={15} color={Colors.brand} />
+            <Text style={styles.actionBtnText}>Message</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Stats */}
+        <Animated.View entering={FadeInUp.delay(90).duration(280)} style={styles.statsCard}>
           {[
-            { val: MOCK_USER.countries, label: 'COUNTRIES' },
-            { val: MOCK_USER.trips, label: 'TRIPS' },
-            { val: `${(MOCK_USER.followers / 1000).toFixed(1)}k`, label: 'FOLLOWERS' },
+            { icon: 'earth-outline' as const, val: String(MOCK_USER.countries), label: 'Countries' },
+            { icon: 'compass-outline' as const, val: String(MOCK_USER.trips), label: 'Expeditions' },
+            { icon: 'people-outline' as const, val: `${(MOCK_USER.followers / 1000).toFixed(1)}k`, label: 'Followers' },
           ].map((s, i) => (
             <React.Fragment key={s.label}>
               {i > 0 && <View style={styles.statDivider} />}
               <View style={styles.statItem}>
+                <Ionicons name={s.icon} size={16} color={Colors.brand} style={{ marginBottom: 4 }} />
                 <Text style={styles.statVal}>{s.val}</Text>
                 <Text style={styles.statLabel}>{s.label}</Text>
               </View>
@@ -54,89 +94,185 @@ export default function ProfileScreen() {
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(110).duration(280)} style={styles.sectionCard}>
-          <Text style={styles.sectionLabel}>ACCOUNT PREFERENCES</Text>
+        {/* Achievements */}
+        <Animated.View entering={FadeInUp.delay(120).duration(280)}>
+          <Text style={styles.sectionHeading}>Achievements</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.achievementsRow}>
+            {ACHIEVEMENTS.map((a) => (
+              <View key={a.label} style={styles.achievementChip}>
+                <Ionicons name={a.icon} size={13} color={Colors.brand} />
+                <Text style={styles.achievementText}>{a.label}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </Animated.View>
+
+        {/* Followers preview */}
+        <Animated.View entering={FadeInUp.delay(140).duration(280)} style={styles.followersCard}>
+          <View style={styles.followersLeft}>
+            <View style={styles.followersAvatarRow}>
+              {FOLLOWERS_AVATARS.slice(0, 4).map((img, i) => (
+                <Image
+                  key={img}
+                  source={{ uri: `https://i.pravatar.cc/60?img=${img}` }}
+                  style={[styles.followerAvatar, i > 0 && { marginLeft: -10 }]}
+                />
+              ))}
+            </View>
+            <Text style={styles.followersText}>
+              <Text style={styles.followersStrong}>Areeba, Zain</Text> and {(MOCK_USER.followers / 1000).toFixed(1)}k others follow you
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/flows/followers')}>
+            <Text style={styles.viewFollowersText}>View →</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Recent Journeys */}
+        <Animated.View entering={FadeInUp.delay(160).duration(280)}>
+          <View style={styles.sectionRow}>
+            <Text style={styles.sectionHeading}>Recent Journeys</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/journeys')}>
+              <Text style={styles.viewAllText}>View all</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tripsRow}>
+            {MOCK_TRIPS.map((trip) => (
+              <TouchableOpacity
+                key={trip.id}
+                style={styles.tripCard}
+                activeOpacity={0.88}
+                onPress={() => router.push(`/(tabs)/journeys/${trip.id}/itinerary`)}
+              >
+                <Image source={{ uri: trip.heroImage }} style={styles.tripCardImg} />
+                <View style={styles.tripCardBody}>
+                  <Text style={styles.tripCardTitle} numberOfLines={1}>{trip.title}</Text>
+                  <Text style={styles.tripCardDest}>{trip.destination}</Text>
+                  <Text style={styles.tripCardDate}>{trip.dates}</Text>
+                  {trip.daysLeft > 0 && (
+                    <View style={styles.tripActivePill}>
+                      <Text style={styles.tripActivePillText}>Active</Text>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </Animated.View>
+
+        {/* Membership */}
+        <Animated.View entering={FadeInUp.delay(180).duration(280)} style={styles.membershipCard}>
+          <View style={styles.membershipTop}>
+            <View style={styles.membershipIconWrap}>
+              <Ionicons name="shield-checkmark-outline" size={20} color={Colors.brand} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.membershipLabel}>MEMBERSHIP STATUS</Text>
+              <Text style={styles.membershipStatus}>Not Verified</Text>
+            </View>
+          </View>
+          <Text style={styles.membershipDesc}>
+            Unlock personalized matching, vibe rooms, and exclusive curated stays with verification.
+          </Text>
+          <TouchableOpacity style={styles.verifyBtn} onPress={() => router.push('/flows/verification')}>
+            <Ionicons name="arrow-forward-circle" size={16} color="#fff" />
+            <Text style={styles.verifyBtnText}>Get Verified</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Account Preferences */}
+        <Animated.View entering={FadeInUp.delay(200).duration(280)} style={styles.sectionCard}>
+          <View style={styles.sectionCardHeader}>
+            <Ionicons name="person-circle-outline" size={16} color={Colors.textMuted} />
+            <Text style={styles.sectionLabel}>ACCOUNT</Text>
+          </View>
           {[
-            {
-              ionName: 'person-outline',
-              label: 'Personal Information',
-              onPress: () => router.push('/flows/personal-info'),
-            },
-            {
-              ionName: 'card-outline',
-              label: 'Payments & Payouts',
-              onPress: () => router.push('/flows/payments-payouts'),
-            },
-          ].map((item) => (
-            <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
-              <Ionicons name={item.ionName as any} size={18} color={Colors.textSecondary} style={{ width: 24 }} />
-              <Text style={styles.menuLabel}>{item.label}</Text>
-              <Text style={styles.menuChevron}>›</Text>
+            { ionName: 'person-outline' as const, label: 'Personal Information', desc: 'Name, email, phone', onPress: () => router.push('/flows/personal-info') },
+            { ionName: 'card-outline' as const, label: 'Payments & Payouts', desc: 'Cards, bank accounts', onPress: () => router.push('/flows/payments-payouts') },
+            { ionName: 'notifications-outline' as const, label: 'Notifications', desc: 'Alerts and reminders', onPress: () => router.push('/flows/notifications') },
+          ].map((item, i, arr) => (
+            <TouchableOpacity
+              key={item.label}
+              style={[styles.menuRow, i === arr.length - 1 && { borderBottomWidth: 0 }]}
+              onPress={item.onPress}
+            >
+              <View style={styles.menuIconWrap}>
+                <Ionicons name={item.ionName} size={17} color={Colors.brand} />
+              </View>
+              <View style={styles.menuInfo}>
+                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Text style={styles.menuDesc}>{item.desc}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textMuted} />
             </TouchableOpacity>
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(150).duration(280)} style={styles.membershipCard}>
-          <Text style={styles.sectionLabel}>MEMBERSHIP</Text>
-          <Text style={styles.membershipStatus}>Not Verified</Text>
-          <Text style={styles.membershipDesc}>
-            Get verified to enjoy personalized matching, vibe-based rooms, and exclusive stays.
-          </Text>
-          <TouchableOpacity
-            style={styles.verifyBtn}
-            onPress={() => router.push('/flows/verification')}
-          >
-            <Text style={styles.verifyBtnText}>Verify</Text>
-          </TouchableOpacity>
-        </Animated.View>
-
-        <Animated.View entering={FadeInUp.delay(190).duration(280)} style={styles.sectionCard}>
-          <Text style={styles.sectionLabel}>SECURITY</Text>
+        {/* Security */}
+        <Animated.View entering={FadeInUp.delay(220).duration(280)} style={styles.sectionCard}>
+          <View style={styles.sectionCardHeader}>
+            <Ionicons name="lock-closed-outline" size={16} color={Colors.textMuted} />
+            <Text style={styles.sectionLabel}>SECURITY</Text>
+          </View>
           <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>Two-Factor</Text>
-            <Switch
-              value={is2FA}
-              onValueChange={set2FA}
-              trackColor={{ false: Colors.border, true: Colors.brand }}
-              thumbColor="#fff"
-            />
+            <View style={styles.menuIconWrap}>
+              <Ionicons name="key-outline" size={17} color={Colors.brand} />
+            </View>
+            <View style={styles.menuInfo}>
+              <Text style={styles.menuLabel}>Two-Factor Auth</Text>
+              <Text style={styles.menuDesc}>Extra login security</Text>
+            </View>
+            <Switch value={is2FA} onValueChange={set2FA} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor="#fff" />
           </View>
           <View style={[styles.toggleRow, { borderBottomWidth: 0 }]}>
-            <Text style={styles.toggleLabel}>Face ID</Text>
-            <Switch
-              value={isFaceID}
-              onValueChange={setFaceID}
-              trackColor={{ false: Colors.border, true: Colors.brand }}
-              thumbColor="#fff"
-            />
+            <View style={styles.menuIconWrap}>
+              <Ionicons name="scan-outline" size={17} color={Colors.brand} />
+            </View>
+            <View style={styles.menuInfo}>
+              <Text style={styles.menuLabel}>Face ID</Text>
+              <Text style={styles.menuDesc}>Biometric unlock</Text>
+            </View>
+            <Switch value={isFaceID} onValueChange={setFaceID} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor="#fff" />
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(230).duration(280)} style={styles.sectionCard}>
-          <Text style={styles.sectionLabel}>SUPPORT & TRANSPARENCY</Text>
+        {/* Support */}
+        <Animated.View entering={FadeInUp.delay(240).duration(280)} style={styles.sectionCard}>
+          <View style={styles.sectionCardHeader}>
+            <Ionicons name="help-buoy-outline" size={16} color={Colors.textMuted} />
+            <Text style={styles.sectionLabel}>SUPPORT</Text>
+          </View>
           {[
-            { ionName: 'help-circle-outline', label: 'Get Help', onPress: () => router.push('/safety') },
-            {
-              ionName: 'document-text-outline',
-              label: 'Privacy Policy',
-              onPress: () => router.push('/flows/privacy-policy'),
-            },
-          ].map((item) => (
-            <TouchableOpacity key={item.label} style={styles.menuRow} onPress={item.onPress}>
-              <Ionicons name={item.ionName as any} size={18} color={Colors.textSecondary} style={{ width: 24 }} />
-              <Text style={styles.menuLabel}>{item.label}</Text>
+            { ionName: 'help-circle-outline' as const, label: 'Help Center', desc: 'FAQs and guides', onPress: () => router.push('/safety') },
+            { ionName: 'document-text-outline' as const, label: 'Privacy Policy', desc: 'How we use your data', onPress: () => router.push('/flows/privacy-policy') },
+            { ionName: 'chatbox-ellipses-outline' as const, label: 'Send Feedback', desc: 'Share your thoughts', onPress: () => router.push('/flows/feedback') },
+          ].map((item, i, arr) => (
+            <TouchableOpacity
+              key={item.label}
+              style={[styles.menuRow, i === arr.length - 1 && { borderBottomWidth: 0 }]}
+              onPress={item.onPress}
+            >
+              <View style={styles.menuIconWrap}>
+                <Ionicons name={item.ionName} size={17} color={Colors.brand} />
+              </View>
+              <View style={styles.menuInfo}>
+                <Text style={styles.menuLabel}>{item.label}</Text>
+                <Text style={styles.menuDesc}>{item.desc}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textMuted} />
             </TouchableOpacity>
           ))}
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(270).duration(280)}>
-          <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Text style={styles.logoutText}>LOG OUT OF SAFAR</Text>
+        {/* Logout */}
+        <Animated.View entering={FadeInUp.delay(260).duration(280)} style={styles.logoutSection}>
+          <TouchableOpacity style={styles.logoutBtn} onPress={() => router.replace('/(auth)/index')}>
+            <Ionicons name="log-out-outline" size={16} color={Colors.danger} />
+            <Text style={styles.logoutText}>Log Out of Safar</Text>
           </TouchableOpacity>
+          <Text style={styles.versionText}>Version 1.0.0 · Arches Edition</Text>
         </Animated.View>
 
-        <Text style={styles.versionText}>VERSION 1.0.0 (ARCHES)</Text>
-        <View style={{ height: 20 }} />
       </ScrollView>
       <BottomTabBar />
     </SafeAreaView>
@@ -145,63 +281,170 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bg },
-  avatarSection: { alignItems: 'center', paddingVertical: 20 },
-  avatarWrap: { position: 'relative', marginBottom: 12 },
-  avatar: { width: 90, height: 90, borderRadius: 45, borderWidth: 2, borderColor: Colors.border },
+
+  // Hero
+  coverBg: { width: '100%', height: 320 },
+  coverOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(20,10,8,0.48)',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    paddingHorizontal: Spacing.screen,
+    paddingBottom: 24,
+  },
+  settingsBtn: {
+    alignSelf: 'flex-end',
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  heroContent: { alignItems: 'center' },
+  avatarRing: {
+    width: 96, height: 96,
+    borderRadius: 48,
+    borderWidth: 3,
+    borderColor: Colors.brand,
+    marginBottom: 12,
+    position: 'relative',
+  },
+  avatar: { width: 90, height: 90, borderRadius: 45 },
   editBadge: {
-    position: 'absolute', bottom: 0, right: 0,
+    position: 'absolute', bottom: 0, right: -2,
     width: 26, height: 26, borderRadius: 13,
     backgroundColor: Colors.brand, alignItems: 'center', justifyContent: 'center',
     borderWidth: 2, borderColor: Colors.bg,
   },
-  editIcon: { fontSize: 12, color: '#fff' },
-  name: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 4 },
-  title: { ...Typography.label, color: Colors.textSecondary },
+  heroName: { ...Typography.h2, color: '#fff', marginBottom: 4 },
+  heroTitle: { ...Typography.label, color: 'rgba(255,255,255,0.75)', marginBottom: 8 },
+  heroQuote: { ...Typography.bodyMd, color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' },
 
+  // Action Row
+  actionRow: {
+    flexDirection: 'row', gap: 10,
+    paddingHorizontal: Spacing.screen,
+    paddingVertical: 14,
+    backgroundColor: Colors.bgCard,
+    borderBottomWidth: 1, borderBottomColor: Colors.border,
+  },
+  actionBtn: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+    backgroundColor: Colors.brand, borderRadius: Radius.full, paddingVertical: 10,
+  },
+  actionBtnActive: { backgroundColor: Colors.success },
+  actionBtnOutline: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+    backgroundColor: 'transparent', borderRadius: Radius.full, paddingVertical: 10,
+    borderWidth: 1.5, borderColor: Colors.border,
+  },
+  actionBtnText: { ...Typography.label, color: Colors.brand, fontSize: 13 },
+  actionBtnTextActive: { color: '#fff' },
+
+  // Stats
   statsCard: {
-    marginHorizontal: Spacing.screen, backgroundColor: Colors.bgCard,
-    borderRadius: Radius.lg, padding: 16,
-    flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16, ...Shadow.sm,
+    marginHorizontal: Spacing.screen, marginTop: 14, marginBottom: 8,
+    backgroundColor: Colors.bgCard,
+    borderRadius: Radius.xl, padding: 16,
+    flexDirection: 'row', justifyContent: 'space-around', ...Shadow.sm,
   },
   statItem: { alignItems: 'center' },
   statVal: { ...Typography.h2, color: Colors.textPrimary },
   statLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 10 },
   statDivider: { width: 1, backgroundColor: Colors.border, alignSelf: 'stretch' },
 
+  // Achievements
+  sectionHeading: { ...Typography.h4, color: Colors.textPrimary, marginHorizontal: Spacing.screen, marginTop: 16, marginBottom: 10 },
+  achievementsRow: { paddingHorizontal: Spacing.screen, gap: 8, paddingBottom: 4 },
+  achievementChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: Colors.bgCard, borderRadius: Radius.full,
+    paddingHorizontal: 12, paddingVertical: 7,
+    borderWidth: 1, borderColor: Colors.border, ...Shadow.sm,
+  },
+  achievementText: { ...Typography.label, color: Colors.textSecondary, fontSize: 12 },
+
+  // Followers
+  followersCard: {
+    marginHorizontal: Spacing.screen, marginTop: 12, marginBottom: 6,
+    backgroundColor: Colors.bgCard, borderRadius: Radius.lg,
+    padding: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    ...Shadow.sm,
+  },
+  followersLeft: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },
+  followersAvatarRow: { flexDirection: 'row' },
+  followerAvatar: { width: 30, height: 30, borderRadius: 15, borderWidth: 2, borderColor: Colors.bgCard },
+  followersText: { ...Typography.caption, color: Colors.textSecondary, flex: 1 },
+  followersStrong: { ...Typography.label, color: Colors.textPrimary, fontSize: 11 },
+  viewFollowersText: { ...Typography.label, color: Colors.brand, fontSize: 12 },
+
+  // Recent Journeys
+  sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginHorizontal: Spacing.screen, marginTop: 16, marginBottom: 10 },
+  viewAllText: { ...Typography.label, color: Colors.textSecondary, fontSize: 11 },
+  tripsRow: { paddingHorizontal: Spacing.screen, gap: 12, paddingBottom: 4 },
+  tripCard: { width: 170, backgroundColor: Colors.bgCard, borderRadius: Radius.lg, overflow: 'hidden', ...Shadow.sm },
+  tripCardImg: { width: '100%', height: 110 },
+  tripCardBody: { padding: 10 },
+  tripCardTitle: { ...Typography.label, color: Colors.textPrimary, marginBottom: 2 },
+  tripCardDest: { ...Typography.caption, color: Colors.textSecondary },
+  tripCardDate: { ...Typography.caption, color: Colors.textMuted, marginTop: 2 },
+  tripActivePill: {
+    marginTop: 6, alignSelf: 'flex-start',
+    backgroundColor: Colors.brand, borderRadius: Radius.full,
+    paddingHorizontal: 8, paddingVertical: 3,
+  },
+  tripActivePillText: { ...Typography.caption, color: '#fff', fontSize: 9 },
+
+  // Membership
+  membershipCard: {
+    marginHorizontal: Spacing.screen, marginTop: 14, marginBottom: 8,
+    backgroundColor: Colors.bgCard, borderRadius: Radius.xl,
+    padding: 16, ...Shadow.sm,
+    borderWidth: 1, borderColor: Colors.border,
+  },
+  membershipTop: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
+  membershipIconWrap: {
+    width: 44, height: 44, borderRadius: Radius.md,
+    backgroundColor: Colors.bgMuted, alignItems: 'center', justifyContent: 'center',
+  },
+  membershipLabel: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
+  membershipStatus: { ...Typography.h4, color: Colors.textPrimary },
+  membershipDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 14, lineHeight: 21 },
+  verifyBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center',
+    backgroundColor: Colors.brand, borderRadius: Radius.full, paddingVertical: 13,
+  },
+  verifyBtnText: { ...Typography.h4, color: '#fff' },
+
+  // Sections
   sectionCard: {
     marginHorizontal: Spacing.screen, backgroundColor: Colors.bgCard,
-    borderRadius: Radius.lg, padding: 16, marginBottom: 12, ...Shadow.sm,
+    borderRadius: Radius.xl, padding: 16, marginBottom: 10, ...Shadow.sm,
   },
-  sectionLabel: { ...Typography.label, color: Colors.textMuted, marginBottom: 12 },
+  sectionCardHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 },
+  sectionLabel: { ...Typography.label, color: Colors.textMuted },
   menuRow: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: Colors.border,
   },
-  menuLabel: { ...Typography.h4, color: Colors.textPrimary, flex: 1 },
-  menuChevron: { fontSize: 20, color: Colors.textMuted },
-
-  membershipCard: {
-    marginHorizontal: Spacing.screen, backgroundColor: Colors.bgCard,
-    borderRadius: Radius.lg, padding: 16, marginBottom: 12, ...Shadow.sm,
+  menuIconWrap: {
+    width: 36, height: 36, borderRadius: Radius.sm,
+    backgroundColor: Colors.bgMuted, alignItems: 'center', justifyContent: 'center',
   },
-  membershipStatus: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 6 },
-  membershipDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 14 },
-  verifyBtn: {
-    backgroundColor: Colors.brand, borderRadius: Radius.full,
-    paddingVertical: 12, alignItems: 'center',
-  },
-  verifyBtnText: { ...Typography.h4, color: '#fff' },
-
+  menuInfo: { flex: 1 },
+  menuLabel: { ...Typography.bodySm, color: Colors.textPrimary, fontWeight: '600' },
+  menuDesc: { ...Typography.caption, color: Colors.textSecondary, marginTop: 1 },
   toggleRow: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    flexDirection: 'row', alignItems: 'center', gap: 12,
     paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: Colors.border,
   },
-  toggleLabel: { ...Typography.h4, color: Colors.textPrimary },
 
+  // Logout
+  logoutSection: { marginHorizontal: Spacing.screen, marginTop: 6, alignItems: 'center' },
   logoutBtn: {
-    marginHorizontal: Spacing.screen, borderWidth: 1.5, borderColor: Colors.danger,
-    borderRadius: Radius.full, paddingVertical: 14, alignItems: 'center', marginBottom: 12,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    width: '100%', borderWidth: 1.5, borderColor: Colors.danger,
+    borderRadius: Radius.full, paddingVertical: 14,
+    justifyContent: 'center', marginBottom: 16,
   },
   logoutText: { ...Typography.h4, color: Colors.danger },
-  versionText: { ...Typography.caption, color: Colors.textMuted, textAlign: 'center', marginBottom: 8 },
+  versionText: { ...Typography.caption, color: Colors.textMuted },
 });

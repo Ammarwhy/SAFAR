@@ -8,6 +8,7 @@ import {
 	Modal,
 	TextInput,
 	SafeAreaView,
+	ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -28,6 +29,48 @@ export default function ExpenseScreen() {
 	const [showAddModal, setShowAddModal] = useState(false);
 	const [newName, setNewName] = useState("");
 	const [newAmt, setNewAmt] = useState("");
+	const [fieldError, setFieldError] = useState("");
+	const [actionMsg, setActionMsg] = useState("");
+	const [isProcessing, setIsProcessing] = useState(false);
+
+	const resetProcessing = () => {
+		setTimeout(() => setIsProcessing(false), 1000);
+	};
+
+	const handleSettle = () => {
+		if (isProcessing) {
+			return;
+		}
+		setIsProcessing(true);
+		setActionMsg(settled ? "Settlement reset." : "Great! Expenses marked as settled.");
+		setSettled(!settled);
+		resetProcessing();
+	};
+
+	const handleAddExpense = () => {
+		if (isProcessing) {
+			return;
+		}
+		const amount = Number(newAmt);
+		if (!newName.trim()) {
+			setFieldError("Add a short expense description, for example: Dinner at Eagle Nest.");
+			return;
+		}
+		if (!newAmt.trim() || Number.isNaN(amount) || amount < 0) {
+			setFieldError("Enter a non-negative amount in PKR, for example: 18500.");
+			return;
+		}
+
+		setFieldError("");
+		setIsProcessing(true);
+		setActionMsg("Expense added to this trip.");
+		setTimeout(() => {
+			setShowAddModal(false);
+			setNewAmt("");
+			setNewName("");
+			setIsProcessing(false);
+		}, 700);
+	};
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -39,7 +82,7 @@ export default function ExpenseScreen() {
 					<Text style={styles.headerSuper}>{MOCK_EXPENSES.tripTitle.toUpperCase()}</Text>
 					<Text style={styles.headerMain}>Expense Ledger</Text>
 				</View>
-				<TouchableOpacity onPress={() => setShowAddModal(true)} style={styles.addBtn}>
+				<TouchableOpacity onPress={() => setShowAddModal(true)} style={styles.addBtn} accessibilityLabel="Add a new expense">
 					<Text style={styles.addBtnText}>+</Text>
 				</TouchableOpacity>
 			</View>
@@ -60,11 +103,15 @@ export default function ExpenseScreen() {
 					<Text style={styles.pendingText}>{MOCK_EXPENSES.pendingSettlements} Pending settlements</Text>
 				</View>
 
+				{!!actionMsg && <Text style={styles.actionMessage}>{actionMsg}</Text>}
+
 				<TouchableOpacity
 					style={[styles.settleBtn, settled && styles.settleBtnDone]}
-					onPress={() => setSettled(!settled)}
+					onPress={handleSettle}
+					disabled={isProcessing}
+					accessibilityLabel="Mark trip expenses as settled"
 				>
-					<Text style={styles.settleBtnText}>{settled ? "✓ Settled!" : "✓  Mark as Settled"}</Text>
+					{isProcessing ? <ActivityIndicator color={Colors.textOnDark} /> : <Text style={styles.settleBtnText}>{settled ? "✓ Settled" : "✓ Mark as Settled"}</Text>}
 				</TouchableOpacity>
 
 				<View style={styles.section}>
@@ -105,23 +152,38 @@ export default function ExpenseScreen() {
 						<Text style={styles.addModalTitle}>Add Expense</Text>
 						<TextInput
 							style={styles.addInput}
-							placeholder="Description"
+							placeholder="e.g. Dinner at Eagle Nest"
 							placeholderTextColor={Colors.textMuted}
 							value={newName}
-							onChangeText={setNewName}
+							onChangeText={(value) => {
+								setNewName(value);
+								if (fieldError) {
+									setFieldError("");
+								}
+							}}
+							maxLength={60}
+							accessibilityLabel="Expense description"
 						/>
 						<TextInput
 							style={styles.addInput}
-							placeholder="Amount (PKR)"
+							placeholder="e.g. 18500"
 							placeholderTextColor={Colors.textMuted}
 							value={newAmt}
-							onChangeText={setNewAmt}
+							onChangeText={(value) => {
+								setNewAmt(value.replace(/[^0-9.]/g, ""));
+								if (fieldError) {
+									setFieldError("");
+								}
+							}}
 							keyboardType="numeric"
+							maxLength={10}
+							accessibilityLabel="Expense amount in PKR"
 						/>
-						<TouchableOpacity style={styles.addConfirmBtn} onPress={() => setShowAddModal(false)}>
-							<Text style={styles.addConfirmText}>Add Expense</Text>
+						{!!fieldError && <Text style={styles.inlineError}>{fieldError}</Text>}
+						<TouchableOpacity style={styles.addConfirmBtn} onPress={handleAddExpense} disabled={isProcessing} accessibilityLabel="Save expense">
+							{isProcessing ? <ActivityIndicator color={Colors.textOnDark} /> : <Text style={styles.addConfirmText}>Save Expense</Text>}
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => setShowAddModal(false)}>
+						<TouchableOpacity onPress={() => setShowAddModal(false)} accessibilityLabel="Cancel adding expense">
 							<Text style={styles.cancelText}>Cancel</Text>
 						</TouchableOpacity>
 					</View>
@@ -147,14 +209,14 @@ const styles = StyleSheet.create({
 	headerSuper: { ...Typography.label, color: Colors.textMuted, fontSize: 10 },
 	headerMain: { ...Typography.h1, color: Colors.textPrimary },
 	addBtn: {
-		width: 36,
-		height: 36,
-		borderRadius: 18,
+		width: 44,
+		height: 44,
+		borderRadius: 22,
 		backgroundColor: Colors.brand,
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	addBtnText: { color: "#fff", fontSize: 22, lineHeight: 24 },
+	addBtnText: { color: Colors.textOnDark, fontSize: 22, lineHeight: 24 },
 
 	totalCard: {
 		marginHorizontal: Spacing.screen,
@@ -178,17 +240,20 @@ const styles = StyleSheet.create({
 	balanceLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 8 },
 	balanceAmount: { ...Typography.h1, fontSize: 28, marginBottom: 4 },
 	pendingText: { ...Typography.bodyMd, color: Colors.textSecondary },
+	actionMessage: { ...Typography.bodySm, color: Colors.success, marginHorizontal: Spacing.screen, marginBottom: 8 },
 
 	settleBtn: {
 		marginHorizontal: Spacing.screen,
 		backgroundColor: Colors.brand,
-		borderRadius: Radius.xl,
+		borderRadius: Radius.button,
 		paddingVertical: 16,
+		minHeight: 44,
 		alignItems: "center",
 		marginBottom: 20,
+		justifyContent: "center",
 	},
 	settleBtnDone: { backgroundColor: Colors.success },
-	settleBtnText: { ...Typography.h4, color: "#fff", fontSize: 16 },
+	settleBtnText: { ...Typography.h4, color: Colors.textOnDark, fontSize: 16 },
 
 	section: { paddingHorizontal: Spacing.screen },
 	sectionHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
@@ -200,8 +265,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 12,
 		paddingVertical: 12,
+		minHeight: 44,
 		borderBottomWidth: 1,
-		borderBottomColor: Colors.border,
+		borderBottomColor: Colors.divider,
 	},
 	expenseIconWrap: {
 		width: 42,
@@ -233,18 +299,21 @@ const styles = StyleSheet.create({
 	addModalTitle: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 4 },
 	addInput: {
 		backgroundColor: Colors.bgMuted,
-		borderRadius: Radius.md,
+		borderRadius: Radius.input,
 		paddingHorizontal: 14,
 		paddingVertical: 12,
 		...Typography.body,
 		color: Colors.textPrimary,
 	},
+	inlineError: { ...Typography.caption, color: Colors.danger },
 	addConfirmBtn: {
 		backgroundColor: Colors.brand,
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 14,
+		minHeight: 44,
 		alignItems: "center",
+		justifyContent: "center",
 	},
-	addConfirmText: { ...Typography.h4, color: "#fff" },
+	addConfirmText: { ...Typography.h4, color: Colors.textOnDark },
 	cancelText: { ...Typography.body, color: Colors.textSecondary, textAlign: "center" },
 });

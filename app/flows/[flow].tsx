@@ -339,5 +339,5 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
   },
-  ctaText: { ...Typography.h4, color: "#fff" },
+  ctaText: { ...Typography.h4, color: Colors.textOnDark },
 });

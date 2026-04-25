@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   TextInput, Image, ImageBackground, SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -109,6 +110,8 @@ export default function ExploreScreen() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('MOUNTAINS');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
   const [isFeaturedFallback, setIsFeaturedFallback] = useState(false);
 
@@ -126,6 +129,17 @@ export default function ExploreScreen() {
   const filteredJourneys = searchQuery.trim()
     ? baseJourneys.filter((j) => j.title.toLowerCase().includes(searchQuery.toLowerCase()))
     : baseJourneys;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, [activeCategory]);
+
+  const retry = () => {
+    setHasError(false);
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 300);
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -151,6 +165,7 @@ export default function ExploreScreen() {
               key={cat}
               style={[styles.pill, activeCategory === cat && styles.pillActive]}
               onPress={() => setActiveCategory(cat)}
+              accessibilityLabel={`Filter ${cat.toLowerCase()} journeys`}
             >
               <Text style={[styles.pillText, activeCategory === cat && styles.pillTextActive]}>
                 {cat}
@@ -223,14 +238,32 @@ export default function ExploreScreen() {
           </TouchableOpacity>
         </View>
 
-        {filteredJourneys.length === 0 && (
-          <View style={styles.emptyState}>
-            <Ionicons name="compass-outline" size={36} color={Colors.textMuted} style={{ marginBottom: 8 }} />
-            <Text style={styles.emptyTitle}>No journeys found</Text>
-            <Text style={styles.emptyDesc}>Try a different search term.</Text>
+        {isLoading && (
+          <View style={styles.centerState}>
+            <ActivityIndicator size="large" color={Colors.brand} />
+            <Text style={styles.stateBody}>Loading journeys for you...</Text>
           </View>
         )}
-        {filteredJourneys[0] && (
+
+        {hasError && (
+          <View style={styles.centerState}>
+            <Ionicons name="warning-outline" size={36} color={Colors.warning} style={{ marginBottom: 8 }} />
+            <Text style={styles.emptyTitle}>We couldn’t load journeys</Text>
+            <Text style={styles.stateBody}>Check your connection and try again.</Text>
+            <TouchableOpacity style={styles.stateBtn} onPress={retry} accessibilityLabel="Retry loading journeys">
+              <Text style={styles.stateBtnText}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {!isLoading && !hasError && filteredJourneys.length === 0 && (
+          <View style={styles.emptyState}>
+            <Ionicons name="compass-outline" size={36} color={Colors.textMuted} style={{ marginBottom: 8 }} />
+            <Text style={styles.emptyTitle}>No trips yet — start one and invite friends</Text>
+            <Text style={styles.emptyDesc}>Try another destination search or create your own journey.</Text>
+          </View>
+        )}
+        {!isLoading && !hasError && filteredJourneys[0] && (
         <Animated.View entering={FadeInUp.delay(140).duration(280)}>
         <TouchableOpacity
           style={styles.journeyCard}
@@ -279,7 +312,7 @@ export default function ExploreScreen() {
           </View>
         </Animated.View>
 
-        {filteredJourneys[1] && (
+        {!isLoading && !hasError && filteredJourneys[1] && (
         <Animated.View entering={FadeInUp.delay(220).duration(280)}>
         <TouchableOpacity
           style={styles.fullImgCard}
@@ -346,7 +379,7 @@ const styles = StyleSheet.create({
   },
   pillActive: { backgroundColor: Colors.brand, borderColor: Colors.brand },
   pillText: { ...Typography.label, color: Colors.textSecondary, fontSize: 11 },
-  pillTextActive: { color: '#fff' },
+  pillTextActive: { color: Colors.textOnDark },
 
   sectionLabel: { ...Typography.label, color: Colors.textMuted, marginHorizontal: Spacing.screen, marginTop: 16, marginBottom: 8 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginHorizontal: Spacing.screen, marginTop: 20, marginBottom: 12 },
@@ -371,7 +404,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
-  featuredMetaText: { ...Typography.label, color: '#fff', fontSize: 10, letterSpacing: 0.6 },
+  featuredMetaText: { ...Typography.label, color: Colors.textOnDark, fontSize: 10, letterSpacing: 0.6 },
   featuredHighlights: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
   featuredChip: {
     backgroundColor: 'rgba(255,255,255,0.18)',
@@ -379,8 +412,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
-  featuredChipText: { ...Typography.label, color: '#fff', fontSize: 9, letterSpacing: 0.4 },
-  featuredTitle: { ...Typography.h1, color: '#fff', marginBottom: 4 },
+  featuredChipText: { ...Typography.label, color: Colors.textOnDark, fontSize: 9, letterSpacing: 0.4 },
+  featuredTitle: { ...Typography.h1, color: Colors.textOnDark, marginBottom: 4 },
   featuredDesc: { ...Typography.bodyMd, color: 'rgba(255,255,255,0.85)', marginBottom: 12 },
   featuredActions: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   wishlistBtn: {
@@ -389,7 +422,7 @@ const styles = StyleSheet.create({
   },
   joinBtn: {
     flex: 1, backgroundColor: Colors.bgMuted,
-    borderRadius: Radius.pill, paddingVertical: 10, alignItems: 'center',
+    borderRadius: Radius.button, paddingVertical: 10, alignItems: 'center', minHeight: 44, justifyContent: 'center',
   },
   joinText: { ...Typography.h4, color: Colors.brand },
 
@@ -420,14 +453,16 @@ const styles = StyleSheet.create({
   winterTitle: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 2 },
   winterDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 10 },
   browseBtn: {
-    backgroundColor: Colors.brand, borderRadius: Radius.pill,
+    backgroundColor: Colors.brand, borderRadius: Radius.button,
     paddingHorizontal: 14, paddingVertical: 7, alignSelf: 'flex-start',
+    minHeight: 44,
+    justifyContent: 'center',
   },
-  browseBtnText: { ...Typography.label, color: '#fff', fontSize: 10 },
+  browseBtnText: { ...Typography.label, color: Colors.textOnDark, fontSize: 10 },
   fullImgCard: { marginHorizontal: Spacing.screen, marginBottom: 8, borderRadius: Radius.lg, overflow: 'hidden', height: 180 },
   fullImgBg: { flex: 1, justifyContent: 'flex-end' },
   fullImgOverlay: { padding: 14, backgroundColor: 'rgba(0,0,0,0.4)' },
-  fullImgTitle: { ...Typography.h2, color: '#fff' },
+  fullImgTitle: { ...Typography.h2, color: Colors.textOnDark },
   fullImgSub: { ...Typography.label, color: 'rgba(255,255,255,0.8)', letterSpacing: 1.5 },
 
   vicinityLabel: { ...Typography.label, color: Colors.textMuted, marginHorizontal: Spacing.screen, marginTop: 20, marginBottom: 12, textAlign: 'center' },
@@ -443,9 +478,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand, alignItems: 'center', justifyContent: 'center',
     ...Shadow.md,
   },
-  fabText: { ...Typography.h2, color: '#fff', fontSize: 26, lineHeight: 28 },
+  fabText: { ...Typography.h2, color: Colors.textOnDark, fontSize: 26, lineHeight: 28 },
 
   emptyState: { alignItems: 'center', padding: 32 },
   emptyTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 4 },
   emptyDesc: { ...Typography.bodyMd, color: Colors.textSecondary },
+  centerState: { alignItems: 'center', justifyContent: 'center', padding: 32, gap: 8 },
+  stateBody: { ...Typography.bodyMd, color: Colors.textSecondary, textAlign: 'center' },
+  stateBtn: { marginTop: 8, backgroundColor: Colors.brand, borderRadius: Radius.button, paddingHorizontal: 20, minHeight: 44, justifyContent: 'center' },
+  stateBtnText: { ...Typography.label, color: Colors.textOnDark },
 });

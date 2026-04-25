@@ -14,7 +14,8 @@ export const Colors = {
 
   textPrimary: "#251816",
   textSecondary: "#625654",
-  textMuted: "#7B716D",
+  textMuted: "#8A7060",
+  textOnDark: "#F5F0E8",
 
   error: "#B44747",
   success: "#2F6F5E",
@@ -27,8 +28,10 @@ export const Colors = {
   card: "#FAFAF8",
   surface: "#FAFAF8",
 
-  border: "#D6D2CC",
+  border: "#D9D4CB",
   borderDark: "#BFB6AE",
+  divider: "#D9D4CB",
+  tabInactive: "#B0A090",
 };
 
 export const Typography = {
@@ -114,15 +117,19 @@ export const Typography = {
 
 export const Spacing = {
   screen: 16,
-  xs: 6,
-  sm: 10,
+  xs: 8,
+  sm: 12,
   md: 16,
+  button: 12,
   lg: 24,
   xl: 32,
   xxl: 48,
 };
 
 export const Radius = {
+  input: 10,
+  button: 12,
+  card: 16,
   sm: 10,
   md: 16,
   lg: 24,
@@ -136,21 +143,21 @@ export const Shadow = {
     shadowColor: "#371B17",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.07,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowRadius: 12,
+    elevation: 3,
   },
   md: {
     shadowColor: "#371B17",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.09,
+    shadowOpacity: 0.07,
     shadowRadius: 12,
-    elevation: 4,
+    elevation: 3,
   },
   lg: {
     shadowColor: "#371B17",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 20,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.07,
+    shadowRadius: 12,
+    elevation: 3,
   },
 };

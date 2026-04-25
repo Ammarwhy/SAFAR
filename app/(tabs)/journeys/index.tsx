@@ -225,7 +225,7 @@ export default function JourneysScreen() {
                 <ImageBackground source={{ uri: item.image }} style={styles.wishCardBg} imageStyle={{ borderRadius: Radius.lg }}>
                   <View style={styles.wishCardOverlay}>
                     <View style={styles.wishIconWrap}>
-                      <Ionicons name="heart" size={14} color="#fff" />
+                      <Ionicons name="heart" size={14} color={Colors.textOnDark} />
                     </View>
                     <Text style={styles.wishCardSub}>{item.subtitle}</Text>
                     <Text style={styles.wishCardTitle}>{item.title}</Text>
@@ -272,8 +272,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   bookingBadge: { backgroundColor: Colors.match + "CC" },
-  statusText: { ...Typography.label, color: "#fff", fontSize: 10 },
-  mainCardTitle: { ...Typography.h1, color: "#fff", marginBottom: 8 },
+  statusText: { ...Typography.label, color: Colors.textOnDark, fontSize: 10 },
+  mainCardTitle: { ...Typography.h1, color: Colors.textOnDark, marginBottom: 8 },
   mainCardMeta: { flexDirection: "row", gap: 14, marginBottom: 12 },
   metaItem: { flexDirection: "row", alignItems: "center", gap: 4 },
   metaText: { ...Typography.bodyMd, color: "rgba(255,255,255,0.85)" },
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignSelf: "flex-start",
   },
-  viewItineraryText: { ...Typography.h4, color: "#fff" },
+  viewItineraryText: { ...Typography.h4, color: Colors.textOnDark },
 
   gearCard: {
     marginHorizontal: Spacing.screen,
@@ -325,20 +325,22 @@ const styles = StyleSheet.create({
   visaActionBtn: {
     backgroundColor: Colors.brand,
     borderRadius: Radius.full,
-    paddingVertical: 7,
+    minHeight: 34,
     paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
   },
   visaActionBtnOutline: {
     backgroundColor: "transparent",
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  visaActionText: { ...Typography.label, color: "#fff", fontSize: 11 },
+  visaActionText: { ...Typography.label, color: Colors.textOnDark, fontSize: 11, textAlign: "center" },
 
   secondCard: { marginHorizontal: Spacing.screen, marginBottom: 12, borderRadius: Radius.xl, ...Shadow.sm },
   secondCardBg: { height: 180, justifyContent: "flex-end" },
   secondCardOverlay: { padding: 14, backgroundColor: "rgba(0,0,0,0.55)", borderRadius: Radius.xl },
-  secondCardTitle: { ...Typography.h2, color: "#fff", marginTop: 4 },
+  secondCardTitle: { ...Typography.h2, color: Colors.textOnDark, marginTop: 4 },
   secondCardDates: { ...Typography.bodyMd, color: "rgba(255,255,255,0.8)" },
 
   extendCard: {
@@ -348,7 +350,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 12,
   },
-  extendTitle: { ...Typography.h2, color: "#fff", lineHeight: 30, marginBottom: 8 },
+  extendTitle: { ...Typography.h2, color: Colors.textOnDark, lineHeight: 30, marginBottom: 8 },
   extendDesc: { ...Typography.body, color: "rgba(255,255,255,0.8)", marginBottom: 16 },
   extendBtn: {
     backgroundColor: Colors.bgCard,
@@ -395,7 +397,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   wishCardSub: { ...Typography.label, color: "rgba(255,255,255,0.7)", fontSize: 9, marginBottom: 2 },
-  wishCardTitle: { ...Typography.h2, color: "#fff", marginBottom: 8 },
+  wishCardTitle: { ...Typography.h2, color: Colors.textOnDark, marginBottom: 8 },
   wishNotePill: {
     flexDirection: "row", alignItems: "center", gap: 4,
     backgroundColor: "rgba(255,255,255,0.15)", borderRadius: Radius.pill,

@@ -1,5 +1,5 @@
-import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BottomTabBar from "@/components/layouts/BottomTabBar";
 import SafarHeader from "@/components/layouts/SafarHeader";
@@ -7,6 +7,20 @@ import ChatBubble from "@/components/ui/ChatBubble";
 import { Colors, Spacing, Radius, Typography } from "@/constants/Theme";
 
 export default function MessagesScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const retry = () => {
+    setHasError(false);
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 300);
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader title="VIBE ROOM" subtitle="4 Active Explorers" />
@@ -15,6 +29,22 @@ export default function MessagesScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {isLoading ? (
+          <View style={styles.centerState}>
+            <ActivityIndicator size="large" color={Colors.brand} />
+            <Text style={styles.stateBody}>Loading your latest messages...</Text>
+          </View>
+        ) : hasError ? (
+          <View style={styles.centerState}>
+            <Ionicons name="warning-outline" size={36} color={Colors.warning} />
+            <Text style={styles.stateTitle}>Messages are unavailable right now</Text>
+            <Text style={styles.stateBody}>Check your connection and try again.</Text>
+            <TouchableOpacity style={styles.stateBtn} onPress={retry} accessibilityLabel="Retry loading messages">
+              <Text style={styles.stateBtnText}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <>
         <View style={styles.pinnedCard}>
           <Text style={styles.pinnedLabel}>PINNED PRIORITY</Text>
           <Text style={styles.pinnedTitle}>Kashi Trip Itinerary — Day 3</Text>
@@ -34,7 +64,9 @@ export default function MessagesScreen() {
         <View style={styles.syncCard}>
           <Text style={styles.syncTitle}>Sync Interrupted</Text>
           <Text style={styles.syncBody}>Messages will be sent once we're back online.</Text>
-          <Text style={styles.syncAction}>TRY AGAIN</Text>
+          <TouchableOpacity onPress={retry} accessibilityLabel="Try syncing messages again">
+            <Text style={styles.syncAction}>Try Again</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.inputBar}>
@@ -42,6 +74,8 @@ export default function MessagesScreen() {
           <Text style={styles.inputHint}>Share a vibe...</Text>
           <Ionicons name="send" size={18} color={Colors.brand} />
         </View>
+          </>
+        )}
       </ScrollView>
       <BottomTabBar />
     </SafeAreaView>
@@ -53,7 +87,7 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   content: { padding: Spacing.md, paddingBottom: 100 },
   pinnedCard: {
-    backgroundColor: "#EDE8D6",
+    backgroundColor: Colors.bgMuted,
     borderRadius: Radius.md,
     padding: Spacing.md,
     marginBottom: Spacing.md,
@@ -70,10 +104,15 @@ const styles = StyleSheet.create({
   syncTitle: { ...Typography.h4, color: Colors.danger },
   syncBody: { marginTop: 6, ...Typography.bodyMd, color: Colors.textMuted },
   syncAction: { marginTop: Spacing.sm, ...Typography.label, color: Colors.brand },
+  centerState: { alignItems: "center", justifyContent: "center", padding: 40, gap: 8 },
+  stateTitle: { ...Typography.h4, color: Colors.textPrimary, textAlign: "center" },
+  stateBody: { ...Typography.bodyMd, color: Colors.textSecondary, textAlign: "center" },
+  stateBtn: { marginTop: 8, backgroundColor: Colors.brand, borderRadius: Radius.button, minHeight: 44, paddingHorizontal: 20, justifyContent: "center" },
+  stateBtnText: { ...Typography.label, color: Colors.textOnDark },
   inputBar: {
     marginTop: Spacing.md,
     backgroundColor: Colors.bgCard,
-    borderRadius: Radius.pill,
+    borderRadius: Radius.button,
     borderWidth: 1,
     borderColor: Colors.border,
     paddingHorizontal: Spacing.md,
@@ -81,6 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    minHeight: 44,
   },
   inputHint: { ...Typography.bodyMd, color: Colors.textMuted, flex: 1, marginHorizontal: 8 },
 });

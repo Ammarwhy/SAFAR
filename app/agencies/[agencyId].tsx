@@ -38,7 +38,7 @@ export default function AgencyDetailScreen() {
 				<ImageBackground source={{ uri: a.heroImage }} style={styles.hero}>
 					<View style={styles.heroOverlay}>
 						<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-							<Ionicons name="arrow-back" size={22} color="#fff" />
+							<Ionicons name="arrow-back" size={22} color={Colors.textOnDark} />
 						</TouchableOpacity>
 						<View style={styles.heroContent}>
 							<Text style={styles.heroSuper}>FEATURED AGENCY</Text>
@@ -170,7 +170,7 @@ export default function AgencyDetailScreen() {
 	},
 	heroContent: {},
 	heroSuper: { ...Typography.label, color: "rgba(255,255,255,0.75)", fontSize: 10, marginBottom: 4 },
-	heroTitle: { ...Typography.h1, color: "#fff", fontSize: 32, marginBottom: 4 },
+	heroTitle: { ...Typography.h1, color: Colors.textOnDark, fontSize: 32, marginBottom: 4 },
 	heroTagline: { ...Typography.label, color: "rgba(255,255,255,0.65)", letterSpacing: 1.5 },
 
 	body: { paddingHorizontal: Spacing.screen, paddingTop: 16 },
@@ -232,7 +232,7 @@ export default function AgencyDetailScreen() {
 		marginBottom: 12,
 	},
 	bookPriceSuper: { ...Typography.label, color: "rgba(255,255,255,0.65)", fontSize: 10, marginBottom: 4 },
-	bookPrice: { ...Typography.h1, color: "#fff", fontSize: 36, marginBottom: 14 },
+	bookPrice: { ...Typography.h1, color: Colors.textOnDark, fontSize: 36, marginBottom: 14 },
 	bookPriceSub: { fontSize: 18, fontWeight: "400" },
 	bookBtn: {
 		backgroundColor: Colors.bgCard,
@@ -247,11 +247,13 @@ export default function AgencyDetailScreen() {
 		flex: 1,
 		borderWidth: 1,
 		borderColor: "rgba(255,255,255,0.4)",
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 11,
+		minHeight: 44,
 		alignItems: "center",
+		justifyContent: "center",
 	},
-	contactBtnText: { ...Typography.h4, color: "#fff", fontSize: 13 },
+	contactBtnText: { ...Typography.h4, color: Colors.textOnDark, fontSize: 13 },
 
 	mapCard: {
 		backgroundColor: Colors.bgCard,

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Image, SafeAreaView,
+  Image, SafeAreaView, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -11,25 +11,85 @@ import SafarHeader from '../../../components/layouts/SafarHeader';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
 
 const WHY_ITEMS = [
-  { ionName: 'sparkles-outline', color: '#F4EFE8', title: 'AI Compatibility', desc: 'Our neural engine analyzes over 50 travel preferences to find your ideal nomad companion.' },
-  { ionName: 'shield-checkmark-outline', color: '#EFF4F1', title: 'Safety First', desc: 'All profiles are verified with a multi-step identity check before matching.' },
-  { ionName: 'map-outline', color: '#F0ECE8', title: 'Route Sync', desc: 'We match travelers whose routes overlap, making spontaneous meetups possible.' },
+  { ionName: 'sparkles-outline', color: Colors.bgMuted, title: 'AI Compatibility', desc: 'Our neural engine analyzes over 50 travel preferences to find your ideal nomad companion.' },
+  { ionName: 'shield-checkmark-outline', color: Colors.bgCard, title: 'Safety First', desc: 'All profiles are verified with a multi-step identity check before matching.' },
+  { ionName: 'map-outline', color: Colors.bgMuted, title: 'Route Sync', desc: 'We match travelers whose routes overlap, making spontaneous meetups possible.' },
 ];
 
 export default function MatchesScreen() {
   const router = useRouter();
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [connected, setConnected] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [statusText, setStatusText] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const skip = (id: string) => setDismissed((p) => [...p, id]);
-  const connect = (id: string) => setConnected((p) => [...p, id]);
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
 
-  const visible = MOCK_MATCHES.filter((m) => !dismissed.includes(m.id));
+    return () => clearTimeout(timer);
+  }, []);
+
+  const visible = useMemo(() => MOCK_MATCHES.filter((m) => !dismissed.includes(m.id)), [dismissed]);
+  const currentMatch = visible[0];
+
+  const retry = () => {
+    setHasError(false);
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 300);
+  };
+
+  const skip = (id: string) => {
+    if (isProcessing) {
+      return;
+    }
+    setIsProcessing(true);
+    setStatusText('Skipped. Showing your next travel partner...');
+    setDismissed((p) => [...p, id]);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setStatusText('');
+    }, 1000);
+  };
+
+  const connect = (id: string) => {
+    if (isProcessing) {
+      return;
+    }
+    setIsProcessing(true);
+    setStatusText('Connection request sent! Preparing your next match...');
+    setConnected((p) => [...p, id]);
+    setDismissed((p) => [...p, id]);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setStatusText('');
+    }, 1000);
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
       <SafarHeader title="AI MATCH" subtitle="Discovery" />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        {isLoading ? (
+          <View style={styles.centerState}>
+            <ActivityIndicator size="large" color={Colors.brand} />
+            <Text style={styles.stateBody}>Finding your next compatible traveler...</Text>
+          </View>
+        ) : hasError ? (
+          <View style={styles.centerState}>
+            <Ionicons name="warning-outline" size={36} color={Colors.warning} />
+            <Text style={styles.stateTitle}>We couldn’t load matches</Text>
+            <Text style={styles.stateBody}>Check your connection and try again.</Text>
+            <TouchableOpacity style={styles.stateBtn} onPress={retry} accessibilityLabel="Try loading matches again">
+              <Text style={styles.stateBtnText}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+        <>
         <View style={styles.heroSection}>
           <Text style={styles.heroSuper}>ADVENTURE AWAITS</Text>
           <Text style={styles.heroTitle}>Your Potential{"\n"}Travel Partners</Text>
@@ -50,25 +110,28 @@ export default function MatchesScreen() {
           </View>
         </View>
 
-        {visible.map((match) => (
-          <View key={match.id} style={styles.matchCard}>
+        {!!statusText && <Text style={styles.statusText}>{statusText}</Text>}
+
+        {currentMatch ? (
+          <View key={currentMatch.id} style={styles.matchCard}>
             <View style={styles.imgWrap}>
-              <Image source={{ uri: match.avatar }} style={styles.matchImg} />
+              <Image source={{ uri: currentMatch.avatar }} style={styles.matchImg} accessible accessibilityLabel={`${currentMatch.name} traveler profile photo`} />
               <View style={styles.matchBadge}>
-                <Text style={styles.matchBadgeText}>{match.matchPct}% Match</Text>
+                <Text style={styles.matchBadgeText}>{currentMatch.matchPct}%</Text>
+                <Text style={styles.matchBadgeSub}>Compatibility</Text>
               </View>
             </View>
 
             <View style={styles.matchBody}>
-              <Text style={styles.matchName}>{match.name}, {match.age}</Text>
+              <Text style={styles.matchName}>{currentMatch.name}, {currentMatch.age}</Text>
               <View style={styles.locationRow}>
                 <Ionicons name="location-outline" size={13} color={Colors.textSecondary} />
-                <Text style={styles.locationText}>{match.location}</Text>
+                <Text style={styles.locationText}>{currentMatch.location}</Text>
               </View>
-              <Text style={styles.matchBio}>{match.bio}</Text>
+              <Text style={styles.matchBio}>{currentMatch.bio}</Text>
 
               <View style={styles.tagsRow}>
-                {match.tags.map((tag) => (
+                {currentMatch.tags.map((tag) => (
                   <View key={tag} style={styles.tag}>
                     <Text style={styles.tagText}>{tag}</Text>
                   </View>
@@ -76,27 +139,30 @@ export default function MatchesScreen() {
               </View>
 
               <View style={styles.actionsRow}>
-                <TouchableOpacity style={styles.skipBtn} onPress={() => skip(match.id)}>
+                <TouchableOpacity style={styles.skipBtn} onPress={() => skip(currentMatch.id)} disabled={isProcessing} accessibilityLabel="Skip this travel partner">
                   <Text style={styles.skipText}>Skip</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.connectBtn, connected.includes(match.id) && styles.connectBtnActive]}
-                  onPress={() => connect(match.id)}
+                  style={[styles.connectBtn, connected.includes(currentMatch.id) && styles.connectBtnActive]}
+                  onPress={() => connect(currentMatch.id)}
+                  disabled={isProcessing}
+                  accessibilityLabel="Connect with this travel partner"
                 >
-                  <Text style={styles.connectText}>
-                    {connected.includes(match.id) ? 'Connected' : 'Connect'}
-                  </Text>
+                  {isProcessing ? <ActivityIndicator color={Colors.textOnDark} /> : <Text style={styles.connectText}>Connect</Text>}
                 </TouchableOpacity>
               </View>
             </View>
           </View>
-        ))}
+        ) : null}
 
         {visible.length === 0 && (
           <View style={styles.emptyState}>
             <Ionicons name="compass-outline" size={48} color={Colors.textMuted} style={{ marginBottom: 12 }} />
-            <Text style={styles.emptyTitle}>All caught up!</Text>
-            <Text style={styles.emptyDesc}>Refresh to find more travelers heading your way.</Text>
+            <Text style={styles.emptyTitle}>No matches yet — check back soon</Text>
+            <Text style={styles.emptyDesc}>Update your filters to discover more travel partners.</Text>
+            <TouchableOpacity style={styles.stateBtn} onPress={() => router.push('/flows/community-filters')} accessibilityLabel="Adjust match filters">
+              <Text style={styles.stateBtnText}>Adjust Filters</Text>
+            </TouchableOpacity>
           </View>
         )}
 
@@ -112,6 +178,9 @@ export default function MatchesScreen() {
             </View>
           ))}
         </View>
+
+        </>
+        )}
 
       </ScrollView>
       <BottomTabBar />
@@ -147,9 +216,10 @@ const styles = StyleSheet.create({
     position: 'absolute', top: 12, right: 12,
     backgroundColor: Colors.bgMuted,
     borderRadius: Radius.pill, paddingHorizontal: 10, paddingVertical: 5,
-    flexDirection: 'row', alignItems: 'center', gap: 4,
+    alignItems: 'center',
   },
-  matchBadgeText: { ...Typography.label, color: Colors.brand, fontSize: 11 },
+  matchBadgeText: { ...Typography.h2, color: Colors.brand },
+  matchBadgeSub: { ...Typography.caption, color: Colors.textSecondary },
 
   matchBody: { padding: 16 },
   matchName: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 4 },
@@ -167,15 +237,23 @@ const styles = StyleSheet.create({
   actionsRow: { flexDirection: 'row', gap: 10 },
   skipBtn: {
     flex: 1, borderWidth: 1, borderColor: Colors.borderDark,
-    borderRadius: Radius.pill, paddingVertical: 12, alignItems: 'center',
+    borderRadius: Radius.button, paddingVertical: 12, alignItems: 'center', minHeight: 44, justifyContent: 'center',
   },
   skipText: { ...Typography.h4, color: Colors.textSecondary },
   connectBtn: {
     flex: 1, backgroundColor: Colors.brand,
-    borderRadius: Radius.pill, paddingVertical: 12, alignItems: 'center',
+    borderRadius: Radius.button, paddingVertical: 12, alignItems: 'center', minHeight: 44, justifyContent: 'center',
   },
   connectBtnActive: { backgroundColor: Colors.success },
-  connectText: { ...Typography.h4, color: '#fff' },
+  connectText: { ...Typography.h4, color: Colors.textOnDark },
+
+  statusText: { ...Typography.bodySm, color: Colors.success, marginHorizontal: Spacing.screen, marginBottom: 8 },
+
+  centerState: { alignItems: 'center', justifyContent: 'center', padding: 40, gap: 8 },
+  stateTitle: { ...Typography.h4, color: Colors.textPrimary, textAlign: 'center' },
+  stateBody: { ...Typography.bodyMd, color: Colors.textSecondary, textAlign: 'center' },
+  stateBtn: { marginTop: 8, backgroundColor: Colors.brand, borderRadius: Radius.button, minHeight: 44, paddingHorizontal: 20, justifyContent: 'center' },
+  stateBtnText: { ...Typography.label, color: Colors.textOnDark },
 
   emptyState: { alignItems: 'center', padding: 40 },
   emptyTitle: { ...Typography.h2, color: Colors.textPrimary, marginBottom: 6 },

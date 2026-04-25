@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Animated as RNAnimated, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
@@ -41,36 +41,46 @@ const SAFETY_TOOLS = [
 export default function SafetyCenterScreen() {
 	const router = useRouter();
 	const [sosActive, setSosActive] = useState(false);
-	const [confirmModal, setConfirmModal] = useState(false);
-	const [countdown, setCountdown] = useState(5);
 	const [liveShare, setLiveShare] = useState(false);
-	const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const pulseAnim = useRef(new RNAnimated.Value(0)).current;
 
-	const clearCountdown = () => {
-		if (countdownRef.current) {
-			clearInterval(countdownRef.current);
-			countdownRef.current = null;
-		}
-	};
-
-	useEffect(() => clearCountdown, []);
+	useEffect(() => {
+		RNAnimated.loop(
+			RNAnimated.sequence([
+				RNAnimated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: false }),
+				RNAnimated.timing(pulseAnim, { toValue: 0, duration: 800, useNativeDriver: false }),
+			]),
+		).start();
+	}, [pulseAnim]);
 
 	const handleSOSPress = () => {
-		clearCountdown();
-		setCountdown(5);
-		setConfirmModal(true);
-		let c = 5;
-		countdownRef.current = setInterval(() => {
-			c -= 1;
-			setCountdown(c);
-			if (c <= 0) {
-				clearCountdown();
-				setConfirmModal(false);
-				setSosActive(true);
-				router.push('/flows/sos-activated');
-			}
-		}, 1000);
+		Alert.alert(
+			"Confirm SOS",
+			"This will alert your emergency contacts and share your location. Continue?",
+			[
+				{ text: "Cancel" },
+				{
+					text: "Send SOS",
+					style: "destructive",
+					onPress: () => {
+						setSosActive(true);
+						setTimeout(() => {
+							router.push('/flows/sos-activated');
+						}, 500);
+					},
+				},
+			],
+		);
 	};
+
+	const pulseShadowRadius = pulseAnim.interpolate({
+		inputRange: [0, 1],
+		outputRange: [8, 16],
+	});
+	const pulseShadowOpacity = pulseAnim.interpolate({
+		inputRange: [0, 1],
+		outputRange: [0.08, 0.18],
+	});
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -94,14 +104,17 @@ export default function SafetyCenterScreen() {
 							Instantly notify local authorities and your emergency contacts with your live location.
 						</Text>
 					</View>
+					<RNAnimated.View style={[styles.sosBtnWrap, { shadowRadius: pulseShadowRadius, shadowOpacity: pulseShadowOpacity }]}> 
 					<TouchableOpacity
 						style={[styles.sosBtn, sosActive && styles.sosBtnActive]}
 						onPress={sosActive ? () => setSosActive(false) : handleSOSPress}
 						activeOpacity={0.85}
+						accessibilityLabel="Emergency SOS action"
 					>
 						<Text style={styles.sosBtnLabel}>SOS</Text>
-						<Text style={styles.sosBtnText}>{sosActive ? "TAP TO CANCEL SOS" : "ACTIVATE SOS"}</Text>
+						<Text style={styles.sosBtnText}>{sosActive ? "SOS Active — Tap to Stop" : "Send SOS Alert"}</Text>
 					</TouchableOpacity>
+					</RNAnimated.View>
 				</Animated.View>
 
 				<Text style={styles.toolsLabel}>ACTIVE SAFETY TOOLS</Text>
@@ -110,6 +123,7 @@ export default function SafetyCenterScreen() {
 					<TouchableOpacity
 						key={tool.id}
 						style={styles.toolCard}
+						accessibilityLabel={`${tool.title} safety tool`}
 						onPress={() => {
 							if (tool.id === "live") {
 								setLiveShare(!liveShare);
@@ -134,7 +148,7 @@ export default function SafetyCenterScreen() {
 							{tool.id === "live" && liveShare ? (
 							<View style={styles.liveActiveRow}>
 								<View style={styles.liveDot} />
-								<Text style={styles.toolAction}>ACTIVE — STOP SHARING ›</Text>
+								<Text style={styles.toolAction}>Live sharing is active — tap to stop</Text>
 							</View>
 						) : (
 							<Text style={styles.toolAction}>{tool.action}</Text>
@@ -154,7 +168,7 @@ export default function SafetyCenterScreen() {
 							Found a location that feels unsafe? Help the community by reporting it anonymously.
 						</Text>
 						<TouchableOpacity onPress={() => router.push('/flows/safety-report')}>
-							<Text style={styles.reportAction}>SUBMIT REPORT</Text>
+							<Text style={styles.reportAction}>Report This Location</Text>
 						</TouchableOpacity>
 					</View>
 				</Animated.View>
@@ -190,30 +204,6 @@ export default function SafetyCenterScreen() {
 				<View style={{ height: 20 }} />
 			</ScrollView>
 
-			<Modal visible={confirmModal} transparent animationType="fade">
-				<View style={styles.modalOverlay}>
-					<View style={styles.countdownModal}>
-						<View style={styles.countdownCircle}>
-							<Text style={styles.countdownNum}>{countdown}</Text>
-						</View>
-						<Text style={styles.countdownTitle}>SOS activating in {countdown}s</Text>
-						<Text style={styles.countdownDesc}>
-							Tap cancel to abort. Emergency services will be contacted automatically.
-						</Text>
-						<TouchableOpacity
-							style={styles.cancelSosBtn}
-							onPress={() => {
-								clearCountdown();
-								setConfirmModal(false);
-								setCountdown(5);
-							}}
-						>
-							<Text style={styles.cancelSosBtnText}>Cancel</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
-			</Modal>
-
 			<BottomTabBar />
 		</SafeAreaView>
 	);
@@ -234,15 +224,21 @@ const styles = StyleSheet.create({
 		...Shadow.md,
 	},
 	sosCardActive: { backgroundColor: Colors.dangerDark },
+	sosBtnWrap: {
+		borderRadius: Radius.button,
+		shadowColor: Colors.danger,
+		elevation: 3,
+	},
 	sosTop: { marginBottom: 16 },
 	sosBadge: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 10 },
-	sosBadgeText: { ...Typography.label, color: "rgba(255,255,255,0.7)", fontSize: 10 },
-	sosTitle: { ...Typography.h2, color: "#fff", marginBottom: 6 },
-	sosDesc: { ...Typography.bodyMd, color: "rgba(255,255,255,0.8)" },
+	sosBadgeText: { ...Typography.label, color: "rgba(245,240,232,0.7)", fontSize: 10 },
+	sosTitle: { ...Typography.h2, color: Colors.textOnDark, marginBottom: 6 },
+	sosDesc: { ...Typography.bodyMd, color: "rgba(245,240,232,0.8)" },
 	sosBtn: {
 		backgroundColor: Colors.danger,
-		borderRadius: Radius.lg,
+		borderRadius: Radius.button,
 		paddingVertical: 16,
+		minHeight: 44,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",
@@ -251,14 +247,14 @@ const styles = StyleSheet.create({
 	sosBtnActive: { backgroundColor: Colors.danger },
 	sosBtnLabel: {
 		...Typography.label,
-		color: "#fff",
+		color: Colors.textOnDark,
 		fontSize: 13,
-		backgroundColor: "rgba(255,255,255,0.25)",
+		backgroundColor: "rgba(245,240,232,0.25)",
 		paddingHorizontal: 8,
 		paddingVertical: 3,
 		borderRadius: 4,
 	},
-	sosBtnText: { ...Typography.h4, color: "#fff", letterSpacing: 1 },
+	sosBtnText: { ...Typography.h4, color: Colors.textOnDark, letterSpacing: 1 },
 
 	toolsLabel: {
 		...Typography.label,
@@ -304,7 +300,7 @@ const styles = StyleSheet.create({
 	reportBody: { flex: 1 },
 	reportTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 2 },
 	reportDesc: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 6 },
-	reportAction: { ...Typography.label, color: Colors.brand, fontSize: 10, textDecorationLine: "underline" },
+	reportAction: { ...Typography.label, color: Colors.brand, fontSize: 10, textDecorationLine: "underline", minHeight: 44, paddingTop: 12 },
 
 	safetyRatingCard: {
 		marginHorizontal: Spacing.screen,
@@ -321,54 +317,19 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	safetyRatingContent: {},
-	safetyRatingCity: { ...Typography.label, color: "rgba(255,255,255,0.7)", fontSize: 10, marginBottom: 4 },
-	safetyRatingLabel: { ...Typography.h3, color: "#fff" },
+	safetyRatingCity: { ...Typography.label, color: "rgba(245,240,232,0.7)", fontSize: 10, marginBottom: 4 },
+	safetyRatingLabel: { ...Typography.h3, color: Colors.textOnDark },
 	safetyRatingBadge: {
-		backgroundColor: "rgba(255,255,255,0.2)",
+		backgroundColor: "rgba(245,240,232,0.2)",
 		borderRadius: Radius.md,
 		paddingHorizontal: 12,
 		paddingVertical: 6,
 	},
-	safetyRatingScore: { ...Typography.h4, color: "#fff" },
+	safetyRatingScore: { ...Typography.h4, color: Colors.textOnDark },
 	safetyBars: { padding: 16, gap: 10 },
 	safetyBarRow: { flexDirection: "row", alignItems: "center", gap: 10 },
 	safetyBarLabel: { ...Typography.bodyMd, color: Colors.textSecondary, width: 130 },
 	safetyBarTrack: { flex: 1, height: 6, backgroundColor: Colors.border, borderRadius: 3 },
 	safetyBarFill: { height: 6, backgroundColor: Colors.success, borderRadius: 3 },
 	safetyBarPct: { ...Typography.label, color: Colors.textSecondary, fontSize: 11, width: 36, textAlign: "right" },
-
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: "rgba(0,0,0,0.6)",
-		alignItems: "center",
-		justifyContent: "center",
-		padding: 24,
-	},
-	countdownModal: {
-		backgroundColor: Colors.bgCard,
-		borderRadius: Radius.xl,
-		padding: 28,
-		alignItems: "center",
-		width: "100%",
-	},
-	countdownCircle: {
-		width: 80,
-		height: 80,
-		borderRadius: 40,
-		borderWidth: 4,
-		borderColor: Colors.danger,
-		alignItems: "center",
-		justifyContent: "center",
-		marginBottom: 16,
-	},
-	countdownNum: { ...Typography.display, color: Colors.danger, fontSize: 36 },
-	countdownTitle: { ...Typography.h3, color: Colors.textPrimary, textAlign: "center", marginBottom: 8 },
-	countdownDesc: { ...Typography.body, color: Colors.textSecondary, textAlign: "center", marginBottom: 20 },
-	cancelSosBtn: {
-		backgroundColor: Colors.bgMuted,
-		borderRadius: Radius.full,
-		paddingVertical: 12,
-		paddingHorizontal: 40,
-	},
-	cancelSosBtnText: { ...Typography.h4, color: Colors.textPrimary },
 });

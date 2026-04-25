@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import Animated, { FadeInUp, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors, Spacing } from "@/constants/Theme";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type NavItem = {
 	label: string;
@@ -18,6 +19,7 @@ type FrameBottomNavProps = {
 
 export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 	const router = useRouter();
+	const insets = useSafeAreaInsets();
 
 	const NavButton = ({ item, index }: { item: NavItem; index: number }) => {
 		const scale = useSharedValue(1);
@@ -29,6 +31,7 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 		return (
 			<Animated.View entering={FadeInUp.delay(index * 35).duration(280)} style={[styles.itemWrap, animatedStyle]}>
 				<Pressable
+					accessibilityLabel={`${item.label} tab`}
 					onPress={() => {
 						if (item.onPress) {
 							item.onPress();
@@ -54,7 +57,7 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 	};
 
 	return (
-		<View style={styles.wrap}>
+		<View style={[styles.wrap, { height: 60 + insets.bottom, paddingBottom: insets.bottom + 8 }]}>
 			{items.map((item, index) => (
 				<NavButton key={item.label} item={item} index={index} />
 			))}
@@ -65,21 +68,19 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 const styles = StyleSheet.create({
 	wrap: {
 		marginHorizontal: 12,
-		marginBottom: 8,
-		borderWidth: 1,
-		borderColor: Colors.border,
+		marginBottom: 0,
 		borderRadius: 24,
-		backgroundColor: Colors.bgCard,
-		paddingVertical: 8,
+		backgroundColor: Colors.bg,
+		paddingTop: 8,
 		paddingHorizontal: 8,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		shadowColor: "#371B17",
+		shadowColor: Colors.brand,
 		shadowOffset: { width: 0, height: 6 },
-		shadowOpacity: 0.08,
-		shadowRadius: 16,
-		elevation: 6,
+		shadowOpacity: 0.07,
+		shadowRadius: 12,
+		elevation: 3,
 	},
 	itemWrap: { flex: 1 },
 	item: {
@@ -89,12 +90,14 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		paddingHorizontal: 12,
 		borderRadius: 18,
+		minHeight: 44,
+		width: "100%",
 	},
 	itemActive: { backgroundColor: Colors.bgMuted },
 	itemPressed: { opacity: 0.9 },
 	label: {
 		fontSize: 10,
-		color: Colors.textMuted,
+		color: Colors.tabInactive,
 		fontWeight: "600",
 		letterSpacing: 0.6,
 	},

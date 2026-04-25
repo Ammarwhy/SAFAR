@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/Theme";
 import BottomTabBar from "../../../components/layouts/BottomTabBar";
@@ -9,6 +9,20 @@ export default function NewJourneyScreen() {
 	const [title, setTitle] = useState("");
 	const [dest, setDest] = useState("");
 	const [dates, setDates] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [statusText, setStatusText] = useState("");
+	const canCreate = title.trim().length > 0 && dest.trim().length > 0 && dates.trim().length > 0;
+
+	const handleCreate = () => {
+		if (!canCreate || isLoading) {
+			return;
+		}
+		setIsLoading(true);
+		setStatusText("Trip saved! Opening your journeys...");
+		setTimeout(() => {
+			router.replace("/(tabs)/journeys");
+		}, 600);
+	};
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -21,6 +35,7 @@ export default function NewJourneyScreen() {
 			</View>
 			<ScrollView contentContainerStyle={styles.content}>
 				<Text style={styles.sectionLabel}>JOURNEY DETAILS</Text>
+				{!!statusText && <Text style={styles.statusText}>{statusText}</Text>}
 				{[
 					{ label: "Journey Title", val: title, set: setTitle, placeholder: "e.g. Karakoram Expedition" },
 					{ label: "Destination", val: dest, set: setDest, placeholder: "e.g. Gilgit-Baltistan" },
@@ -34,17 +49,19 @@ export default function NewJourneyScreen() {
 							placeholderTextColor={Colors.textMuted}
 							value={f.val}
 							onChangeText={f.set}
+							maxLength={60}
+							accessibilityLabel={f.label}
 						/>
 					</View>
 				))}
 
 				<TouchableOpacity
-					style={styles.createBtn}
-					onPress={() => {
-						router.replace("/(tabs)/journeys");
-					}}
+					style={[styles.createBtn, (!canCreate || isLoading) && styles.createBtnDisabled]}
+					onPress={handleCreate}
+					disabled={!canCreate || isLoading}
+					accessibilityLabel="Save trip"
 				>
-					<Text style={styles.createBtnText}>Create Journey →</Text>
+					{isLoading ? <ActivityIndicator color={Colors.textOnDark} /> : <Text style={styles.createBtnText}>Save Trip</Text>}
 				</TouchableOpacity>
 			</ScrollView>
 			<BottomTabBar />
@@ -68,9 +85,10 @@ const styles = StyleSheet.create({
 	sectionLabel: { ...Typography.label, color: Colors.textMuted, marginBottom: 12 },
 	fieldGroup: { marginBottom: 14 },
 	fieldLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 6 },
+	statusText: { ...Typography.bodySm, color: Colors.success, marginBottom: 8 },
 	input: {
 		backgroundColor: Colors.bgCard,
-		borderRadius: Radius.md,
+		borderRadius: Radius.input,
 		paddingHorizontal: 14,
 		paddingVertical: 13,
 		...Typography.body,
@@ -79,10 +97,13 @@ const styles = StyleSheet.create({
 	},
 	createBtn: {
 		backgroundColor: Colors.brand,
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 16,
 		alignItems: "center",
 		marginTop: 12,
+		minHeight: 44,
+		justifyContent: "center",
 	},
-	createBtnText: { ...Typography.h4, color: "#fff", fontSize: 16 },
+	createBtnDisabled: { opacity: 0.6 },
+	createBtnText: { ...Typography.h4, color: Colors.textOnDark, fontSize: 16 },
 });

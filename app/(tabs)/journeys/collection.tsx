@@ -59,7 +59,7 @@ export default function CollectionScreen() {
                   style={[styles.heroActionBtn, styles.heroActionDark]}
                   onPress={() => router.push('/flows/manage-docs')}
                 >
-                  <Text style={[styles.heroActionText, { color: '#fff' }]}>Manage{'\n'}Docs</Text>
+                  <Text style={[styles.heroActionText, { color: Colors.textOnDark }]}>Manage{'\n'}Docs</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -120,8 +120,8 @@ export default function CollectionScreen() {
                 <Text style={styles.draftSub}>{draft.sub}</Text>
                 {draft.collab && (
                   <View style={styles.draftCollab}>
-                    <View style={[styles.draftAvatar, { backgroundColor: '#8D7868' }]} />
-                    <View style={[styles.draftAvatar, { backgroundColor: '#5C3A26', marginLeft: -8 }]} />
+                    <View style={[styles.draftAvatar, { backgroundColor: Colors.brandLight }]} />
+                    <View style={[styles.draftAvatar, { backgroundColor: Colors.brand, marginLeft: -8 }]} />
                     <Text style={styles.draftCollabText}>Collaborative</Text>
                   </View>
                 )}
@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', marginBottom: 8,
   },
   greenDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.success },
-  upcomingText: { ...Typography.label, color: '#fff', fontSize: 10 },
-  heroTitle: { ...Typography.h1, color: '#fff', fontSize: 30, marginBottom: 6 },
+  upcomingText: { ...Typography.label, color: Colors.textOnDark, fontSize: 10 },
+  heroTitle: { ...Typography.h1, color: Colors.textOnDark, fontSize: 30, marginBottom: 6 },
   heroMeta: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   heroMetaText: { ...Typography.bodyMd, color: 'rgba(255,255,255,0.85)' },
   heroActions: { flexDirection: 'row', gap: 10 },
   heroActionBtn: {
     flex: 1, backgroundColor: Colors.bgCard, borderRadius: Radius.md,
-    paddingVertical: 10, alignItems: 'center',
+    paddingVertical: 10, alignItems: 'center', minHeight: 44, justifyContent: 'center',
   },
   heroActionDark: { backgroundColor: 'rgba(255,255,255,0.2)' },
   heroActionText: { ...Typography.bodyMd, color: Colors.textPrimary, textAlign: 'center', fontWeight: '600' },

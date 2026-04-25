@@ -44,7 +44,7 @@ export default function TravelerProfileScreen() {
 					<View style={styles.avatarWrap}>
 						<Image source={{ uri: t.avatar }} style={styles.avatar} />
 						<View style={styles.verifiedBadge}>
-							<Ionicons name="checkmark" size={11} color="#fff" />
+							<Ionicons name="checkmark" size={11} color={Colors.textOnDark} />
 						</View>
 					</View>
 					<Text style={styles.curation}>{t.curationNo}</Text>
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
 		borderRadius: Radius.lg,
 		padding: 16,
 	},
-	locationTitle: { ...Typography.h4, color: "#fff", marginBottom: 2 },
-	locationCity: { ...Typography.bodyMd, color: "rgba(255,255,255,0.7)", marginBottom: 10 },
+	locationTitle: { ...Typography.h4, color: Colors.textOnDark, marginBottom: 2 },
+	locationCity: { ...Typography.bodyMd, color: "rgba(245,240,232,0.7)", marginBottom: 10 },
 	mapPlaceholder: {
 		height: 100,
 		backgroundColor: "rgba(255,255,255,0.1)",
@@ -244,19 +244,23 @@ const styles = StyleSheet.create({
 	connectBtn: {
 		flex: 1,
 		backgroundColor: Colors.brand,
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 13,
+		minHeight: 44,
 		alignItems: "center",
+		justifyContent: "center",
 	},
-	connectBtnText: { ...Typography.h4, color: "#fff" },
+	connectBtnText: { ...Typography.h4, color: Colors.textOnDark },
 	msgBtn: {
 		flex: 1,
 		backgroundColor: Colors.bgCard,
 		borderWidth: 1,
 		borderColor: Colors.border,
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 13,
+		minHeight: 44,
 		alignItems: "center",
+		justifyContent: "center",
 	},
 	msgBtnText: { ...Typography.h4, color: Colors.textPrimary },
 });

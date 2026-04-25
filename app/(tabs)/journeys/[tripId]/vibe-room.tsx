@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import {
+	Alert,
 	Image,
 	KeyboardAvoidingView,
 	Modal,
@@ -164,7 +165,7 @@ export default function VibeRoomScreen() {
 
 				<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
 					{["🔥 Hot", "👀 Noted", "✅ On it", "❤️ Love it", "⚡ Let's go"].map((reaction) => (
-						<TouchableOpacity key={reaction} style={styles.emojiChip}>
+						<TouchableOpacity key={reaction} style={styles.emojiChip} onPress={() => Alert.alert('Coming Soon', 'This feature is on the way.')}>
 							<Text style={styles.emojiChipText}>{reaction}</Text>
 						</TouchableOpacity>
 					))}
@@ -192,7 +193,7 @@ export default function VibeRoomScreen() {
 						<Ionicons name="happy-outline" size={22} color={Colors.textSecondary} />
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.sendBtn} onPress={sendMessage}>
-						<Ionicons name="send" size={16} color="#fff" />
+						<Ionicons name="send" size={16} color={Colors.textOnDark} />
 					</TouchableOpacity>
 				</View>
 
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 12,
 	},
-	retryText: { ...Typography.h4, color: "#fff" },
+	retryText: { ...Typography.h4, color: Colors.textOnDark },
 	dismissBtn: { paddingVertical: 4 },
 	dismissText: { ...Typography.h4, color: Colors.brand },
 });
@@ -461,7 +462,7 @@ const bubbleStyles = StyleSheet.create({
 	},
 	myBubble: { backgroundColor: Colors.brand },
 	text: { ...Typography.body, color: Colors.textPrimary },
-	myText: { color: "#fff" },
+	myText: { color: Colors.textOnDark },
 	time: { ...Typography.caption, color: Colors.textMuted, marginTop: 4, fontSize: 11 },
 	myTime: { textAlign: "right" },
 
@@ -491,7 +492,7 @@ const bubbleStyles = StyleSheet.create({
 		alignItems: "center",
 		marginTop: 4,
 	},
-	voteBtnText: { ...Typography.label, color: "#fff" },
+	voteBtnText: { ...Typography.label, color: Colors.textOnDark },
 
 	sharedImage: { width: 220, height: 140, borderRadius: Radius.md, marginBottom: 4 },
 });

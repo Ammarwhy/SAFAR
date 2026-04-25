@@ -43,11 +43,13 @@ const styles = StyleSheet.create({
 	desc: { ...Typography.body, color: Colors.textSecondary, textAlign: "center", lineHeight: 22, marginBottom: 28 },
 	retryBtn: {
 		backgroundColor: Colors.brand,
-		borderRadius: Radius.full,
+		borderRadius: Radius.button,
 		paddingVertical: 14,
 		paddingHorizontal: 48,
 		marginBottom: 16,
+		minHeight: 44,
+		justifyContent: "center",
 	},
-	retryText: { ...Typography.h4, color: "#fff" },
+	retryText: { ...Typography.h4, color: Colors.textOnDark },
 	offlineText: { ...Typography.h4, color: Colors.brand },
 });

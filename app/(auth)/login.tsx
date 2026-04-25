@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  ScrollView, KeyboardAvoidingView, Platform,
+  ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../constants/Theme';
+import ScreenMotion from '@/components/ui/ScreenMotion';
+import { setAuthenticated } from '../../stores/authStore';
 
 function GoogleIcon() {
-  // Simple G icon with 4-color segments
   return (
     <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontSize: 16, fontWeight: '700' }}>
-        <Text style={{ color: '#4285F4' }}>G</Text>
-      </Text>
+      <Text style={{ ...Typography.h4, color: Colors.brand }}>G</Text>
     </View>
   );
 }
@@ -21,30 +20,66 @@ export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [successText, setSuccessText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const isFormValid = email.trim().length > 0 && password.trim().length > 0;
 
   const handleLogin = () => {
-    setError('');
+    if (loading || isProcessing) {
+      return;
+    }
+    setEmailError('');
+    setPasswordError('');
+    setFormError('');
+    setSuccessText('');
+
+    setIsProcessing(true);
+    setTimeout(() => setIsProcessing(false), 1000);
+
     if (!email || !password) {
-      setError('Please enter your email and password.');
+      if (!email) {
+        setEmailError('Email is required. Example: traveler@safar.com');
+      }
+      if (!password) {
+        setPasswordError('Password is required to continue.');
+      }
       return;
     }
-    // Simulate wrong credentials (Screen 15 state)
+
     if (password !== 'safar123') {
-      setError('Incorrect email or password. Please check your credentials and try again.');
+      setFormError('We couldn’t sign you in. Check your email and password, then try again.');
       return;
     }
+
     setLoading(true);
+    setSuccessText('Signing you in...');
     setTimeout(() => {
+      setSuccessText('Welcome back! You are signed in.');
       setLoading(false);
-      router.replace('/(tabs)/explore');
+      setAuthenticated(true);
+      setTimeout(() => {
+        router.replace('/(tabs)/explore');
+      }, 600);
     }, 800);
   };
 
   const handleDemoLogin = () => {
-    // Quick demo bypass
-    router.replace('/(tabs)/explore');
+    if (isProcessing) {
+      return;
+    }
+    setIsProcessing(true);
+    setSuccessText('Opening demo mode...');
+      setLoading(false);
+    setTimeout(() => {
+      router.replace('/(tabs)/explore');
+      setAuthenticated(true);
+      setIsProcessing(false);
+    }, 500);
   };
 
   return (
@@ -52,12 +87,12 @@ export default function LoginScreen() {
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'height' : 'padding'}
     >
+      <ScreenMotion style={styles.flex}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Logo area */}
         <View style={styles.logoArea}>
           <View style={styles.logoMark}>
             <MiniMountain />
@@ -66,89 +101,105 @@ export default function LoginScreen() {
           <Text style={styles.tagline}>ELEVATED EXPLORATION</Text>
         </View>
 
-        {/* Card */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Welcome Back</Text>
           <Text style={styles.cardSubtitle}>Continue your journey across the peaks.</Text>
 
-          {/* Error banner (Screen 15) */}
-          {!!error && (
+          {!!formError && (
             <View style={styles.errorBanner}>
               <View style={styles.errorIconWrap}>
                 <Text style={styles.errorIcon}>!</Text>
               </View>
               <View style={styles.errorContent}>
                 <Text style={styles.errorTitle}>Login Issue</Text>
-                <Text style={styles.errorMsg}>{error}</Text>
+                <Text style={styles.errorMsg}>{formError}</Text>
               </View>
-              <TouchableOpacity onPress={() => setError('')} style={styles.errorClose}>
+              <TouchableOpacity onPress={() => setFormError('')} style={styles.errorClose} accessibilityLabel="Close login issue message">
                 <Text style={styles.errorCloseText}>×</Text>
               </TouchableOpacity>
             </View>
           )}
 
-          {/* Email */}
+          {!!successText && <Text style={styles.successText}>{successText}</Text>}
+
           <View style={styles.fieldGroup}>
             <Text style={styles.fieldLabel}>EMAIL ADDRESS</Text>
             <TextInput
-              style={[styles.input, !!error && styles.inputError]}
+              accessibilityLabel="Email address input"
+              style={[styles.input, !!emailError && styles.inputError]}
               placeholder="traveler@safar.com"
               placeholderTextColor={Colors.textMuted}
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(value) => {
+                setEmail(value);
+                if (emailError) {
+                  setEmailError('');
+                }
+              }}
               autoCapitalize="none"
               keyboardType="email-address"
+              maxLength={80}
             />
+            {!!emailError && <Text style={styles.inlineError}>{emailError}</Text>}
           </View>
 
-          {/* Password */}
           <View style={styles.fieldGroup}>
             <Text style={styles.fieldLabel}>PASSWORD</Text>
             <TextInput
-              style={[styles.input, !!error && styles.inputError]}
-              placeholder="••••••••"
+              accessibilityLabel="Password input"
+              style={[styles.input, !!passwordError && styles.inputError]}
+              placeholder="Example: safar123"
               placeholderTextColor={Colors.textMuted}
               value={password}
-              onChangeText={setPassword}
+              onChangeText={(value) => {
+                setPassword(value);
+                if (passwordError) {
+                  setPasswordError('');
+                }
+              }}
               secureTextEntry
+              maxLength={32}
             />
+            {!!passwordError && <Text style={styles.inlineError}>{passwordError}</Text>}
             <TouchableOpacity
               style={styles.forgotBtn}
               onPress={() => router.push('/flows/forgot-password')}
+              accessibilityLabel="Forgot password"
             >
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 
-          {/* Sign In */}
           <TouchableOpacity
-            style={[styles.signInBtn, loading && styles.signInBtnDisabled]}
+            style={[styles.signInBtn, (!isFormValid || loading || isProcessing) && styles.signInBtnDisabled]}
             onPress={handleLogin}
+            disabled={!isFormValid || loading || isProcessing}
             activeOpacity={0.85}
+            accessibilityLabel="Sign in"
           >
-            <Text style={styles.signInText}>{loading ? 'Signing in…' : 'Sign In →'}</Text>
+            {loading ? (
+              <ActivityIndicator color={Colors.textOnDark} />
+            ) : (
+              <Text style={styles.signInText}>Sign In</Text>
+            )}
           </TouchableOpacity>
 
-          {/* Demo bypass */}
-          <TouchableOpacity onPress={handleDemoLogin} style={styles.demoBtn}>
-            <Text style={styles.demoText}>Skip to Demo →</Text>
+          <TouchableOpacity onPress={handleDemoLogin} style={styles.demoBtn} accessibilityLabel="Open demo mode" disabled={isProcessing}>
+            <Text style={styles.demoText}>Open Demo Mode</Text>
           </TouchableOpacity>
 
-          {/* Divider */}
           <View style={styles.dividerRow}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerLabel}>OR JOIN WITH</Text>
             <View style={styles.dividerLine} />
           </View>
 
-          {/* Google */}
-          <TouchableOpacity style={styles.googleBtn} onPress={handleDemoLogin}>
+          <TouchableOpacity style={styles.googleBtn} onPress={handleDemoLogin} accessibilityLabel="Continue with Google" disabled={isProcessing}>
             <GoogleIcon />
             <Text style={styles.googleText}>Google</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Footer */}
         <Text style={styles.createRow}>
           Don't have an account?{'  '}
           <Text
@@ -167,6 +218,7 @@ export default function LoginScreen() {
           <Text style={styles.footerLink}>SUPPORT</Text>
         </View>
       </ScrollView>
+      </ScreenMotion>
     </KeyboardAvoidingView>
   );
 }
@@ -240,37 +292,41 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.danger,
     alignItems: 'center', justifyContent: 'center',
   },
-  errorIcon: { color: '#fff', fontWeight: '800', fontSize: 12 },
+  errorIcon: { color: Colors.textOnDark, fontWeight: '800', fontSize: 12 },
   errorContent: { flex: 1 },
   errorTitle: { ...Typography.h4, color: Colors.danger, marginBottom: 2 },
   errorMsg: { ...Typography.bodySm, color: Colors.danger },
   errorClose: { padding: 2 },
   errorCloseText: { fontSize: 18, color: Colors.danger },
+  successText: { ...Typography.bodySm, color: Colors.success, marginBottom: 12, textAlign: 'center' },
 
   fieldGroup: { marginBottom: 14 },
   fieldLabel: { ...Typography.label, color: Colors.textSecondary, marginBottom: 6 },
   input: {
     backgroundColor: Colors.bgMuted,
-    borderRadius: Radius.md,
+    borderRadius: Radius.input,
     paddingHorizontal: 16,
     paddingVertical: 14,
     ...Typography.body,
     color: Colors.textPrimary,
   },
   inputError: { borderWidth: 1, borderColor: Colors.danger + '60' },
+  inlineError: { ...Typography.caption, color: Colors.danger, marginTop: 4 },
   forgotBtn: { alignSelf: 'flex-end', marginTop: 8 },
   forgotText: { ...Typography.bodyMd, color: Colors.textSecondary },
 
   signInBtn: {
     backgroundColor: Colors.brand,
-    borderRadius: Radius.lg,
+    borderRadius: Radius.button,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 8,
     marginBottom: 12,
+    minHeight: 44,
+    justifyContent: 'center',
   },
   signInBtnDisabled: { opacity: 0.6 },
-  signInText: { ...Typography.h4, color: '#fff', fontSize: 16 },
+  signInText: { ...Typography.h4, color: Colors.textOnDark },
 
   demoBtn: { alignItems: 'center', marginBottom: 16 },
   demoText: { ...Typography.bodySm, color: Colors.textMuted },
@@ -285,10 +341,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: Colors.border,
-    borderRadius: Radius.lg,
+    borderRadius: Radius.button,
     paddingVertical: 14,
     gap: 10,
     backgroundColor: Colors.bgCard,
+    minHeight: 44,
   },
   googleText: { ...Typography.h4, color: Colors.textPrimary },
 

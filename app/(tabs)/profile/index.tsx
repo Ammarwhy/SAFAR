@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Image, Switch, SafeAreaView, ImageBackground,
+  Image, Switch, SafeAreaView, ImageBackground, Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_USER, MOCK_TRIPS } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
+import { clearAuthState } from '../../../stores/authStore';
 
 const COVER_IMAGE = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80';
 const AVATAR_URI = 'https://i.pravatar.cc/200?img=11';
@@ -29,6 +30,20 @@ export default function ProfileScreen() {
   const [isFaceID, setFaceID] = useState(MOCK_USER.isFaceIDEnabled);
   const [isFollowing, setFollowing] = useState(false);
 
+  const handleLogout = () => {
+    Alert.alert('Confirm Sign Out', 'You will be signed out and returned to login. Continue?', [
+      { text: 'Cancel' },
+      {
+        text: 'Sign Out',
+        style: 'destructive',
+        onPress: () => {
+          clearAuthState();
+          router.replace('/(auth)/index');
+        },
+      },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
@@ -37,14 +52,14 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(300)}>
           <ImageBackground source={{ uri: COVER_IMAGE }} style={styles.coverBg}>
             <View style={styles.coverOverlay}>
-              <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/flows/settings')}>
-                <Ionicons name="settings-outline" size={20} color="#fff" />
+              <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/flows/settings')} accessibilityLabel="Open profile settings">
+                <Ionicons name="settings-outline" size={20} color={Colors.textOnDark} />
               </TouchableOpacity>
               <View style={styles.heroContent}>
                 <View style={styles.avatarRing}>
                   <Image source={{ uri: AVATAR_URI }} style={styles.avatar} />
-                  <TouchableOpacity style={styles.editBadge} onPress={() => router.push('/flows/profile-photo')}>
-                    <Ionicons name="camera" size={11} color="#fff" />
+                  <TouchableOpacity style={styles.editBadge} onPress={() => router.push('/flows/profile-photo')} accessibilityLabel="Update profile photo">
+                    <Ionicons name="camera" size={11} color={Colors.textOnDark} />
                   </TouchableOpacity>
                 </View>
                 <Text style={styles.heroName}>{MOCK_USER.name}</Text>
@@ -61,18 +76,18 @@ export default function ProfileScreen() {
             style={[styles.actionBtn, isFollowing && styles.actionBtnActive]}
             onPress={() => setFollowing(!isFollowing)}
           >
-            <Ionicons name={isFollowing ? 'checkmark' : 'person-add-outline'} size={15} color={isFollowing ? '#fff' : Colors.brand} />
+            <Ionicons name={isFollowing ? 'checkmark' : 'person-add-outline'} size={15} color={Colors.textOnDark} />
             <Text style={[styles.actionBtnText, isFollowing && styles.actionBtnTextActive]}>
               {isFollowing ? 'Following' : 'Follow'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/flows/share-profile')}>
             <Ionicons name="share-social-outline" size={15} color={Colors.brand} />
-            <Text style={styles.actionBtnText}>Share</Text>
+            <Text style={styles.actionBtnTextOutline}>Share</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/flows/messages')}>
+          <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/(tabs)/messages')}>
             <Ionicons name="chatbubble-outline" size={15} color={Colors.brand} />
-            <Text style={styles.actionBtnText}>Message</Text>
+            <Text style={styles.actionBtnTextOutline}>Message</Text>
           </TouchableOpacity>
         </Animated.View>
 
@@ -174,8 +189,8 @@ export default function ProfileScreen() {
           <Text style={styles.membershipDesc}>
             Unlock personalized matching, vibe rooms, and exclusive curated stays with verification.
           </Text>
-          <TouchableOpacity style={styles.verifyBtn} onPress={() => router.push('/flows/verification')}>
-            <Ionicons name="arrow-forward-circle" size={16} color="#fff" />
+          <TouchableOpacity style={styles.verifyBtn} onPress={() => router.push('/flows/verification')} accessibilityLabel="Start profile verification">
+            <Ionicons name="arrow-forward-circle" size={16} color={Colors.textOnDark} />
             <Text style={styles.verifyBtnText}>Get Verified</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -222,7 +237,7 @@ export default function ProfileScreen() {
               <Text style={styles.menuLabel}>Two-Factor Auth</Text>
               <Text style={styles.menuDesc}>Extra login security</Text>
             </View>
-            <Switch value={is2FA} onValueChange={set2FA} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor="#fff" />
+            <Switch value={is2FA} onValueChange={set2FA} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor={Colors.textOnDark} />
           </View>
           <View style={[styles.toggleRow, { borderBottomWidth: 0 }]}>
             <View style={styles.menuIconWrap}>
@@ -232,7 +247,7 @@ export default function ProfileScreen() {
               <Text style={styles.menuLabel}>Face ID</Text>
               <Text style={styles.menuDesc}>Biometric unlock</Text>
             </View>
-            <Switch value={isFaceID} onValueChange={setFaceID} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor="#fff" />
+            <Switch value={isFaceID} onValueChange={setFaceID} trackColor={{ false: Colors.border, true: Colors.brand }} thumbColor={Colors.textOnDark} />
           </View>
         </Animated.View>
 
@@ -266,7 +281,7 @@ export default function ProfileScreen() {
 
         {/* Logout */}
         <Animated.View entering={FadeInUp.delay(260).duration(280)} style={styles.logoutSection}>
-          <TouchableOpacity style={styles.logoutBtn} onPress={() => router.replace('/(auth)/index')}>
+          <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} accessibilityLabel="Sign out">
             <Ionicons name="log-out-outline" size={16} color={Colors.danger} />
             <Text style={styles.logoutText}>Log Out of Safar</Text>
           </TouchableOpacity>
@@ -314,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand, alignItems: 'center', justifyContent: 'center',
     borderWidth: 2, borderColor: Colors.bg,
   },
-  heroName: { ...Typography.h2, color: '#fff', marginBottom: 4 },
+  heroName: { ...Typography.h2, color: Colors.textOnDark, marginBottom: 4 },
   heroTitle: { ...Typography.label, color: 'rgba(255,255,255,0.75)', marginBottom: 8 },
   heroQuote: { ...Typography.bodyMd, color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' },
 
@@ -336,8 +351,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent', borderRadius: Radius.full, paddingVertical: 10,
     borderWidth: 1.5, borderColor: Colors.border,
   },
-  actionBtnText: { ...Typography.label, color: Colors.brand, fontSize: 13 },
-  actionBtnTextActive: { color: '#fff' },
+  actionBtnText: { ...Typography.label, color: Colors.textOnDark, fontSize: 13 },
+  actionBtnTextOutline: { ...Typography.label, color: Colors.brand, fontSize: 13 },
+  actionBtnTextActive: { color: Colors.textOnDark },
 
   // Stats
   statsCard: {
@@ -391,7 +407,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand, borderRadius: Radius.full,
     paddingHorizontal: 8, paddingVertical: 3,
   },
-  tripActivePillText: { ...Typography.caption, color: '#fff', fontSize: 9 },
+  tripActivePillText: { ...Typography.caption, color: Colors.textOnDark, fontSize: 9 },
 
   // Membership
   membershipCard: {
@@ -412,7 +428,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center',
     backgroundColor: Colors.brand, borderRadius: Radius.full, paddingVertical: 13,
   },
-  verifyBtnText: { ...Typography.h4, color: '#fff' },
+  verifyBtnText: { ...Typography.h4, color: Colors.textOnDark },
 
   // Sections
   sectionCard: {

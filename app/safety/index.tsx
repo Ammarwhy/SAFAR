@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Animated as RNAnimated, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Animated as RNAnimated, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
-import SafarHeader from "../../components/layouts/SafarHeader";
 import BottomTabBar from "../../components/layouts/BottomTabBar";
+import OfflineBanner from "../../components/ui/OfflineBanner";
+import { MOCK_EMERGENCY_CONTACTS, MOCK_LOCAL_AUTHORITIES } from "../../constants/mockData";
 
 const SAFETY_TOOLS = [
 	{
@@ -82,12 +83,29 @@ export default function SafetyCenterScreen() {
 		outputRange: [0.08, 0.18],
 	});
 
+	const callNumber = (phone: string) => {
+		Linking.openURL(`tel:${phone}`).catch(() =>
+			Alert.alert("Cannot Call", "Your device cannot make calls at this time.")
+		);
+	};
+
 	return (
 		<SafeAreaView style={styles.safe}>
-			<SafarHeader />
+			<View style={styles.header}>
+				<TouchableOpacity
+					onPress={() => router.back()}
+					hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+					style={styles.backBtn}
+					accessibilityLabel="Go back"
+				>
+					<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+				</TouchableOpacity>
+				<Text style={styles.headerTitle}>Safety Center</Text>
+				<View style={{ width: 44 }} />
+			</View>
+			<OfflineBanner />
 			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<View style={styles.titleSection}>
-					<Text style={styles.pageTitle}>Safety Center</Text>
 					<Text style={styles.pageDesc}>
 						Your security is our priority. Access immediate assistance and safety tools tailored for your current location.
 					</Text>
@@ -158,6 +176,56 @@ export default function SafetyCenterScreen() {
 					</Animated.View>
 				))}
 
+				<Text style={[styles.toolsLabel, { marginTop: 16 }]}>EMERGENCY CONTACTS</Text>
+				{MOCK_EMERGENCY_CONTACTS.map((contact) => (
+					<Animated.View key={contact.id} entering={FadeInUp.delay(60).duration(280)}>
+						<TouchableOpacity
+							style={styles.contactCard}
+							onPress={() => callNumber(contact.phone)}
+							accessibilityLabel={`Call ${contact.name}`}
+						>
+							<View style={styles.contactLeft}>
+								<View style={styles.contactAvatar}>
+									<Ionicons name="person-outline" size={18} color={Colors.brand} />
+								</View>
+								<View style={styles.contactInfo}>
+									<Text style={styles.contactName}>{contact.name}</Text>
+									<Text style={styles.contactRel}>{contact.relationship}</Text>
+								</View>
+							</View>
+							<View style={styles.callBtn}>
+								<Ionicons name="call-outline" size={16} color={Colors.textOnDark} />
+								<Text style={styles.callBtnText}>Call</Text>
+							</View>
+						</TouchableOpacity>
+					</Animated.View>
+				))}
+
+				<Text style={[styles.toolsLabel, { marginTop: 16 }]}>LOCAL AUTHORITIES</Text>
+				{MOCK_LOCAL_AUTHORITIES.map((auth) => (
+					<Animated.View key={auth.id} entering={FadeInUp.delay(80).duration(280)}>
+						<TouchableOpacity
+							style={styles.contactCard}
+							onPress={() => callNumber(auth.phone)}
+							accessibilityLabel={`Call ${auth.name}`}
+						>
+							<View style={styles.contactLeft}>
+								<View style={styles.contactAvatar}>
+									<Ionicons name="shield-outline" size={18} color={Colors.brand} />
+								</View>
+								<View style={styles.contactInfo}>
+									<Text style={styles.contactName}>{auth.name}</Text>
+									<Text style={styles.contactRel}>{auth.type}</Text>
+								</View>
+							</View>
+							<View style={styles.callBtn}>
+								<Ionicons name="call-outline" size={16} color={Colors.textOnDark} />
+								<Text style={styles.callBtnText}>{auth.phone}</Text>
+							</View>
+						</TouchableOpacity>
+					</Animated.View>
+				))}
+
 				<Animated.View entering={FadeInUp.delay(220).duration(280)} style={styles.reportCard}>
 					<View style={styles.reportLeft}>
 						<Ionicons name="warning-outline" size={18} color={Colors.warning} />
@@ -211,8 +279,13 @@ export default function SafetyCenterScreen() {
 
 const styles = StyleSheet.create({
 	safe: { flex: 1, backgroundColor: Colors.bg },
-	titleSection: { paddingHorizontal: Spacing.screen, paddingTop: 8, paddingBottom: 12 },
-	pageTitle: { ...Typography.h1, color: Colors.textPrimary, marginBottom: 6 },
+	header: {
+		flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+		paddingHorizontal: Spacing.screen, paddingTop: 10, paddingBottom: 8,
+	},
+	backBtn: { width: 44, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
+	headerTitle: { ...Typography.h3, color: Colors.textPrimary },
+	titleSection: { paddingHorizontal: Spacing.screen, paddingTop: 4, paddingBottom: 12 },
 	pageDesc: { ...Typography.body, color: Colors.textSecondary, lineHeight: 22 },
 
 	sosCard: {
@@ -278,6 +351,33 @@ const styles = StyleSheet.create({
 	toolAction: { ...Typography.label, color: Colors.brand, fontSize: 10 },
 	liveActiveRow: { flexDirection: "row", alignItems: "center", gap: 5 },
 	liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.success },
+
+	contactCard: {
+		marginHorizontal: Spacing.screen,
+		marginBottom: 8,
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.lg,
+		padding: 14,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		...Shadow.sm,
+	},
+	contactLeft: { flexDirection: "row", alignItems: "center", gap: 12, flex: 1 },
+	contactAvatar: {
+		width: 40, height: 40, borderRadius: 20,
+		backgroundColor: Colors.bgMuted,
+		alignItems: "center", justifyContent: "center",
+	},
+	contactInfo: { flex: 1 },
+	contactName: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 2 },
+	contactRel: { ...Typography.caption, color: Colors.textSecondary },
+	callBtn: {
+		flexDirection: "row", alignItems: "center", gap: 6,
+		backgroundColor: Colors.brand, borderRadius: Radius.full,
+		paddingHorizontal: 14, paddingVertical: 8, minHeight: 36,
+	},
+	callBtnText: { ...Typography.label, color: Colors.textOnDark, fontSize: 11 },
 
 	reportCard: {
 		marginHorizontal: Spacing.screen,

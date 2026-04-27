@@ -18,7 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Radius, Shadow, scale, vscale } from '../../constants/Theme';
+import { Colors, Radius, Shadow, Typography, scale, vscale } from '../../constants/Theme';
 import { SwipeTraveler } from '../../constants/mockData';
 
 const { width, height } = Dimensions.get('window');
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     borderRadius: 20,
     overflow: 'hidden',
-    backgroundColor: Colors.card,
+    backgroundColor: Colors.bgCard,
     ...Shadow.lg,
   },
   photo: {
@@ -323,15 +323,15 @@ const styles = StyleSheet.create({
     height: PHOTO_HEIGHT,
   },
   compatBadge: {
-    backgroundColor: '#371B17',
+    backgroundColor: Colors.brand,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 999,
   },
   compatText: {
-    fontSize: scale(13),
-    fontWeight: '700',
-    color: '#F5F0E8',
+    ...Typography.label,
+    fontWeight: '700' as const,
+    color: Colors.textOnDark,
   },
   verifiedBadge: {
     position: 'absolute',
@@ -352,38 +352,36 @@ const styles = StyleSheet.create({
   },
   connectLabel: {
     left: 14,
-    borderColor: '#2F6F5E',
+    borderColor: Colors.success,
     backgroundColor: 'rgba(47,111,94,0.85)',
   },
   passLabel: {
     right: 14,
-    borderColor: '#B44747',
+    borderColor: Colors.danger,
     backgroundColor: 'rgba(180,71,71,0.85)',
   },
   overlayText: {
-    fontSize: scale(18),
-    fontWeight: '800',
-    color: '#FFFFFF',
+    ...Typography.h4,
+    fontWeight: '800' as const,
+    color: Colors.textOnDark,
     letterSpacing: 0.5,
   },
   infoPanel: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#EEEDE9',
+    backgroundColor: Colors.bg,
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: scale(5),
   },
   name: {
-    fontSize: scale(18),
-    fontWeight: '700',
+    ...Typography.h4,
+    fontWeight: '700' as const,
     color: Colors.brand,
-    lineHeight: scale(22),
   },
   ageCity: {
-    fontSize: scale(13),
+    ...Typography.label,
     color: Colors.textMuted,
-    lineHeight: scale(17),
   },
   nameRow: {
     flexDirection: 'row',
@@ -402,19 +400,18 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   tagText: {
-    fontSize: scale(11),
+    ...Typography.caption,
     color: Colors.brand,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   bio: {
     width: '100%',
-    fontSize: scale(13),
+    ...Typography.label,
     color: Colors.textBody,
-    fontStyle: 'italic',
-    lineHeight: scale(19),
+    fontStyle: 'italic' as const,
   },
   tapHint: {
-    fontSize: scale(11),
+    ...Typography.caption,
     color: Colors.textMuted,
   },
 });
@@ -453,12 +450,12 @@ const ep = StyleSheet.create({
   },
   headerLeft: { flex: 1, paddingRight: scale(12) },
   name: {
-    fontSize: scale(22),
-    fontWeight: '700',
+    ...Typography.h3,
+    fontWeight: '700' as const,
     color: Colors.brand,
   },
   meta: {
-    fontSize: scale(13),
+    ...Typography.label,
     color: Colors.textMuted,
     marginTop: 4,
   },
@@ -470,27 +467,26 @@ const ep = StyleSheet.create({
     paddingVertical: scale(8),
   },
   compatPct: {
-    fontSize: scale(26),
-    fontWeight: '800',
+    ...Typography.h2,
+    fontWeight: '800' as const,
     color: Colors.brand,
   },
   compatLabel: {
-    fontSize: scale(11),
+    ...Typography.caption,
     color: Colors.textMuted,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   bio: {
-    fontSize: scale(14),
+    ...Typography.bodySm,
     color: Colors.textBody,
-    lineHeight: scale(22),
     marginBottom: scale(20),
   },
   sectionTitle: {
-    fontSize: scale(11),
-    fontWeight: '700',
+    ...Typography.caption,
+    fontWeight: '700' as const,
     color: Colors.brand,
     letterSpacing: 1,
-    textTransform: 'uppercase',
+    textTransform: 'uppercase' as const,
     marginBottom: scale(10),
   },
   traitRow: {
@@ -501,9 +497,8 @@ const ep = StyleSheet.create({
   },
   traitLabel: {
     width: scale(72),
-    fontSize: scale(12),
+    ...Typography.label,
     color: Colors.textBody,
-    fontWeight: '600',
   },
   traitTrack: {
     flex: 1,
@@ -519,9 +514,9 @@ const ep = StyleSheet.create({
   },
   traitValue: {
     width: scale(28),
-    fontSize: scale(11),
+    ...Typography.caption,
     color: Colors.textMuted,
-    textAlign: 'right',
+    textAlign: 'right' as const,
   },
   destRow: {
     gap: scale(8),
@@ -536,7 +531,7 @@ const ep = StyleSheet.create({
     paddingVertical: scale(5),
   },
   destText: {
-    fontSize: scale(12),
+    ...Typography.label,
     color: Colors.textBody,
   },
   actions: {
@@ -555,8 +550,8 @@ const ep = StyleSheet.create({
     backgroundColor: Colors.bg,
   },
   passBtnText: {
-    fontSize: scale(15),
-    fontWeight: '700',
+    ...Typography.bodyMd,
+    fontWeight: '700' as const,
     color: Colors.brand,
   },
   connectBtn: {
@@ -568,8 +563,8 @@ const ep = StyleSheet.create({
     backgroundColor: Colors.brand,
   },
   connectBtnText: {
-    fontSize: scale(15),
-    fontWeight: '700',
+    ...Typography.bodyMd,
+    fontWeight: '700' as const,
     color: Colors.textOnDark,
   },
 });

@@ -1,94 +1,303 @@
-import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import BottomTabBar from "@/components/layouts/BottomTabBar";
-import SafarHeader from "@/components/layouts/SafarHeader";
-import ArchCard from "@/components/ui/ArchCard";
-import { Colors, Spacing, Radius, Typography, Shadow } from "@/constants/Theme";
+import React, { useState } from 'react';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Colors, Radius, Shadow, Spacing, Typography } from '@/constants/Theme';
+import { MOCK_AGENCIES, MOCK_DESTINATIONS } from '@/constants/mockData';
+
+const DIFFICULTY_COLOR: Record<string, string> = {
+  Easy: Colors.success,
+  Moderate: Colors.warning,
+  Challenging: Colors.danger,
+};
 
 export default function DestinationDetailScreen() {
   const { destination } = useLocalSearchParams<{ destination: string }>();
   const router = useRouter();
+  const [saved, setSaved] = useState(false);
+
+  const dest = MOCK_DESTINATIONS.find((d) => d.id === destination);
+  const agencies = dest
+    ? MOCK_AGENCIES.filter((a) => dest.agencyIds.includes(a.id))
+    : [];
+
+  if (!dest) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={styles.backBtn}
+            accessibilityLabel="Go back"
+          >
+            <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.notFound}>
+          <Ionicons name="map-outline" size={48} color={Colors.textMuted} />
+          <Text style={styles.notFoundText}>Destination not found</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.backRow}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
-        </TouchableOpacity>
-      </View>
-      <SafarHeader title="CURATED JOURNEYS" subtitle={destination?.toUpperCase() ?? "DESTINATION"} showAvatar={false} />
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.title}>The Eternal <Text style={styles.italic}>Silk Road</Text></Text>
-        <Text style={styles.body}>Discover ancient architectural marvels preserved through centuries of history.</Text>
-
-        <ArchCard
-          imageUri="https://images.unsplash.com/photo-1561361058-c24cecae35ca?auto=format&fit=crop&w=900&q=80"
-          title="Varanasi"
-          subtitle="INDIA"
-        />
-
-        <View style={styles.grid}>
-          <View style={styles.gridItem}>
-            <ArchCard
-              imageUri="https://images.unsplash.com/photo-1706980062378-ee1160f15195?auto=format&fit=crop&w=900&q=80"
-              title="Petra"
-              subtitle="THE ROSE CITY"
-            />
-          </View>
-          <View style={styles.gridItem}>
-            <ArchCard
-              imageUri="https://images.unsplash.com/photo-1580654712603-eb43273aff33?auto=format&fit=crop&w=900&q=80"
-              title="Bukhara"
-              subtitle="SILK ROAD GEM"
-            />
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.heroContainer}>
+          <Image source={{ uri: dest.heroImage }} style={styles.heroImage} />
+          <View style={styles.heroOverlay} />
+          <TouchableOpacity
+            onPress={() => router.back()}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={styles.heroBackBtn}
+            accessibilityLabel="Go back"
+          >
+            <Ionicons name="arrow-back" size={20} color={Colors.textOnDark} />
+          </TouchableOpacity>
+          <View style={styles.heroMeta}>
+            <View style={styles.regionChip}>
+              <Ionicons name="location-outline" size={11} color={Colors.brand} />
+              <Text style={styles.regionChipText}>{dest.region}</Text>
+            </View>
+            <Text style={styles.heroName}>{dest.name}</Text>
+            <View style={styles.chipsRow}>
+              <View style={styles.chip}>
+                <Ionicons name="time-outline" size={12} color={Colors.textMuted} />
+                <Text style={styles.chipText}>{dest.duration}</Text>
+              </View>
+              <View style={[styles.chip, { borderColor: DIFFICULTY_COLOR[dest.difficulty] }]}>
+                <View style={[styles.difficultyDot, { backgroundColor: DIFFICULTY_COLOR[dest.difficulty] }]} />
+                <Text style={[styles.chipText, { color: DIFFICULTY_COLOR[dest.difficulty] }]}>{dest.difficulty}</Text>
+              </View>
+            </View>
           </View>
         </View>
 
-        <Text style={styles.archiveTitle}>Heritage Archives</Text>
-        <View style={styles.archiveCard}>
-          <Text style={styles.archiveVol}>VOL. 04</Text>
-          <Text style={styles.archiveText}>Agra: Beyond the Marble</Text>
-        </View>
-        <View style={styles.archiveCard}>
-          <Text style={styles.archiveVol}>VOL. 09</Text>
-          <Text style={styles.archiveText}>Forgotten Kingdoms</Text>
+        <View style={styles.body}>
+          <Text style={styles.sectionLabel}>HIGHLIGHTS</Text>
+          <View style={styles.highlightsCard}>
+            {dest.highlights.map((h, i) => (
+              <View key={h} style={[styles.highlightRow, i === dest.highlights.length - 1 && styles.highlightRowLast]}>
+                <View style={styles.highlightDot} />
+                <Text style={styles.highlightText}>{h}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.sectionLabel}>BEST TIME TO VISIT</Text>
+          <View style={styles.monthsRow}>
+            {dest.bestMonths.map((m) => (
+              <View key={m} style={styles.monthChip}>
+                <Text style={styles.monthChipText}>{m}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Text style={styles.sectionLabel}>COST ESTIMATE</Text>
+          <View style={styles.costCard}>
+            <View style={styles.costRow}>
+              <View style={styles.costCol}>
+                <Text style={styles.costLabel}>SOLO</Text>
+                <Text style={styles.costValue}>
+                  PKR {dest.soloEstimate.toLocaleString()}
+                </Text>
+                <Text style={styles.costNote}>Self-planned, per person</Text>
+              </View>
+              <View style={styles.costDivider} />
+              <View style={styles.costCol}>
+                <Text style={styles.costLabel}>WITH AGENCY</Text>
+                <Text style={[styles.costValue, { color: Colors.brand }]}>
+                  PKR {dest.agencyEstimate.toLocaleString()}
+                </Text>
+                <Text style={styles.costNote}>All-in, guided package</Text>
+              </View>
+            </View>
+            <Text style={styles.costTeaser}>
+              Agency packages include transport, accommodation, guides & permits.
+            </Text>
+          </View>
+
+          {agencies.length > 0 && (
+            <>
+              <Text style={styles.sectionLabel}>AGENCY PACKAGES</Text>
+              {agencies.map((agency) => (
+                <TouchableOpacity
+                  key={agency.id}
+                  style={styles.agencyCard}
+                  onPress={() => router.push(`/(tabs)/explore/agency/${agency.id}` as never)}
+                  accessibilityLabel={`View ${agency.name} packages`}
+                  activeOpacity={0.85}
+                >
+                  <Image source={{ uri: agency.heroImage }} style={styles.agencyHero} />
+                  <View style={styles.agencyInfo}>
+                    <View style={styles.agencyNameRow}>
+                      <Text style={styles.agencyName}>{agency.name}</Text>
+                      {agency.verified && (
+                        <Ionicons name="checkmark-circle" size={14} color={Colors.brand} />
+                      )}
+                    </View>
+                    <Text style={styles.agencyRegion}>{agency.region}</Text>
+                    <View style={styles.agencyFooter}>
+                      <View style={styles.ratingRow}>
+                        <Ionicons name="star" size={11} color={Colors.warning} />
+                        <Text style={styles.ratingText}>{agency.rating}</Text>
+                      </View>
+                      <Text style={styles.agencyPrice}>
+                        From PKR {agency.startingPrice.toLocaleString()}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </>
+          )}
+
+          <TouchableOpacity
+            style={[styles.wishlistBtn, saved && styles.wishlistBtnSaved]}
+            onPress={() => setSaved((v) => !v)}
+            accessibilityLabel={saved ? 'Remove from wishlist' : 'Save to wishlist'}
+            activeOpacity={0.85}
+          >
+            <Ionicons
+              name={saved ? 'bookmark' : 'bookmark-outline'}
+              size={18}
+              color={saved ? Colors.textOnDark : Colors.brand}
+            />
+            <Text style={[styles.wishlistText, saved && styles.wishlistTextSaved]}>
+              {saved ? 'Saved to Wishlist' : 'Save to Wishlist'}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={{ height: 32 }} />
         </View>
       </ScrollView>
-      <BottomTabBar />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bg },
-  backRow: {
-    paddingHorizontal: Spacing.screen,
-    paddingTop: 10,
-    paddingBottom: 4,
+  scrollContent: { flexGrow: 1 },
+  header: {
+    paddingHorizontal: Spacing.screen, paddingTop: 10, paddingBottom: 8,
   },
-  scroll: { flex: 1 },
-  content: { padding: Spacing.md, paddingBottom: 100 },
-  title: { marginTop: Spacing.md, ...Typography.h1, color: Colors.brand },
-  italic: { fontStyle: "italic" },
-  body: { marginTop: 8, ...Typography.bodyMd, color: Colors.textMuted, marginBottom: Spacing.md, lineHeight: 22 },
-  grid: { marginTop: Spacing.md, flexDirection: "row", gap: Spacing.sm },
-  gridItem: { flex: 1 },
-  archiveTitle: { marginTop: Spacing.md, ...Typography.h3, color: Colors.brand },
-  archiveCard: {
-    marginTop: Spacing.sm,
-    backgroundColor: Colors.bgCard,
-    borderRadius: Radius.md,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    padding: Spacing.md,
+  backBtn: { width: 44, height: 44, justifyContent: 'center' },
+  notFound: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  notFoundText: { ...Typography.bodyMd, color: Colors.textMuted },
+
+  heroContainer: { position: 'relative', height: 300 },
+  heroImage: { width: '100%', height: 300 },
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  heroBackBtn: {
+    position: 'absolute', top: 16, left: Spacing.screen,
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center', justifyContent: 'center',
+  },
+  heroMeta: {
+    position: 'absolute', bottom: 20, left: Spacing.screen, right: Spacing.screen,
+  },
+  regionChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: Radius.pill, paddingHorizontal: 10, paddingVertical: 4,
+    alignSelf: 'flex-start', marginBottom: 8,
+  },
+  regionChipText: { ...Typography.caption, color: Colors.textOnDark },
+  heroName: { ...Typography.h1, color: Colors.textOnDark, marginBottom: 10 },
+  chipsRow: { flexDirection: 'row', gap: 8 },
+  chip: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: Radius.pill, paddingHorizontal: 10, paddingVertical: 5,
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)',
+  },
+  chipText: { ...Typography.caption, color: Colors.textOnDark },
+  difficultyDot: { width: 6, height: 6, borderRadius: 3 },
+
+  body: { paddingHorizontal: Spacing.screen, paddingTop: 20 },
+  sectionLabel: {
+    ...Typography.label,
+    color: Colors.textMuted,
+    textTransform: 'uppercase' as const,
+    letterSpacing: 1.2,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+
+  highlightsCard: {
+    backgroundColor: Colors.bgCard, borderRadius: Radius.xl, ...Shadow.sm, overflow: 'hidden',
+  },
+  highlightRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingHorizontal: 16, paddingVertical: 14,
+    borderBottomWidth: 1, borderBottomColor: Colors.border,
+  },
+  highlightRowLast: { borderBottomWidth: 0 },
+  highlightDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: Colors.brand },
+  highlightText: { ...Typography.bodyMd, color: Colors.textPrimary },
+
+  monthsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  monthChip: {
+    backgroundColor: Colors.bgCard, borderRadius: Radius.pill,
+    paddingHorizontal: 14, paddingVertical: 8,
+    borderWidth: 1, borderColor: Colors.brand,
     ...Shadow.sm,
   },
-  archiveVol: { ...Typography.label, color: Colors.brand, marginBottom: 6 },
-  archiveText: { ...Typography.bodyMd, color: Colors.textMuted, lineHeight: 19 },
+  monthChipText: { ...Typography.caption, color: Colors.brand, fontWeight: '600' },
+
+  costCard: {
+    backgroundColor: Colors.bgCard, borderRadius: Radius.xl, ...Shadow.sm, padding: 16,
+  },
+  costRow: { flexDirection: 'row', alignItems: 'stretch' },
+  costCol: { flex: 1, alignItems: 'center', gap: 4 },
+  costDivider: { width: 1, backgroundColor: Colors.border, marginHorizontal: 12 },
+  costLabel: {
+    ...Typography.label, color: Colors.textMuted,
+    textTransform: 'uppercase' as const, letterSpacing: 0.8,
+  },
+  costValue: { ...Typography.h3, color: Colors.textPrimary },
+  costNote: { ...Typography.caption, color: Colors.textSecondary, textAlign: 'center' },
+  costTeaser: {
+    ...Typography.caption, color: Colors.textSecondary,
+    textAlign: 'center', marginTop: 12,
+    borderTopWidth: 1, borderTopColor: Colors.border, paddingTop: 10,
+  },
+
+  agencyCard: {
+    backgroundColor: Colors.bgCard, borderRadius: Radius.xl,
+    ...Shadow.sm, overflow: 'hidden', marginBottom: 12,
+  },
+  agencyHero: { width: '100%', height: 120 },
+  agencyInfo: { padding: 14 },
+  agencyNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 },
+  agencyName: { ...Typography.h4, color: Colors.textPrimary },
+  agencyRegion: { ...Typography.caption, color: Colors.textSecondary, marginBottom: 8 },
+  agencyFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  ratingText: { ...Typography.caption, color: Colors.textSecondary, fontWeight: '600' },
+  agencyPrice: { ...Typography.caption, color: Colors.brand, fontWeight: '700' },
+
+  wishlistBtn: {
+    height: 52, borderRadius: Radius.full,
+    borderWidth: 1.5, borderColor: Colors.brand,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    marginTop: 24,
+  },
+  wishlistBtnSaved: { backgroundColor: Colors.brand },
+  wishlistText: { ...Typography.bodySm, fontWeight: '700', color: Colors.brand },
+  wishlistTextSaved: { color: Colors.textOnDark },
 });

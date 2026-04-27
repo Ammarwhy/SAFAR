@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-	Alert,
 	Image,
 	KeyboardAvoidingView,
 	Modal,
@@ -16,7 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../../constants/Theme";
-import { MOCK_VIBE_MESSAGES } from "../../../../constants/mockData";
+import { MOCK_VIBE_MESSAGES, MockVibeMessage } from "../../../../constants/mockData";
 
 export default function VibeRoomScreen() {
 	const router = useRouter();
@@ -54,7 +53,12 @@ export default function VibeRoomScreen() {
 		<SafeAreaView style={styles.safe}>
 			<KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
 				<View style={styles.header}>
-					<TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+					<TouchableOpacity
+						onPress={() => router.back()}
+						style={styles.backBtn}
+						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+						accessibilityLabel="Go back"
+					>
 						<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 					</TouchableOpacity>
 					<View style={styles.headerCenter}>
@@ -153,20 +157,25 @@ export default function VibeRoomScreen() {
 					<Text style={styles.dateDivider}>TODAY</Text>
 
 					{messages.map((msg) => {
-						if (msg.type === "poll") {
-							return <PollBubble key={msg.id} msg={msg} />;
+						if (msg.type === "poll" && msg.poll) {
+							return <PollBubble key={msg.id} msg={msg as PollMsg} />;
 						}
-						if (msg.type === "image") {
-							return <ImageBubble key={msg.id} msg={msg} />;
+						if (msg.type === "image" && msg.imageUrl) {
+							return <ImageBubble key={msg.id} msg={msg as ImageMsg} />;
 						}
 						return <TextBubble key={msg.id} msg={msg} />;
 					})}
 				</ScrollView>
 
 				<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiRow}>
-					{["🔥 Hot", "👀 Noted", "✅ On it", "❤️ Love it", "⚡ Let's go"].map((reaction) => (
-						<TouchableOpacity key={reaction} style={styles.emojiChip} onPress={() => Alert.alert('Coming Soon', 'This feature is on the way.')}>
-							<Text style={styles.emojiChipText}>{reaction}</Text>
+					{["🔥", "👀", "✅", "❤️", "⚡"].map((emoji) => (
+						<TouchableOpacity
+							key={emoji}
+							style={styles.emojiChip}
+							onPress={() => setInput((prev) => prev + emoji)}
+							accessibilityLabel={`Append ${emoji} to message`}
+						>
+							<Text style={styles.emojiChipText}>{emoji}</Text>
 						</TouchableOpacity>
 					))}
 				</ScrollView>
@@ -221,7 +230,11 @@ export default function VibeRoomScreen() {
 	);
 }
 
-function TextBubble({ msg }: { msg: any }) {
+type PollOption = { label: string; votes: number };
+type PollMsg = MockVibeMessage & { type: 'poll'; poll: { question: string; options: PollOption[] } };
+type ImageMsg = MockVibeMessage & { type: 'image'; imageUrl: string };
+
+function TextBubble({ msg }: { msg: MockVibeMessage }) {
 	return (
 		<View style={[bubbleStyles.row, msg.isMine && bubbleStyles.myRow]}>
 			{!msg.isMine && <Image source={{ uri: msg.avatar }} style={bubbleStyles.avatar} />}
@@ -238,7 +251,7 @@ function TextBubble({ msg }: { msg: any }) {
 	);
 }
 
-function PollBubble({ msg }: { msg: any }) {
+function PollBubble({ msg }: { msg: PollMsg }) {
 	const [voted, setVoted] = useState<number | null>(null);
 	return (
 		<View style={bubbleStyles.row}>
@@ -250,7 +263,7 @@ function PollBubble({ msg }: { msg: any }) {
 						<Ionicons name="list-outline" size={16} color={Colors.textSecondary} />
 						<Text style={bubbleStyles.pollQuestion}>{msg.poll.question}</Text>
 					</View>
-					{msg.poll.options.map((opt: any, i: number) => (
+					{msg.poll.options.map((opt, i) => (
 						<TouchableOpacity
 							key={i}
 							style={[bubbleStyles.pollOption, voted === i && bubbleStyles.pollOptionSelected]}
@@ -270,7 +283,7 @@ function PollBubble({ msg }: { msg: any }) {
 	);
 }
 
-function ImageBubble({ msg }: { msg: any }) {
+function ImageBubble({ msg }: { msg: ImageMsg }) {
 	return (
 		<View style={bubbleStyles.row}>
 			<Image source={{ uri: msg.avatar }} style={bubbleStyles.avatar} />
@@ -298,7 +311,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.bg,
 		gap: 10,
 	},
-	backBtn: { paddingTop: 4 },
+	backBtn: { width: 44, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
 	headerCenter: { flex: 1 },
 	headerSuper: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
 	headerTitle: { ...Typography.h1, color: Colors.textPrimary, lineHeight: 30 },

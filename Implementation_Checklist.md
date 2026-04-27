@@ -43,10 +43,11 @@ Latest completed UI milestone: Entry 012 in `Build_Progress.md`.
 
 ## Phase 2 — Stores (State Layer)
 
-- [ ] `stores/authStore.ts` (session, login/logout, loading/error)
-- [ ] `stores/tripStore.ts` (trip list, active trip, itinerary cache)
+- [x] `stores/authStore.ts` (session, login/logout, loading/error)
+- [x] `stores/tripStore.ts` (newTrips + wishlist; addTrip, addToWishlist, removeFromWishlist, isWishlisted)
 - [ ] `stores/chatStore.ts` (room messages, queue, poll state, reconnect)
 - [ ] `stores/safetyStore.ts` (SOS state, contacts, location flags)
+- [x] `stores/profileStore.ts` (name, bio, travelStyles, languages; setProfile)
 - [ ] Add persist strategy for offline-safe state where needed
 
 ## Phase 3 — Shared UI Components
@@ -70,14 +71,21 @@ Latest completed UI milestone: Entry 012 in `Build_Progress.md`.
 ## Phase 5 — Feature Delivery (PRD Critical Path)
 
 ### 5A Authentication
-- [ ] Email/password login
-- [ ] Session persistence and logout
-- [ ] Login error state UI
+- [x] Email/password login (F04 — login.tsx with inline validation + loading state)
+- [x] Login CTA disabled until both fields non-empty (`canSubmit` flag + opacity 0.45)
+- [x] Login uses only `Colors.*` / `Typography.*` tokens — no raw hex or fontSize
+- [x] Root index redirects to `/(auth)/login` directly (not ambiguous group root `/(auth)`) — Entry 016 fix
+- [x] Multi-role registration (F01/F41 — register.tsx with traveler/agency toggle)
+- [x] Forgot password flow (F03 — forgot-password.tsx with email→loading→success)
+- [x] Session persistence and logout (F46 — clearAuthState + Alert confirmation)
+- [x] Login error state UI (inline field-level errors)
 
 ### 5B Explore + Destination Detail
-- [x] Destination list cards with category filters/search (CATEGORY_DATA drives content per pill)
-- [x] Featured escape hero card with working image display
-- [ ] Destination detail with archives section (stub in [destination].tsx)
+- [x] Destination list cards with category filters/search (CATEGORY_DATA drives content per pill) (F05)
+- [x] Featured escape hero card with working image display (F06)
+- [x] Destination detail: hero image, region/duration/difficulty chips, highlights, best months, cost estimate, agency cards, Save to Wishlist (F06)
+- [x] `MOCK_DESTINATIONS` with 3 Pakistan entries (hunza-valley, swat-valley, fairy-meadows)
+- [x] Save to wishlist from explore (F07 — tripStore.addToWishlist)
 
 ### 5C AI Match Discovery
 - [x] Candidate card + compatibility percentage
@@ -86,11 +94,15 @@ Latest completed UI milestone: Entry 012 in `Build_Progress.md`.
 - [ ] Traveler public profile navigation
 
 ### 5D Journeys + Itinerary
-- [x] Journeys feed hero + status cards
-- [x] Tabs show distinct content: Upcoming (active journeys), Past Trips (completed from MOCK_TRIPS), Wishlist (saved destinations)
+- [x] Journeys feed hero + status cards (F15)
+- [x] Tabs show distinct content: Upcoming (newTrips from store + mock), Past Trips, Wishlist (F15/F17)
+- [x] New Journey form writes to tripStore (F14)
+- [x] New Journey back button uses `canGoBack()` guard with `router.replace('/(tabs)/journeys')` fallback; hitSlop 12 on all sides — Entry 016 fix
+- [x] Wishlist tab empty state with icon + message (F17)
 - [x] Latest Update card: overlapping avatar stack + Notify All / View All action buttons
 - [x] Trips collection with cached labels
-- [ ] Trip itinerary details and structure
+- [x] Itinerary timeline view with links to Expense + Vibe Room (F16)
+- [ ] Itinerary builder: add/edit stops (F13 — currently read-only)
 
 ### 5E Vibe Room (Realtime)
 - [ ] Room message fetch/send via Supabase
@@ -101,13 +113,15 @@ Latest completed UI milestone: Entry 012 in `Build_Progress.md`.
 - [x] Emoji reaction strip above input
 - [x] Poll UI (vote UI rendered from mock message data)
 - [x] Sync interrupted error state + retry (UI)
+- [x] Back button 44×44 with `hitSlop` (Issue 4 fix)
 
 ### 5F Expense Ledger
-- [x] Expense list row rendering
-- [ ] Add expense flow
-- [x] Total + user share cards
-- [x] Balance/settle up summary
-- [x] Offline sync indicator
+- [x] Expense list row rendering (F28)
+- [x] Add expense modal (F27 — title/amount/category/paidBy/splitType; loading+disabled; validation)
+- [x] Total + user share cards (F28)
+- [x] Balance/settle up summary with Who Owes Whom section (F30)
+- [x] Settle Up confirmation alert (destructive action pattern) (F30)
+- [x] Offline banner placement (F32)
 
 ### 5G Safety Center
 - [x] SOS button with confirmation (UI)
@@ -115,29 +129,45 @@ Latest completed UI milestone: Entry 012 in `Build_Progress.md`.
 - [x] Local authority list + call actions (UI)
 - [x] Location state text + map section (UI)
 - [x] Offline safety kit behavior (UI)
+- [x] Back button with `hitSlop` — replaced `SafarHeader` with custom header row (Issue 4 fix)
 
 ### 5H Agency Directory
-- [x] Agency list with verified badges
-- [x] Agency details with itinerary cards
-- [x] Contact CTAs and map section (profile CTA area)
+- [x] Agency list with verified badges (F22, F42)
+- [x] Agency details with itinerary cards (F23)
+- [x] Real email + call via Linking.openURL (F33)
+- [x] Cost comparison table — Agency vs DIY (F40)
+- [x] Agency booking flow stub (F24 — flows/agency-booking with date/traveler fields)
 
 ### 5I Profile & Settings
-- [x] Hero section: cover photo, large avatar with ring, name/title/quote
-- [x] Follow / Share / Message action row
+- [x] Hero section: cover photo, large avatar with ring, name from profileStore, bio from profileStore (F43)
+- [x] Edit Profile button routes to /(tabs)/profile/edit (F44)
+- [x] Edit profile form: name/bio/travel styles/languages with profileStore (F44)
+- [x] Settings gear routes to /settings (F45)
+- [x] Settings screen: language selector, display switches, connected accounts (F45)
+- [x] Settings all buttons fully wired: Personal Info → profile/edit, Notifications → /notifications-settings, Feedback → /feedback, Privacy → Linking.openURL, 2FA/FaceID toggles with Alert confirm (Issue 2/3 fix)
+- [x] `/notifications-settings` screen with 5 toggle rows (F45 sub-feature)
+- [x] `/feedback` screen with multiline input, char count, loading state (F45 sub-feature)
 - [x] Stats card with icons (countries, expeditions, followers)
 - [x] Achievement badges horizontal scroll
 - [x] Followers preview with avatar stack
 - [x] Recent Journeys horizontal card scroll (from MOCK_TRIPS)
 - [x] Membership / verification CTA card
 - [x] Account preferences, security toggles, support sections — all with icon backgrounds + descriptions
-- [x] Sign-out flow (router.replace to auth index)
+- [x] Sign-out with confirmation alert → clearAuthState → /(auth)/login (F46)
 
-## Latest Notes (2026-04-25)
+### 5J Community + Swipe
+- [x] Swipe deck with gesture detection and card animation (F08)
+- [x] Match overlay with dismiss + keep exploring (F08)
+- [x] X = `triggerSwipeLeft()` (no alert), checkmark = Alert "Connected!" + swipeRight, star = Alert "Super Liked!" + swipeRight (Issue 6 fix)
+- [x] All `fontSize: scale(N)` replaced with `Typography.*` tokens in community/index.tsx and SwipeCard.tsx (Issue 6 fix)
+- [x] Raw hex colors in SwipeCard.tsx replaced with `Colors.*` tokens
 
-- What changed: Featured Escape now uses fallback image handling and includes duration + highlight chips; mock data updated accordingly; all markdown docs synced to Entry 011.
-- Why it changed: The hero card must never render blank; adding resilience and richer context improves trust and scanability.
-- How verified: Not run in this session (visual check pending).
-- Core idea: Make key visual surfaces robust and information-rich so failures do not break the experience.
+## Latest Notes (2026-04-27)
+
+- What changed: Full Pass 1–7 feature sweep + 6-issue bug-fix pass + 2 navigation regressions fixed (Entry 016). Root redirect now goes to `/(auth)/login` explicitly; New Journey back button uses `canGoBack()` guard.
+- Why it changed: Auth gate must always be the entry point; every screen must have a working escape route regardless of navigation history.
+- How verified: `npx tsc --noEmit` passes with only the pre-existing tsconfig ignoreDeprecations error (intentionally kept).
+- Core idea: Every feature that touches cross-screen state belongs in a Zustand store; everything else stays in component `useState`. Stubs must always be reachable and respond — never silently missing.
 
 ## Phase 6 — Offline & Reliability Hardening
 

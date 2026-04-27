@@ -6,38 +6,16 @@ import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/
 import { MOCK_JOURNEYS, MOCK_TRIPS } from "../../../constants/mockData";
 import SafarHeader from "../../../components/layouts/SafarHeader";
 import BottomTabBar from "../../../components/layouts/BottomTabBar";
+import { useTripStore } from "../../../stores/tripStore";
 
 const TABS = ["Upcoming", "Past Trips", "Wishlist"];
-
-const WISHLIST = [
-  {
-    id: "w1",
-    title: "Fairy Meadows",
-    subtitle: "NANGA PARBAT BASE",
-    image: "https://images.unsplash.com/photo-1580654712603-eb43273aff33?auto=format&fit=crop&w=900&q=80",
-    note: "Best window: Jun – Aug",
-  },
-  {
-    id: "w2",
-    title: "Deosai Plains",
-    subtitle: "GILGIT-BALTISTAN",
-    image: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=900&q=80",
-    note: "Wildflower season: Jul",
-  },
-  {
-    id: "w3",
-    title: "Hingol National Park",
-    subtitle: "BALOCHISTAN COAST",
-    image: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=900&q=80",
-    note: "Coastal route: Oct – Mar",
-  },
-];
 
 export default function JourneysScreen() {
   const router = useRouter();
   const [tab, setTab] = useState("Upcoming");
   const [j1, j2] = MOCK_JOURNEYS;
   const pastTrips = MOCK_TRIPS.filter((t) => t.daysLeft === 0);
+  const { newTrips, wishlist, removeFromWishlist } = useTripStore();
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -59,6 +37,21 @@ export default function JourneysScreen() {
 
         {tab === "Upcoming" && (
           <>
+            {newTrips.length > 0 && newTrips.map((trip) => (
+              <View key={trip.id} style={styles.userTripCard}>
+                <View style={styles.userTripHeader}>
+                  <Ionicons name="map-outline" size={18} color={Colors.brand} />
+                  <Text style={styles.userTripTitle}>{trip.title}</Text>
+                  <View style={styles.newBadge}><Text style={styles.newBadgeText}>NEW</Text></View>
+                </View>
+                <View style={styles.userTripMeta}>
+                  <Ionicons name="location-outline" size={13} color={Colors.textSecondary} />
+                  <Text style={styles.userTripMetaText}>{trip.destination}</Text>
+                  <Ionicons name="calendar-outline" size={13} color={Colors.textSecondary} />
+                  <Text style={styles.userTripMetaText}>{trip.dates}</Text>
+                </View>
+              </View>
+            ))}
             <TouchableOpacity
               style={styles.mainCard}
               activeOpacity={0.9}
@@ -213,9 +206,16 @@ export default function JourneysScreen() {
         {tab === "Wishlist" && (
           <>
             <View style={styles.pastHeader}>
-              <Text style={styles.pastCount}>{WISHLIST.length} saved destinations</Text>
+              <Text style={styles.pastCount}>{wishlist.length} saved destinations</Text>
             </View>
-            {WISHLIST.map((item) => (
+            {wishlist.length === 0 && (
+              <View style={styles.emptyState}>
+                <Ionicons name="heart-outline" size={36} color={Colors.textMuted} style={{ marginBottom: 10 }} />
+                <Text style={styles.emptyTitle}>No saved destinations yet</Text>
+                <Text style={styles.emptyDesc}>Tap the heart on any destination in Explore to save it here.</Text>
+              </View>
+            )}
+            {wishlist.map((item) => (
               <TouchableOpacity
                 key={item.id}
                 style={styles.wishCard}
@@ -224,9 +224,14 @@ export default function JourneysScreen() {
               >
                 <ImageBackground source={{ uri: item.image }} style={styles.wishCardBg} imageStyle={{ borderRadius: Radius.lg }}>
                   <View style={styles.wishCardOverlay}>
-                    <View style={styles.wishIconWrap}>
+                    <TouchableOpacity
+                      style={styles.wishIconWrap}
+                      onPress={() => removeFromWishlist(item.id)}
+                      hitSlop={8}
+                      accessibilityLabel="Remove from wishlist"
+                    >
                       <Ionicons name="heart" size={14} color={Colors.textOnDark} />
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.wishCardSub}>{item.subtitle}</Text>
                     <Text style={styles.wishCardTitle}>{item.title}</Text>
                     <View style={styles.wishNotePill}>
@@ -385,6 +390,23 @@ const styles = StyleSheet.create({
   metaChipText: { ...Typography.caption, color: Colors.textSecondary },
   pastCardBtn: { alignSelf: "flex-start" },
   pastCardBtnText: { ...Typography.label, color: Colors.brand },
+
+  userTripCard: {
+    marginHorizontal: Spacing.screen, marginBottom: 12,
+    backgroundColor: Colors.bgCard, borderRadius: Radius.lg,
+    padding: 14, ...Shadow.sm,
+    borderWidth: 1, borderColor: Colors.brand,
+  },
+  userTripHeader: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 8 },
+  userTripTitle: { ...Typography.h4, color: Colors.textPrimary, flex: 1 },
+  newBadge: { backgroundColor: Colors.brand, borderRadius: Radius.full, paddingHorizontal: 8, paddingVertical: 2 },
+  newBadgeText: { ...Typography.label, color: Colors.textOnDark, fontSize: 9 },
+  userTripMeta: { flexDirection: "row", alignItems: "center", gap: 6 },
+  userTripMetaText: { ...Typography.caption, color: Colors.textSecondary },
+
+  emptyState: { alignItems: "center", paddingVertical: 40, paddingHorizontal: 24 },
+  emptyTitle: { ...Typography.h4, color: Colors.textPrimary, marginBottom: 6 },
+  emptyDesc: { ...Typography.bodyMd, color: Colors.textSecondary, textAlign: "center", lineHeight: 20 },
 
   // Wishlist
   wishCard: { marginHorizontal: Spacing.screen, marginBottom: 12, borderRadius: Radius.lg, ...Shadow.sm },

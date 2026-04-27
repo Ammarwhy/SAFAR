@@ -10,6 +10,7 @@ import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/
 import { MOCK_USER, MOCK_TRIPS } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
 import { clearAuthState } from '../../../stores/authStore';
+import { useProfileStore } from '../../../stores/profileStore';
 
 const COVER_IMAGE = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80';
 const AVATAR_URI = 'https://i.pravatar.cc/200?img=11';
@@ -26,9 +27,9 @@ const FOLLOWERS_AVATARS = ['3', '5', '8', '4', '22', '14'];
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { name: profileName, bio: profileBio } = useProfileStore();
   const [is2FA, set2FA] = useState(MOCK_USER.is2FAEnabled);
   const [isFaceID, setFaceID] = useState(MOCK_USER.isFaceIDEnabled);
-  const [isFollowing, setFollowing] = useState(false);
 
   const handleLogout = () => {
     Alert.alert('Confirm Sign Out', 'You will be signed out and returned to login. Continue?', [
@@ -52,7 +53,7 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(300)}>
           <ImageBackground source={{ uri: COVER_IMAGE }} style={styles.coverBg}>
             <View style={styles.coverOverlay}>
-              <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/flows/settings')} accessibilityLabel="Open profile settings">
+              <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/settings')} accessibilityLabel="Open profile settings">
                 <Ionicons name="settings-outline" size={20} color={Colors.textOnDark} />
               </TouchableOpacity>
               <View style={styles.heroContent}>
@@ -62,9 +63,9 @@ export default function ProfileScreen() {
                     <Ionicons name="camera" size={11} color={Colors.textOnDark} />
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.heroName}>{MOCK_USER.name}</Text>
+                <Text style={styles.heroName}>{profileName}</Text>
                 <Text style={styles.heroTitle}>{MOCK_USER.title}</Text>
-                <Text style={styles.heroQuote}>"Collect stories, not stamps."</Text>
+                <Text style={styles.heroQuote}>{profileBio}</Text>
               </View>
             </View>
           </ImageBackground>
@@ -73,13 +74,12 @@ export default function ProfileScreen() {
         {/* Action Row */}
         <Animated.View entering={FadeInUp.delay(60).duration(280)} style={styles.actionRow}>
           <TouchableOpacity
-            style={[styles.actionBtn, isFollowing && styles.actionBtnActive]}
-            onPress={() => setFollowing(!isFollowing)}
+            style={styles.actionBtn}
+            onPress={() => router.push('/(tabs)/profile/edit')}
+            accessibilityLabel="Edit profile"
           >
-            <Ionicons name={isFollowing ? 'checkmark' : 'person-add-outline'} size={15} color={Colors.textOnDark} />
-            <Text style={[styles.actionBtnText, isFollowing && styles.actionBtnTextActive]}>
-              {isFollowing ? 'Following' : 'Follow'}
-            </Text>
+            <Ionicons name="pencil-outline" size={15} color={Colors.textOnDark} />
+            <Text style={styles.actionBtnText}>Edit Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionBtnOutline} onPress={() => router.push('/flows/share-profile')}>
             <Ionicons name="share-social-outline" size={15} color={Colors.brand} />
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
     backgroundColor: Colors.brand, borderRadius: Radius.full, paddingVertical: 10,
   },
-  actionBtnActive: { backgroundColor: Colors.success },
+
   actionBtnOutline: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
     backgroundColor: 'transparent', borderRadius: Radius.full, paddingVertical: 10,
@@ -353,7 +353,6 @@ const styles = StyleSheet.create({
   },
   actionBtnText: { ...Typography.label, color: Colors.textOnDark, fontSize: 13 },
   actionBtnTextOutline: { ...Typography.label, color: Colors.brand, fontSize: 13 },
-  actionBtnTextActive: { color: Colors.textOnDark },
 
   // Stats
   statsCard: {

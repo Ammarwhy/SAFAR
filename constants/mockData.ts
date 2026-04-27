@@ -152,6 +152,34 @@ export type MockAgency = {
 	startingPrice: number;
 	description?: string;
 	avatars?: string[];
+	verified?: boolean;
+};
+
+export type MockEmergencyContact = {
+	id: string;
+	name: string;
+	relationship: string;
+	phone: string;
+};
+
+export type MockLocalAuthority = {
+	id: string;
+	name: string;
+	type: string;
+	phone: string;
+};
+
+export type CostComparisonRow = {
+	item: string;
+	soloCost: number;
+	agencyCost: number;
+};
+
+export type MockCostComparison = {
+	destination: string;
+	duration: string;
+	groupSize: number;
+	rows: CostComparisonRow[];
 };
 
 export type MockAgencyItinerary = {
@@ -175,8 +203,66 @@ export type MockAgencyDetail = {
 	certification: string;
 	startingPrice: number;
 	officeAddress: string;
+	phone: string;
+	email: string;
 	itineraries: MockAgencyItinerary[];
 };
+
+export type MockDestination = {
+	id: string;
+	name: string;
+	region: string;
+	heroImage: string;
+	duration: string;
+	difficulty: 'Easy' | 'Moderate' | 'Challenging';
+	highlights: string[];
+	bestMonths: string[];
+	soloEstimate: number;
+	agencyEstimate: number;
+	agencyIds: string[];
+};
+
+export const MOCK_DESTINATIONS: MockDestination[] = [
+	{
+		id: 'hunza-valley',
+		name: 'Hunza Valley',
+		region: 'Gilgit-Baltistan, Pakistan',
+		heroImage: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80',
+		duration: '7–10 Days',
+		difficulty: 'Moderate',
+		highlights: ['Baltit Fort', 'Attabad Lake', "Eagle's Nest Viewpoint", 'Karimabad Bazaar', 'Rakaposhi Base Camp'],
+		bestMonths: ['April', 'May', 'June', 'September', 'October'],
+		soloEstimate: 95000,
+		agencyEstimate: 185000,
+		agencyIds: ['atlas-nomad-co', 'silk-route-collective'],
+	},
+	{
+		id: 'swat-valley',
+		name: 'Swat Valley',
+		region: 'Khyber Pakhtunkhwa, Pakistan',
+		heroImage: 'https://images.unsplash.com/photo-1504900954325-23c46b4ce8df?auto=format&fit=crop&w=1200&q=80',
+		duration: '4–6 Days',
+		difficulty: 'Easy',
+		highlights: ['Mahodand Lake', 'Kalam Valley', 'Fizagat Park', 'Malam Jabba Ski Resort', 'White Palace Museum'],
+		bestMonths: ['March', 'April', 'May', 'August', 'September'],
+		soloEstimate: 55000,
+		agencyEstimate: 98000,
+		agencyIds: ['dune-to-peak-travel'],
+	},
+	{
+		id: 'fairy-meadows',
+		name: 'Fairy Meadows',
+		region: 'Gilgit-Baltistan, Pakistan',
+		heroImage: 'https://images.unsplash.com/photo-1467173572719-f14b9fb86e5f?auto=format&fit=crop&w=1200&q=80',
+		duration: '3–5 Days',
+		difficulty: 'Challenging',
+		highlights: ['Nanga Parbat Base Camp Trek', 'Raikot Bridge', 'Fairy Meadows Plateau', 'Alpine Wildflowers', 'Sunrise Over Nanga Parbat'],
+		bestMonths: ['June', 'July', 'August'],
+		soloEstimate: 45000,
+		agencyEstimate: 130000,
+		agencyIds: ['atlas-nomad-co', 'dune-to-peak-travel'],
+	},
+];
 
 export const destinations: Destination[] = [
 	{
@@ -527,6 +613,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 			"https://i.pravatar.cc/80?img=22",
 			"https://i.pravatar.cc/80?img=32",
 		],
+		verified: true,
 	},
 	{
 		id: "silk-route-collective",
@@ -542,6 +629,7 @@ export const MOCK_AGENCIES: MockAgency[] = [
 			"https://i.pravatar.cc/80?img=14",
 			"https://i.pravatar.cc/80?img=24",
 		],
+		verified: true,
 	},
 	{
 		id: "dune-to-peak-travel",
@@ -551,8 +639,36 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		heroImage:
 			"https://images.unsplash.com/photo-1531501410720-c8d437636169?auto=format&fit=crop&w=1200&q=80",
 		startingPrice: 149000,
+		verified: false,
 	},
 ];
+
+export const MOCK_EMERGENCY_CONTACTS: MockEmergencyContact[] = [
+	{ id: "ec-1", name: "Sara Khan", relationship: "Sister", phone: "+923001234567" },
+	{ id: "ec-2", name: "Ahmed Malik", relationship: "Father", phone: "+923219876543" },
+	{ id: "ec-3", name: "Dr. Nadia Raza", relationship: "Family Doctor", phone: "+922134567890" },
+];
+
+export const MOCK_LOCAL_AUTHORITIES: MockLocalAuthority[] = [
+	{ id: "la-1", name: "Gilgit Police HQ", type: "Police", phone: "+925811920191" },
+	{ id: "la-2", name: "DHQ Hospital Gilgit", type: "Hospital", phone: "+925811920091" },
+	{ id: "la-3", name: "Pakistan Rescue 1122", type: "Rescue", phone: "1122" },
+	{ id: "la-4", name: "AKAH Disaster Response", type: "Disaster Relief", phone: "+925811920041" },
+];
+
+export const MOCK_COST_COMPARISON: MockCostComparison = {
+	destination: "Hunza Valley — 8 Days",
+	duration: "8 Days / 7 Nights",
+	groupSize: 2,
+	rows: [
+		{ item: "Transport (Islamabad–Hunza)", soloCost: 14000, agencyCost: 0 },
+		{ item: "Accommodation (per night)", soloCost: 8000, agencyCost: 0 },
+		{ item: "Daily Meals (×8)", soloCost: 4000, agencyCost: 0 },
+		{ item: "Local Guides", soloCost: 12000, agencyCost: 0 },
+		{ item: "Permits & Entry Fees", soloCost: 5000, agencyCost: 0 },
+		{ item: "Agency Package (all-in)", soloCost: 0, agencyCost: 189000 },
+	],
+};
 
 export const SWIPE_TRAVELERS: SwipeTraveler[] = [
 	{
@@ -676,6 +792,8 @@ export const MOCK_AGENCY_DETAIL: MockAgencyDetail = {
 	certification: "IATA + Local Tourism Board",
 	startingPrice: 185000,
 	officeAddress: "Old Fort Road, Karimabad, Hunza, Gilgit-Baltistan",
+	phone: "+925811920222",
+	email: "info@atlasnomad.pk",
 	itineraries: [
 		{
 			id: "it-1",

@@ -5,13 +5,49 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Responsive typography scaling complete as of 2026-04-26 (Entry 012). All Typography tokens now use the `scale()` utility, making fonts adapt to device viewport width. This resolves the oversized font issue on multiple screen sizes. Backend/realtime wiring remains the next phase. See `Build_Progress.md` Entry 012 for full details.
+Current implementation status note: Navigation regression fixes complete as of 2026-04-27 (Entry 016). **33 of 46 PRD features are DONE; 13 are stubs.** Root redirect now goes to `/(auth)/login` explicitly (no group-root ambiguity); New Journey back button uses `canGoBack()` guard. See `Build_Progress.md` Entry 016 for details.
 
-### Latest Checkpoint (Entry 012 — 2026-04-26)
-- What changed: Responsive typography scaling implemented. All `Typography` token sizes now use `scale()` utility function for device-adaptive font sizing.
-- Why it changed: Typography was previously fixed to absolute sizes, causing overdimensioned text on wider screens and violating responsive design principles.
-- How verified: TypeScript compilation successful with no errors; fonts will scale relative to device width baseline (390px).
-- Core idea: Design systems should treat typography the same as spacing/layout — responsive and proportional, never fixed and absolute.
+### Latest Checkpoint (Entry 016 — 2026-04-27)
+- What changed: Two navigation regressions fixed. `app/index.tsx` now redirects to `/(auth)/login` directly instead of `/(auth)` (transparent group root URL collision on web). New Journey back button uses `router.canGoBack()` guard with `router.replace('/(tabs)/journeys')` fallback; `hitSlop` raised to 12.
+- Why it changed: Auth gate must always be the app entry point; every screen must have a working escape route even without navigation history.
+- How verified: `npx tsc --noEmit` → zero errors. Cold start routes to login immediately on web and native.
+- Core idea: Direct route references (`/(auth)/login`) are always safer than group root references (`/(auth)`) because transparent groups resolve to the same URL as root on web.
+
+### Screen Inventory (current)
+| Screen | Path | Status |
+|--------|------|--------|
+| Splash | `app/(auth)/index.tsx` | DONE |
+| Login | `app/(auth)/login.tsx` | DONE |
+| Register | `app/(auth)/register.tsx` | DONE |
+| Forgot Password | `app/(auth)/forgot-password.tsx` | DONE |
+| Explore | `app/(tabs)/explore/index.tsx` | DONE |
+| Destination Detail | `app/(tabs)/explore/[destination].tsx` | DONE |
+| Journeys | `app/(tabs)/journeys/index.tsx` | DONE |
+| New Journey | `app/(tabs)/journeys/new-journey.tsx` | DONE |
+| Itinerary | `app/(tabs)/journeys/[tripId]/itinerary.tsx` | DONE |
+| Vibe Room | `app/(tabs)/journeys/[tripId]/vibe-room.tsx` | DONE |
+| Expense Ledger | `app/(tabs)/journeys/[tripId]/expense.tsx` | DONE |
+| Community / Swipe | `app/(tabs)/community/index.tsx` | DONE |
+| Messages | `app/(tabs)/messages/index.tsx` | STUB |
+| Profile | `app/(tabs)/profile/index.tsx` | DONE |
+| Edit Profile | `app/(tabs)/profile/edit.tsx` | DONE |
+| Settings | `app/settings.tsx` | DONE |
+| Notifications Settings | `app/notifications-settings.tsx` | DONE |
+| Feedback | `app/feedback.tsx` | DONE |
+| Agency List | `app/agencies/index.tsx` | DONE |
+| Agency Detail | `app/agencies/[agencyId].tsx` | DONE |
+| Safety Center | `app/safety/index.tsx` | DONE |
+| Traveler Profile | `app/traveler/[userId].tsx` | DONE |
+| Flow Stubs | `app/flows/[flow].tsx` | STUB (catch-all) |
+
+### Store Inventory (current)
+| Store | File | State / Actions |
+|-------|------|-----------------|
+| Auth | `stores/authStore.ts` | isAuthenticated, setAuthenticated, clearAuthState |
+| Trip | `stores/tripStore.ts` | newTrips, wishlist, addTrip, addToWishlist, removeFromWishlist, isWishlisted |
+| Profile | `stores/profileStore.ts` | name, bio, travelStyles, languages, setProfile |
+| Chat | `stores/chatStore.ts` | (empty — pending) |
+| Safety | `stores/safetyStore.ts` | (empty — pending) |
 
 ---
 

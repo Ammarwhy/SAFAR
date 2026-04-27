@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../../constants/Theme';
 import { MOCK_EXPLORE, ExploreJourney } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
+import { useTripStore } from '../../../stores/tripStore';
 
 type CategoryEntry = { headline: string; journeys: ExploreJourney[] };
 
@@ -114,6 +115,9 @@ export default function ExploreScreen() {
   const [hasError, setHasError] = useState(false);
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
   const [isFeaturedFallback, setIsFeaturedFallback] = useState(false);
+  const { addToWishlist, isWishlisted } = useTripStore();
+  const featuredWishlistId = featured.title.toLowerCase().replace(/\s+/g, '-');
+  const featuredSaved = isWishlisted(featuredWishlistId);
 
   const featuredFallbackUri = featured.fallbackImage ?? featured.image;
   const featuredImageSource = useMemo(() => {
@@ -218,9 +222,22 @@ export default function ExploreScreen() {
               <View style={styles.featuredActions}>
                 <TouchableOpacity
                   style={styles.wishlistBtn}
-                  onPress={() => router.push('/flows/wishlist')}
+                  onPress={() => {
+                    if (featuredSaved) return;
+                    addToWishlist({
+                      title: featured.title,
+                      subtitle: featured.region,
+                      image: featured.image,
+                      note: `Duration: ${featured.duration}`,
+                    });
+                  }}
+                  accessibilityLabel={featuredSaved ? 'Saved to wishlist' : 'Save to wishlist'}
                 >
-                  <Ionicons name="heart-outline" size={20} color={Colors.textMuted} />
+                  <Ionicons
+                    name={featuredSaved ? 'heart' : 'heart-outline'}
+                    size={20}
+                    color={featuredSaved ? Colors.danger : Colors.textMuted}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.joinBtn} onPress={() => router.push('/(tabs)/journeys/new-journey')}>
                   <Text style={styles.joinText}>Join Expedition</Text>

@@ -1,7 +1,9 @@
 import React from "react";
 import {
+	Alert,
 	Image,
 	ImageBackground,
+	Linking,
 	SafeAreaView,
 	ScrollView,
 	StyleSheet,
@@ -12,7 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../constants/Theme";
-import { MOCK_AGENCY_DETAIL } from "../../constants/mockData";
+import { MOCK_AGENCY_DETAIL, MOCK_COST_COMPARISON } from "../../constants/mockData";
 import BottomTabBar from "../../components/layouts/BottomTabBar";
 
 function StarRow({ rating }: { rating: number }) {
@@ -31,6 +33,22 @@ export default function AgencyDetailScreen() {
 	const router = useRouter();
 	const { agencyId } = useLocalSearchParams<{ agencyId: string }>();
 	const a = MOCK_AGENCY_DETAIL;
+	const comparison = MOCK_COST_COMPARISON;
+
+	const handleCall = () => {
+		Linking.openURL(`tel:${a.phone}`).catch(() =>
+			Alert.alert("Cannot Call", "Your device cannot make calls at this time.")
+		);
+	};
+
+	const handleEmail = () => {
+		Linking.openURL(`mailto:${a.email}`).catch(() =>
+			Alert.alert("Cannot Email", "Your device cannot open email at this time.")
+		);
+	};
+
+	const soloTotal = comparison.rows.reduce((sum, r) => sum + r.soloCost, 0) * comparison.groupSize;
+	const agencyTotal = comparison.rows.reduce((sum, r) => sum + r.agencyCost, 0);
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -119,18 +137,42 @@ export default function AgencyDetailScreen() {
 							<Text style={styles.bookBtnText}>Book Now</Text>
 						</TouchableOpacity>
 						<View style={styles.contactRow}>
-							<TouchableOpacity
-								style={styles.contactBtn}
-								onPress={() => router.push(`/flows/agency-contact?name=${encodeURIComponent(agencyId ?? a.name)}`)}
-							>
-								<Text style={styles.contactBtnText}>Contact</Text>
+							<TouchableOpacity style={styles.contactBtn} onPress={handleEmail}>
+								<Text style={styles.contactBtnText}>Email</Text>
 							</TouchableOpacity>
-							<TouchableOpacity
-								style={styles.contactBtn}
-								onPress={() => router.push(`/flows/agency-call?name=${encodeURIComponent(agencyId ?? a.name)}`)}
-							>
+							<TouchableOpacity style={styles.contactBtn} onPress={handleCall}>
 								<Text style={styles.contactBtnText}>Call Now</Text>
 							</TouchableOpacity>
+						</View>
+					</View>
+
+					<Text style={styles.sectionTitle}>Cost Comparison</Text>
+					<Text style={styles.comparisonSubtitle}>{comparison.destination} · Group of {comparison.groupSize}</Text>
+					<View style={styles.comparisonCard}>
+						<View style={styles.comparisonHeader}>
+							<Text style={[styles.comparisonCol, styles.comparisonColItem]}>Item</Text>
+							<Text style={styles.comparisonColHead}>DIY Solo</Text>
+							<Text style={styles.comparisonColHead}>Agency</Text>
+						</View>
+						{comparison.rows.map((row, i) => (
+							<View key={i} style={styles.comparisonRow}>
+								<Text style={[styles.comparisonCol, styles.comparisonColItem]}>{row.item}</Text>
+								<Text style={styles.comparisonColVal}>
+									{row.soloCost > 0 ? `${(row.soloCost / 1000).toFixed(0)}K` : '—'}
+								</Text>
+								<Text style={styles.comparisonColVal}>
+									{row.agencyCost > 0 ? `${(row.agencyCost / 1000).toFixed(0)}K` : '—'}
+								</Text>
+							</View>
+						))}
+						<View style={styles.comparisonTotalRow}>
+							<Text style={[styles.comparisonCol, styles.comparisonColItem, styles.comparisonTotalLabel]}>Total (per group)</Text>
+							<Text style={[styles.comparisonColVal, styles.comparisonTotalVal]}>
+								PKR {(soloTotal / 1000).toFixed(0)}K
+							</Text>
+							<Text style={[styles.comparisonColVal, styles.comparisonTotalVal, { color: Colors.success }]}>
+								PKR {(agencyTotal / 1000).toFixed(0)}K
+							</Text>
 						</View>
 					</View>
 
@@ -254,6 +296,40 @@ export default function AgencyDetailScreen() {
 		justifyContent: "center",
 	},
 	contactBtnText: { ...Typography.h4, color: Colors.textOnDark, fontSize: 13 },
+
+	comparisonSubtitle: { ...Typography.bodyMd, color: Colors.textSecondary, marginBottom: 10 },
+	comparisonCard: {
+		backgroundColor: Colors.bgCard,
+		borderRadius: Radius.lg,
+		overflow: "hidden",
+		marginBottom: 20,
+		...Shadow.sm,
+	},
+	comparisonHeader: {
+		flexDirection: "row",
+		backgroundColor: Colors.brand,
+		paddingHorizontal: 14,
+		paddingVertical: 10,
+	},
+	comparisonRow: {
+		flexDirection: "row",
+		paddingHorizontal: 14,
+		paddingVertical: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: Colors.border,
+	},
+	comparisonTotalRow: {
+		flexDirection: "row",
+		paddingHorizontal: 14,
+		paddingVertical: 12,
+		backgroundColor: Colors.bgMuted,
+	},
+	comparisonCol: { ...Typography.bodyMd, color: Colors.textPrimary },
+	comparisonColItem: { flex: 1, paddingRight: 8 },
+	comparisonColHead: { ...Typography.label, color: Colors.textOnDark, width: 70, textAlign: "right", fontSize: 11 },
+	comparisonColVal: { ...Typography.bodyMd, color: Colors.textPrimary, width: 70, textAlign: "right" },
+	comparisonTotalLabel: { ...Typography.label, color: Colors.textPrimary, fontWeight: "700" },
+	comparisonTotalVal: { ...Typography.label, color: Colors.textPrimary, fontWeight: "700", width: 70, textAlign: "right" },
 
 	mapCard: {
 		backgroundColor: Colors.bgCard,

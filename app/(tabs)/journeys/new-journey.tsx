@@ -3,9 +3,11 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/Theme";
 import BottomTabBar from "../../../components/layouts/BottomTabBar";
+import { useTripStore } from "../../../stores/tripStore";
 
 export default function NewJourneyScreen() {
 	const router = useRouter();
+	const addTrip = useTripStore((s) => s.addTrip);
 	const [title, setTitle] = useState("");
 	const [dest, setDest] = useState("");
 	const [dates, setDates] = useState("");
@@ -18,6 +20,7 @@ export default function NewJourneyScreen() {
 			return;
 		}
 		setIsLoading(true);
+		addTrip({ title: title.trim(), destination: dest.trim(), dates: dates.trim() });
 		setStatusText("Trip saved! Opening your journeys...");
 		setTimeout(() => {
 			router.replace("/(tabs)/journeys");
@@ -27,7 +30,17 @@ export default function NewJourneyScreen() {
 	return (
 		<SafeAreaView style={styles.safe}>
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+				<TouchableOpacity
+					onPress={() => {
+						if (router.canGoBack()) {
+							router.back();
+						} else {
+							router.replace('/(tabs)/journeys');
+						}
+					}}
+					hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+					accessibilityLabel="Go back"
+				>
 					<Text style={styles.backText}>←</Text>
 				</TouchableOpacity>
 				<Text style={styles.headerTitle}>New Journey</Text>

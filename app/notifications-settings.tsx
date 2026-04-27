@@ -1,0 +1,94 @@
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { Colors, Radius, Shadow, Spacing, Typography } from '../constants/Theme';
+
+const NOTIFICATION_ROWS = [
+  { key: 'tripUpdates', title: 'Trip Updates', subtitle: 'Route changes, weather alerts, visa news' },
+  { key: 'messages', title: 'Messages', subtitle: 'Vibe room messages and direct chats' },
+  { key: 'matches', title: 'New Matches', subtitle: 'When a traveler connects with you' },
+  { key: 'expenses', title: 'Expense Alerts', subtitle: 'New expenses added to your ledger' },
+  { key: 'promotions', title: 'Promotions', subtitle: 'Agency deals and seasonal offers' },
+] as const;
+
+type NotifKey = (typeof NOTIFICATION_ROWS)[number]['key'];
+
+export default function NotificationsSettingsScreen() {
+  const router = useRouter();
+  const [enabled, setEnabled] = useState<Record<NotifKey, boolean>>({
+    tripUpdates: true,
+    messages: true,
+    matches: true,
+    expenses: true,
+    promotions: false,
+  });
+
+  const toggle = (key: NotifKey) => {
+    setEnabled((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+          accessibilityLabel="Go back"
+        >
+          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Notifications</Text>
+        <View style={{ width: 44 }} />
+      </View>
+
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Text style={styles.sectionLabel}>PREFERENCES</Text>
+        <View style={styles.card}>
+          {NOTIFICATION_ROWS.map((item, i) => (
+            <View key={item.key} style={[styles.row, i === NOTIFICATION_ROWS.length - 1 && styles.rowLast]}>
+              <View style={styles.rowText}>
+                <Text style={styles.rowTitle}>{item.title}</Text>
+                <Text style={styles.rowSubtitle}>{item.subtitle}</Text>
+              </View>
+              <Switch
+                value={enabled[item.key]}
+                onValueChange={() => toggle(item.key)}
+                trackColor={{ false: Colors.border, true: Colors.brand }}
+                thumbColor={Colors.textOnDark}
+              />
+            </View>
+          ))}
+        </View>
+        <View style={{ height: 40 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: Colors.bg },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: Spacing.screen, paddingTop: 10, paddingBottom: 8,
+  },
+  backBtn: { width: 44, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
+  headerTitle: { ...Typography.h3, color: Colors.textPrimary },
+  content: { paddingHorizontal: Spacing.screen, paddingTop: 8 },
+  sectionLabel: {
+    ...Typography.label,
+    color: Colors.textMuted, textTransform: 'uppercase' as const,
+    letterSpacing: 1.2, marginBottom: 8, marginTop: 16,
+  },
+  card: { backgroundColor: Colors.bgCard, borderRadius: Radius.xl, ...Shadow.sm, overflow: 'hidden' },
+  row: {
+    flexDirection: 'row', alignItems: 'center',
+    minHeight: 56, paddingHorizontal: 16, paddingVertical: 10,
+    borderBottomWidth: 1, borderBottomColor: Colors.border,
+  },
+  rowLast: { borderBottomWidth: 0 },
+  rowText: { flex: 1, paddingRight: 12 },
+  rowTitle: { ...Typography.bodySm, color: Colors.textPrimary, fontWeight: '600' },
+  rowSubtitle: { ...Typography.caption, color: Colors.textSecondary, marginTop: 2 },
+});

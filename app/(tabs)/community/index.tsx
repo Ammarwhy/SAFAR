@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Alert,
   Animated,
   Dimensions,
   Image,
@@ -11,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Radius, Shadow, scale, vscale } from '../../../constants/Theme';
+import { Colors, Radius, Shadow, Typography, scale, vscale } from '../../../constants/Theme';
 import { SWIPE_TRAVELERS, SwipeTraveler } from '../../../constants/mockData';
 import SafarHeader from '../../../components/layouts/SafarHeader';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
@@ -77,7 +78,7 @@ export default function CommunityScreen() {
                 bg={Colors.bg}
                 borderColor={Colors.brand}
                 iconName="close"
-                iconColor="#B44747"
+                iconColor={Colors.danger}
                 onPress={() => cardRef.current?.triggerSwipeLeft()}
               />
               <ActionBtn
@@ -85,14 +86,22 @@ export default function CommunityScreen() {
                 bg={Colors.brand}
                 iconName="star"
                 iconColor={Colors.textOnDark}
-                onPress={() => cardRef.current?.triggerSwipeRight()}
+                onPress={() => {
+                  Alert.alert('Super Liked!', `${topTraveler.name} will be notified.`, [
+                    { text: 'OK', onPress: () => cardRef.current?.triggerSwipeRight() },
+                  ]);
+                }}
               />
               <ActionBtn
                 size={56}
                 bg={Colors.brand}
                 iconName="checkmark"
                 iconColor={Colors.textOnDark}
-                onPress={() => cardRef.current?.triggerSwipeRight()}
+                onPress={() => {
+                  Alert.alert('Connected!', `You connected with ${topTraveler.name}.`, [
+                    { text: 'Keep Exploring', onPress: () => cardRef.current?.triggerSwipeRight() },
+                  ]);
+                }}
               />
             </View>
           </>
@@ -247,8 +256,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(32),
   },
   matchTitle: {
-    fontSize: scale(28),
-    fontWeight: '800',
+    ...Typography.h2,
+    fontWeight: '800' as const,
     color: Colors.brand,
     marginBottom: vscale(20),
     letterSpacing: 0.5,
@@ -272,10 +281,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   matchSub: {
-    fontSize: scale(14),
+    ...Typography.bodySm,
     color: Colors.textBody,
     textAlign: 'center',
-    lineHeight: scale(22),
     marginBottom: vscale(28),
   },
   matchActions: {
@@ -290,8 +298,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   matchStartText: {
-    fontSize: scale(16),
-    fontWeight: '700',
+    ...Typography.body,
+    fontWeight: '700' as const,
     color: Colors.textOnDark,
   },
   matchKeepBtn: {
@@ -303,8 +311,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.brand,
   },
   matchKeepText: {
-    fontSize: scale(16),
-    fontWeight: '600',
+    ...Typography.body,
+    fontWeight: '600' as const,
     color: Colors.brand,
   },
 
@@ -334,17 +342,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.bgMuted,
   },
   emptyTitle: {
-    fontSize: scale(18),
-    fontWeight: '700',
+    ...Typography.h4,
+    fontWeight: '700' as const,
     color: Colors.textPrimary,
     textAlign: 'center',
     marginBottom: scale(8),
   },
   emptySub: {
-    fontSize: scale(13),
+    ...Typography.bodySm,
     color: Colors.textBody,
     textAlign: 'center',
-    lineHeight: scale(20),
     marginBottom: vscale(24),
   },
   refreshBtn: {
@@ -354,8 +361,8 @@ const styles = StyleSheet.create({
     paddingVertical: vscale(14),
   },
   refreshText: {
-    fontSize: scale(15),
-    fontWeight: '700',
+    ...Typography.bodyMd,
+    fontWeight: '700' as const,
     color: Colors.textOnDark,
   },
 });

@@ -37,7 +37,15 @@ export default function AgenciesScreen() {
 						<View style={styles.cardBody}>
 							<View style={styles.cardRow}>
 								<View style={styles.cardLeft}>
-									<Text style={styles.agencyName}>{agency.name}</Text>
+									<View style={styles.agencyNameRow}>
+										<Text style={styles.agencyName}>{agency.name}</Text>
+										{agency.verified && (
+											<View style={styles.verifiedBadge}>
+												<Ionicons name="checkmark-circle" size={12} color={Colors.success} />
+												<Text style={styles.verifiedText}>Verified</Text>
+											</View>
+										)}
+									</View>
 									<View style={styles.regionRow}>
 										<Ionicons name="location-outline" size={12} color={Colors.textSecondary} />
 										<Text style={styles.regionText}>{agency.region}</Text>
@@ -114,7 +122,10 @@ const styles = StyleSheet.create({
 	cardBody: { padding: 14 },
 	cardRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 },
 	cardLeft: { flex: 1 },
-	agencyName: { ...Typography.h3, color: Colors.textPrimary, marginBottom: 4 },
+	agencyNameRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 },
+	agencyName: { ...Typography.h3, color: Colors.textPrimary },
+	verifiedBadge: { flexDirection: "row", alignItems: "center", gap: 3, backgroundColor: Colors.bgMuted, borderRadius: Radius.full, paddingHorizontal: 8, paddingVertical: 3 },
+	verifiedText: { ...Typography.label, color: Colors.success, fontSize: 10 },
 	regionRow: { flexDirection: "row", alignItems: "center", gap: 3 },
 	regionText: { ...Typography.bodyMd, color: Colors.textSecondary },
 	priceWrap: { alignItems: "flex-end" },

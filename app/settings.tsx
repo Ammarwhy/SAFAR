@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Alert,
   Linking,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors, Radius, Shadow, Spacing, Typography } from '../constants/Theme';
 import { clearAuthState } from '../stores/authStore';
@@ -25,6 +27,19 @@ export default function SettingsScreen() {
   const [highContrast, setHighContrast] = useState(false);
   const [is2FA, set2FA] = useState(false);
   const [isFaceID, setFaceID] = useState(false);
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+    router.replace('/(tabs)/profile');
+  };
+
+  const performLogout = () => {
+    clearAuthState();
+    router.replace('/(auth)/login');
+  };
 
   const toggle2FA = (value: boolean) => {
     Alert.alert(
@@ -57,6 +72,16 @@ export default function SettingsScreen() {
   };
 
   const handleLogout = () => {
+    if (Platform.OS === 'web') {
+      const shouldLogout = typeof window === 'undefined'
+        ? true
+        : window.confirm('Are you sure you want to sign out?');
+      if (shouldLogout) {
+        performLogout();
+      }
+      return;
+    }
+
     Alert.alert(
       'Sign Out',
       'Are you sure you want to sign out?',
@@ -65,10 +90,7 @@ export default function SettingsScreen() {
         {
           text: 'Sign Out',
           style: 'destructive',
-          onPress: () => {
-            clearAuthState();
-            router.replace('/(auth)/login');
-          },
+          onPress: performLogout,
         },
       ]
     );
@@ -78,7 +100,7 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={handleBackPress}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           style={styles.backBtn}
           accessibilityLabel="Go back"
@@ -94,19 +116,19 @@ export default function SettingsScreen() {
         <Text style={styles.sectionLabel}>ACCOUNT</Text>
         <View style={styles.card}>
           <SettingsRow
-            icon="person-outline"
+            icon="account-outline"
             title="Personal Information"
             subtitle="Name, email, phone"
             onPress={() => router.push('/(tabs)/profile/edit')}
           />
           <SettingsRow
-            icon="card-outline"
+            icon="credit-card-outline"
             title="Payments & Payouts"
             subtitle="Cards, bank accounts"
             onPress={() => Alert.alert('Payments', 'Payment methods coming soon.')}
           />
           <SettingsRow
-            icon="notifications-outline"
+            icon="bell-outline"
             title="Notifications"
             subtitle="Alerts and reminders"
             onPress={() => router.push('/notifications-settings')}
@@ -117,14 +139,14 @@ export default function SettingsScreen() {
         <Text style={styles.sectionLabel}>SECURITY</Text>
         <View style={styles.card}>
           <ToggleRow
-            icon="key-outline"
+            icon="key-chain-variant"
             title="Two-Factor Auth"
             subtitle="Extra login security"
             value={is2FA}
             onValueChange={toggle2FA}
           />
           <ToggleRow
-            icon="scan-outline"
+            icon="face-recognition"
             title="Face ID"
             subtitle="Biometric unlock"
             value={isFaceID}
@@ -143,7 +165,7 @@ export default function SettingsScreen() {
               accessibilityLabel={`Select ${lang} language`}
             >
               <View style={styles.rowIconWrap}>
-                <Ionicons name="language-outline" size={17} color={Colors.brand} />
+                <MaterialCommunityIcons name="translate" size={17} color={Colors.brand} />
               </View>
               <Text style={styles.rowTitle}>{lang}</Text>
               {selectedLang === lang && (
@@ -156,21 +178,21 @@ export default function SettingsScreen() {
         <Text style={styles.sectionLabel}>DISPLAY OPTIONS</Text>
         <View style={styles.card}>
           <ToggleRow
-            icon="moon-outline"
+            icon="moon-waning-crescent"
             title="Dark Mode"
             subtitle="Switch to darker color scheme"
             value={darkMode}
             onValueChange={setDarkMode}
           />
           <ToggleRow
-            icon="contract-outline"
+            icon="view-compact-outline"
             title="Compact View"
             subtitle="Reduce spacing between cards"
             value={compactView}
             onValueChange={setCompactView}
           />
           <ToggleRow
-            icon="eye-outline"
+            icon="contrast-circle"
             title="High Contrast"
             subtitle="Improve readability"
             value={highContrast}
@@ -181,8 +203,8 @@ export default function SettingsScreen() {
 
         <Text style={styles.sectionLabel}>CONNECTED ACCOUNTS</Text>
         <View style={styles.card}>
-          <AccountRow name="Google" icon="logo-google" />
-          <AccountRow name="Apple" icon="logo-apple" isLast />
+          <AccountRow name="Google" icon="google" />
+          <AccountRow name="Apple" icon="apple" isLast />
         </View>
 
         <Text style={styles.sectionLabel}>SUPPORT</Text>
@@ -194,13 +216,13 @@ export default function SettingsScreen() {
             onPress={() => Alert.alert('Help Center', 'Visit safar.pk/help for guides and FAQs.')}
           />
           <SettingsRow
-            icon="document-text-outline"
+            icon="file-document-outline"
             title="Privacy Policy"
             subtitle="How we use your data"
             onPress={handlePrivacyPolicy}
           />
           <SettingsRow
-            icon="chatbox-ellipses-outline"
+            icon="message-alert-outline"
             title="Send Feedback"
             subtitle="Share your thoughts"
             onPress={() => router.push('/feedback')}
@@ -226,7 +248,7 @@ export default function SettingsScreen() {
 function SettingsRow({
   icon, title, subtitle, onPress, isLast,
 }: {
-  icon: React.ComponentProps<typeof Ionicons>['name'];
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
   title: string;
   subtitle: string;
   onPress: () => void;
@@ -239,7 +261,7 @@ function SettingsRow({
       accessibilityLabel={title}
     >
       <View style={styles.rowIconWrap}>
-        <Ionicons name={icon} size={17} color={Colors.brand} />
+        <MaterialCommunityIcons name={icon} size={17} color={Colors.brand} />
       </View>
       <View style={styles.rowTextStack}>
         <Text style={styles.rowTitle}>{title}</Text>
@@ -253,7 +275,7 @@ function SettingsRow({
 function ToggleRow({
   icon, title, subtitle, value, onValueChange, isLast,
 }: {
-  icon: React.ComponentProps<typeof Ionicons>['name'];
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
   title: string;
   subtitle: string;
   value: boolean;
@@ -263,7 +285,7 @@ function ToggleRow({
   return (
     <View style={[styles.row, isLast && styles.rowLast]}>
       <View style={styles.rowIconWrap}>
-        <Ionicons name={icon} size={17} color={Colors.brand} />
+        <MaterialCommunityIcons name={icon} size={17} color={Colors.brand} />
       </View>
       <View style={styles.rowTextStack}>
         <Text style={styles.rowTitle}>{title}</Text>
@@ -283,13 +305,13 @@ function AccountRow({
   name, icon, isLast,
 }: {
   name: string;
-  icon: React.ComponentProps<typeof Ionicons>['name'];
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
   isLast?: boolean;
 }) {
   return (
     <View style={[styles.row, isLast && styles.rowLast]}>
       <View style={styles.rowIconWrap}>
-        <Ionicons name={icon} size={17} color={Colors.textPrimary} />
+        <MaterialCommunityIcons name={icon} size={17} color={Colors.textPrimary} />
       </View>
       <View style={styles.rowTextStack}>
         <Text style={styles.rowTitle}>{name}</Text>

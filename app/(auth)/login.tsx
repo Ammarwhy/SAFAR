@@ -186,7 +186,7 @@ export default function LoginScreen() {
             accessibilityRole="button"
             accessibilityLabel="Continue with Google"
           >
-            <Text style={s.googleG}>G</Text>
+            <Ionicons name="logo-google" size={18} color={Colors.match} />
             <Text style={s.googleBtnText}>Google</Text>
           </TouchableOpacity>
 
@@ -285,7 +285,7 @@ const s = StyleSheet.create({
     borderRadius: Radius.full, alignItems: 'center', justifyContent: 'center',
     marginTop: vscale(6), marginBottom: vscale(20),
   },
-  signInBtnDisabled: { opacity: 0.45 },
+  signInBtnDisabled: { backgroundColor: Colors.brandLight, opacity: 1 },
   signInBtnPressed: { opacity: 0.82 },
   signInText: { ...Typography.bodySm, fontWeight: '700', color: Colors.textOnDark, letterSpacing: 0.4 },
   dividerRow: { flexDirection: 'row', alignItems: 'center', marginBottom: vscale(16) },
@@ -301,7 +301,6 @@ const s = StyleSheet.create({
     backgroundColor: Colors.bgCard,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,
   },
-  googleG: { ...Typography.body, fontWeight: '800', color: Colors.match, fontStyle: 'italic' },
   googleBtnText: { ...Typography.bodySm, fontWeight: '600', color: Colors.textSecondary },
   devSkipBtn: { alignItems: 'center', marginTop: vscale(14), minHeight: 44, justifyContent: 'center' },
   devSkip: { ...Typography.caption, color: Colors.textMuted, textAlign: 'center' },

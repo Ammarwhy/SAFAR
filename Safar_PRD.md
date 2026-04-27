@@ -7,7 +7,7 @@
 >
 > **Agent instruction — Doc changes:** Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 >
-> **Current implementation status:** Responsive typography scaling complete (Entry 012, 2026-04-26). All Typography tokens now use the `scale()` utility for device-adaptive font sizing, resolving oversized text on multiple screen sizes. Backend / Supabase wiring remains the next implementation phase. See `Build_Progress.md` Entry 012 for full change log.
+> **Current implementation status:** UI polish fixes complete (Entry 018, 2026-04-27). Login visuals were refined, community shadows/spacing were cleaned up, edit-profile back path now returns to settings, and vibe-room top-right action is now interactive. Backend / Supabase wiring remains the next implementation phase. See `Build_Progress.md` Entry 018 for full change log.
 
 ---
 
@@ -22,6 +22,8 @@
 | 2.4 | Apr 25 2026 | Updated to Entry 010: category-reactive Explore, tab-distinct Journeys, enriched Vibe Room, full Profile overhaul, stale component list corrected | Claude |
 | 2.5 | Apr 25 2026 | Updated to Entry 011: Featured Escape image fallback handling and metadata chips | Copilot |
 | 2.6 | Apr 26 2026 | Updated to Entry 012: Responsive typography scaling — all Typography token sizes now use `scale()` utility for device-adaptive font sizing | Copilot |
+| 2.7 | Apr 27 2026 | Updated to Entry 017: Community tab card-stack discovery redesign with profile preview and match overlay | Copilot |
+| 2.8 | Apr 27 2026 | Updated to Entry 018: Login/community/vibe-room/edit-profile polish and navigation fixes | Copilot |
 
 ---
 

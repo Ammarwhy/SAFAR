@@ -6,7 +6,7 @@ Every change explanation must clearly include: what was changed, why it was chan
 
 Current primary testing mode is the web variant: `npx expo start --web --clear`.
 
-Latest update reference: Entry 012 in `Build_Progress.md`.
+Latest update reference: Entry 018 in `Build_Progress.md`.
 
 ## Simple Summary
 
@@ -34,6 +34,8 @@ It helps with:
 - Completed palette migration to parchment background + rich mahogany primary across major components and updated project docs accordingly.
 - Completed a thorough audit-and-polish pass: removed dead component files, fixed token gaps, redesigned splash, added scroll padding, fixed back button hit areas, and corrected keyboard behaviour.
 - **Featured Escape hardening (2026-04-25):** Added fallback image handling plus duration and highlight chips to keep the hero card reliable and more informative.
+- **Community tab redesign (2026-04-27):** Rebuilt the Community tab into a reliable card-stack discovery screen with profile preview and match overlay, replacing the brittle gesture-heavy implementation.
+- **UI polish fixes (2026-04-27):** Refined login visuals, removed heavy community shadows, fixed edit-profile back target to settings, and made vibe-room header action clickable.
 
 ## Why These Changes Matter
 
@@ -66,9 +68,9 @@ For every new code change, documentation must answer four things in simple words
 - Connect the app to Supabase.
 - Make Explore, Journeys, Chat, Expense, Safety, and Profile fully functional.
 
-## Latest Change Summary (2026-04-26)
+## Latest Change Summary (2026-04-27)
 
-- What changed: Responsive typography scaling now active across all screens. All `Typography` token sizes now use the `scale()` utility function, making fonts adapt to device viewport width.
-- Why it changed: Typography was previously fixed to absolute sizes, causing text to appear oversized on wider screens (web, tablet) and not scaling proportionally across devices, violating responsive design principles.
-- How it was verified: TypeScript compilation confirms no errors; fonts will now scale relative to device width (base 390px).
-- Core idea: Design systems should treat type the same as spacing/layout — responsive and proportional, never fixed and absolute.
+- What changed: Login Google icon/CTA state were refined, community vertical spacing and shadows were cleaned up, edit-profile back/save now return to settings, and vibe-room header alignment plus top-right action were fixed.
+- Why it changed: The interface had visible polish issues and one incorrect back-navigation path that caused users to land on unrelated screens.
+- How it was verified: Updated files show zero diagnostics and full workspace diagnostics remain clean; TypeScript CLI still reports only the pre-existing `tsconfig.json` deprecation-value issue.
+- Core idea: Prioritize predictable navigation and clean visual hierarchy to raise quality without adding extra scope.

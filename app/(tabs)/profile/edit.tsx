@@ -55,14 +55,14 @@ export default function EditProfileScreen() {
       });
       setIsLoading(false);
       setSaved(true);
-      setTimeout(() => router.back(), 600);
+      setTimeout(() => router.replace('/settings'), 600);
     }, 700);
   };
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+        <TouchableOpacity onPress={() => router.replace('/settings')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
           <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Edit Profile</Text>

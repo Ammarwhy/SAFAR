@@ -5,13 +5,13 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Navigation regression fixes complete as of 2026-04-27 (Entry 016). **33 of 46 PRD features are DONE; 13 are stubs.** Root redirect now goes to `/(auth)/login` explicitly (no group-root ambiguity); New Journey back button uses `canGoBack()` guard. See `Build_Progress.md` Entry 016 for details.
+Current implementation status note: UI polish fixes complete as of 2026-04-27 (Entry 018). **33 of 46 PRD features are DONE; 13 are stubs.** Login visuals were refined, community shadows removed for cleaner design, edit-profile back navigation was stabilized to settings, and vibe-room top-right action is now interactive. See `Build_Progress.md` Entry 018 for details.
 
-### Latest Checkpoint (Entry 016 — 2026-04-27)
-- What changed: Two navigation regressions fixed. `app/index.tsx` now redirects to `/(auth)/login` directly instead of `/(auth)` (transparent group root URL collision on web). New Journey back button uses `router.canGoBack()` guard with `router.replace('/(tabs)/journeys')` fallback; `hitSlop` raised to 12.
-- Why it changed: Auth gate must always be the app entry point; every screen must have a working escape route even without navigation history.
-- How verified: `npx tsc --noEmit` → zero errors. Cold start routes to login immediately on web and native.
-- Core idea: Direct route references (`/(auth)/login`) are always safer than group root references (`/(auth)`) because transparent groups resolve to the same URL as root on web.
+### Latest Checkpoint (Entry 018 — 2026-04-27)
+- What changed: Four targeted fixes were shipped: realistic Google logo and improved Sign In CTA state on login, cleaner/no-shadow community layout with corrected top spacing, explicit edit-profile return path to settings, and lower/cleaner vibe-room header with clickable top-right action.
+- Why it changed: These were direct UX regressions reported during interface review.
+- How verified: File diagnostics and workspace diagnostics show no new errors; TypeScript CLI still reports only a pre-existing `tsconfig.json` config issue.
+- Core idea: Keep interactions explicit and visuals minimal to reduce friction and navigation surprises.
 
 ### Screen Inventory (current)
 | Screen | Path | Status |

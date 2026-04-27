@@ -43,7 +43,7 @@
 - [ ] Tabs include icon + label.
 - [ ] Filter chips show names.
 - [ ] Expense rows show payer and amount.
-- [ ] Match cards show prominent compatibility percentage.
+- [x] Match cards show prominent compatibility percentage.
 
 ### 7) Flexibility and Efficiency
 - [ ] Explore search filters in real time.
@@ -140,3 +140,7 @@
 - [x] Remove never-imported components (N/A — all components are imported).
 - [x] `npx tsc --noEmit` passes with zero new errors (only pre-existing tsconfig ignoreDeprecations).
 - [ ] `npx expo start --web --clear` boots (not verified in this session — visual check pending).
+
+### Latest UI Pass
+- Community tab now uses a stable card-stack match discovery layout with profile preview and match overlay, replacing the brittle swipe-based implementation.
+- Login CTA state and Google icon were refined; edit-profile back path now returns to settings; vibe-room header spacing and top-right room action are fixed.

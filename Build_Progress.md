@@ -972,3 +972,122 @@ Fix two navigation regressions: New Journey back button crashes without history,
 
 ### Core Idea
 Auth gate must always be the app's entry point. Every navigable screen needs an escape route that works even if there is no navigation history (e.g., deep-link or cold start).
+
+---
+
+## Entry 017 — 2026-04-27
+
+### Goal
+Rebuild the Community tab into a reliable match-discovery screen that matches the provided reference more closely and works consistently on web.
+
+### What Changed
+- Replaced the gesture-heavy community screen with a self-contained card-stack discovery layout driven by `MOCK_MATCHES`.
+- Added a visible stack of traveler cards, a profile preview modal, a match overlay, and three action paths: pass, super like, connect.
+- Kept the bottom tab bar intact so navigation still behaves like the rest of the app.
+
+### Files Changed
+- `app/(tabs)/community/index.tsx`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+- `HCI_UIUX_Audit_Checklist.md`
+- `.expo/README.md`
+
+### Verification
+- `npx tsc --noEmit` reported zero errors.
+- Workspace diagnostics reported no errors after the screen rewrite.
+
+### Known Issues / Follow-ups
+- The current match overlay uses mock data and should be wired to real chat/state in a later phase.
+- Fine-tune spacing and motion after visual review on an actual device.
+
+### Reasoning
+- The previous swipe/gesture-based implementation was too fragile for the web preview path. A simpler press-driven card stack is easier to maintain and much less likely to fail at runtime.
+
+### Core Idea
+- Stabilize the interaction model first, then add richer gesture polish later. Reliable behavior is more important than complex animation when the screen is still evolving.
+
+---
+
+## Entry 018 — 2026-04-27
+
+### Goal
+Fix final UI and navigation polish issues: login CTA/Google icon quality, community vertical alignment and shadow-heavy visuals, edit-profile back navigation target, and vibe-room header/action behavior.
+
+### What Changed
+- `app/(auth)/login.tsx`
+	- Replaced fake text-based Google mark with `Ionicons` `logo-google` icon.
+	- Updated disabled Sign In style from low-opacity grey look to `Colors.brandLight` while keeping submit validation logic intact.
+- `app/(tabs)/community/index.tsx`
+	- Raised top content spacing so the screen no longer sits too high.
+	- Removed shadow-heavy treatment from cards/buttons/sheets and replaced with clean border-based surfaces.
+- `app/(tabs)/profile/edit.tsx`
+	- Back button now routes explicitly to `/settings`.
+	- Save success callback also returns to `/settings` to avoid stale history jumps (e.g., landing on New Journey unexpectedly).
+- `app/(tabs)/journeys/[tripId]/vibe-room.tsx`
+	- Adjusted header spacing/alignment so the screen sits lower and cleaner.
+	- Reworked header text to concise room title/subtitle.
+	- Replaced non-interactive top-right avatar with clickable room-members action (`/flows/vibe-room-members`).
+
+### Files Changed
+- `app/(auth)/login.tsx`
+- `app/(tabs)/community/index.tsx`
+- `app/(tabs)/profile/edit.tsx`
+- `app/(tabs)/journeys/[tripId]/vibe-room.tsx`
+- `Build_Progress.md`
+- `Implementation_Checklist.md`
+- `Project_Explanation.md`
+- `Safar_Context.md`
+- `Safar_PRD.md`
+- `HCI_UIUX_Audit_Checklist.md`
+- `.expo/README.md`
+
+### Verification
+- Target-file diagnostics: no errors in all four updated TSX files.
+- Workspace diagnostics: no errors reported.
+- `npx tsc --noEmit --skipLibCheck` still reports one pre-existing repo issue: `tsconfig.json` uses invalid `ignoreDeprecations: "6.0"` value.
+
+### Known Issues / Follow-ups
+- TypeScript CLI build remains blocked by the pre-existing `tsconfig.json` deprecation setting (not introduced by this change set).
+
+### Reasoning
+- These changes keep UX reliable and visually cleaner without expanding scope or introducing new flows.
+
+### Core Idea
+- Explicit routing and minimal visual complexity reduce navigation surprises and improve perceived quality faster than adding more feature depth.
+
+---
+
+## Entry 019 — 2026-04-27
+
+### Goal
+Fix settings navigation/actions and improve community visual quality per latest QA feedback.
+
+### What Changed
+- `app/settings.tsx`
+	- Fixed header back behavior: it now safely falls back to `/(tabs)/profile` when no history exists.
+	- Reworked sign-out flow to be reliable on both native and web (`window.confirm` path on web + existing native alert path).
+	- Replaced plain row/toggle/account icons with better-matched `MaterialCommunityIcons` glyphs.
+- `app/(tabs)/community/index.tsx`
+	- Removed image-based stacked back cards that created a shadow-like visual artifact behind the main card.
+	- Kept stack depth using muted placeholder back cards for cleaner layering.
+	- Upgraded action/filter icon set using `FontAwesome6`/`AntDesign` for a more polished look.
+
+### Files Changed
+- `app/settings.tsx`
+- `app/(tabs)/community/index.tsx`
+- `Build_Progress.md`
+
+### Verification
+- File diagnostics report no errors for updated files.
+
+### Known Issues / Follow-ups
+- Full CLI typecheck still has the pre-existing `tsconfig.json` deprecation config issue from earlier entries.
+
+### Reasoning
+- The reported bugs were interaction reliability issues, so this pass prioritizes robust navigation/action handlers before cosmetic tweaks.
+
+### Core Idea
+- Use explicit fallbacks for navigation and platform-safe interaction flows, then simplify visual layers to reduce UI artifacts.

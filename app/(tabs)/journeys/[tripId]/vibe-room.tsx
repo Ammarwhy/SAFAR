@@ -62,10 +62,17 @@ export default function VibeRoomScreen() {
 						<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 					</TouchableOpacity>
 					<View style={styles.headerCenter}>
-						<Text style={styles.headerSuper}>ACTIVE SESSION</Text>
-						<Text style={styles.headerTitle}>Karakoram Vibe{"\n"}Room</Text>
+						<Text style={styles.headerSuper}>VIBE ROOM</Text>
+						<Text style={styles.headerTitle}>4 Active Explorers</Text>
 					</View>
-					<Image source={{ uri: "https://i.pravatar.cc/40?img=11" }} style={styles.headerAvatar} />
+					<TouchableOpacity
+						onPress={() => router.push('/flows/vibe-room-members' as never)}
+						style={styles.headerAvatarBtn}
+						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+						accessibilityLabel="Open room members"
+					>
+						<Text style={styles.headerAvatarText}>S</Text>
+					</TouchableOpacity>
 				</View>
 
 				<View style={styles.membersRow}>
@@ -304,18 +311,26 @@ const styles = StyleSheet.create({
 	flex: { flex: 1 },
 	header: {
 		flexDirection: "row",
-		alignItems: "flex-start",
+		alignItems: "center",
 		paddingHorizontal: Spacing.screen,
-		paddingTop: 10,
-		paddingBottom: 8,
+		paddingTop: 18,
+		paddingBottom: 12,
 		backgroundColor: Colors.bg,
 		gap: 10,
 	},
 	backBtn: { width: 44, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
-	headerCenter: { flex: 1 },
-	headerSuper: { ...Typography.label, color: Colors.textMuted, fontSize: 10, marginBottom: 2 },
-	headerTitle: { ...Typography.h1, color: Colors.textPrimary, lineHeight: 30 },
-	headerAvatar: { width: 36, height: 36, borderRadius: 18, marginTop: 4 },
+	headerCenter: { flex: 1, justifyContent: 'center' },
+	headerSuper: { ...Typography.h4, color: Colors.textPrimary, letterSpacing: 1.2 },
+	headerTitle: { ...Typography.caption, color: Colors.textMuted, marginTop: 2 },
+	headerAvatarBtn: {
+		width: 36,
+		height: 36,
+		borderRadius: 18,
+		backgroundColor: Colors.bgMuted,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	headerAvatarText: { ...Typography.label, color: Colors.textPrimary, fontSize: 12, fontWeight: '700' },
 
 	membersRow: {
 		flexDirection: "row",

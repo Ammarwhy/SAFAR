@@ -1091,3 +1091,172 @@ Fix settings navigation/actions and improve community visual quality per latest 
 
 ### Core Idea
 - Use explicit fallbacks for navigation and platform-safe interaction flows, then simplify visual layers to reduce UI artifacts.
+
+---
+
+## Entry 020 — 2026-04-27
+
+### Goal
+Fix chat usability and interaction gaps across Messages, Community, Explore, Journeys, and Expense screens.
+
+### What Changed
+- `app/(tabs)/messages/index.tsx`
+	- Replaced the static mock-only layout with a functional multi-room chat screen.
+	- Added real `TextInput` message entry, send action, room switching, and per-room message state.
+	- Added working top actions (search/create room) and improved top-bar icons.
+- `app/(tabs)/community/index.tsx`
+	- Removed AI-like abstract background blobs and switched to cleaner card-based surfaces.
+	- Replaced top icons with `MaterialCommunityIcons` and wired actions to concrete routes (`/flows/community-filters`, `/flows/community-saved`).
+- `app/(tabs)/explore/index.tsx`
+	- Featured heart action now toggles both ways (save + unsave) using `addToWishlist` / `removeFromWishlist`.
+- `app/(tabs)/journeys/[tripId]/expense.tsx`
+	- Refined top-right add button alignment and interaction area.
+	- Replaced text plus sign with centered icon button for consistent behavior.
+- `app/(tabs)/journeys/index.tsx`
+	- Made `Notify All` visibly functional (confirmation alert + status banner).
+	- Wired `View All` to `/(tabs)/journeys/collection`.
+
+### Files Changed
+- `app/(tabs)/messages/index.tsx`
+- `app/(tabs)/community/index.tsx`
+- `app/(tabs)/explore/index.tsx`
+- `app/(tabs)/journeys/[tripId]/expense.tsx`
+- `app/(tabs)/journeys/index.tsx`
+- `Build_Progress.md`
+
+### Verification
+- Diagnostics report no errors in all modified TSX files.
+
+### Known Issues / Follow-ups
+- Full CLI TypeScript check still has the pre-existing `tsconfig.json` deprecation-value issue tracked in earlier entries.
+
+### Reasoning
+- The reported issues were core interaction failures (input, tap actions, toggles), so this pass prioritizes working behavior before adding deeper backend/realtime complexity.
+
+### Core Idea
+- Ship reliable stateful interactions first: every visible control should give immediate, deterministic feedback and a reversible path where expected.
+
+---
+
+## Entry 021 — 2026-04-27
+
+### Goal
+Improve Explore top search-bar visual quality and stop bottom-tab refresh behavior on interactions.
+
+### What Changed
+- `app/(tabs)/explore/index.tsx`
+	- Polished the top search bar to better blend with the app aesthetic: refined spacing, border treatment, icon container, and clear-search affordance.
+	- Kept token-based styling and added accessibility labels for search/clear actions.
+- `components/layouts/FrameBottomNav.tsx`
+	- Removed re-entry animation pattern that made the tab bar appear to refresh on rerenders.
+	- Updated tab navigation to `router.replace(...)` and no-op on already active tab to avoid unnecessary stack churn and visual reset.
+
+### Files Changed
+- `app/(tabs)/explore/index.tsx`
+- `components/layouts/FrameBottomNav.tsx`
+- `Build_Progress.md`
+
+### Verification
+- Diagnostics report no errors in changed files.
+
+### Known Issues / Follow-ups
+- Full CLI type-check remains affected by the previously known `tsconfig.json` deprecation-value setting issue.
+
+### Reasoning
+- The request focused on perceived quality and interaction stability; these changes directly target first-impression polish and eliminate avoidable navigation re-animation.
+
+### Core Idea
+- UI should feel persistent and intentional: stable navigation behavior plus restrained visual hierarchy improves perceived app quality.
+
+---
+
+## Entry 022 — 2026-04-27
+
+### Goal
+Ship a second refinement pass for Explore search polish and bottom-nav rerender stability.
+
+### What Changed
+- `app/(tabs)/explore/index.tsx`
+	- Added focused-state styling to search bar for clearer interaction feedback.
+	- Refined icon capsule and clear-button affordance for cleaner, more professional top-bar behavior.
+- `components/layouts/BottomTabBar.tsx`
+	- Added memoization (`memo` + `useMemo`) to reduce unnecessary rerenders when parent screens update local state.
+	- Kept active-label routing behavior intact while improving nav persistence feel.
+
+### Files Changed
+- `app/(tabs)/explore/index.tsx`
+- `components/layouts/BottomTabBar.tsx`
+- `Build_Progress.md`
+
+### Verification
+- Diagnostics show no errors in all modified files.
+
+### Known Issues / Follow-ups
+- CLI type-check still blocked by the pre-existing `tsconfig.json` deprecation-value issue.
+
+### Reasoning
+- The first pass solved the core behavior issue; this second pass focuses on interaction feel and render stability for a more production-like UX.
+
+### Core Idea
+- Reliability plus micro-polish compounds quickly: stable components and intentional focus states make the app feel significantly more mature.
+
+---
+
+## Entry 023 — 2026-04-27
+
+### Goal
+Hotfix runtime crash after the second nav optimization pass.
+
+### What Changed
+- `components/layouts/BottomTabBar.tsx`
+	- Removed `memo(...)` wrapper and restored plain function component export to resolve runtime error (`Component is not a function`) at `<BottomTabBar />` render sites.
+	- Kept `useMemo` for nav item list and previous route-replace behavior in `FrameBottomNav`.
+
+### Files Changed
+- `components/layouts/BottomTabBar.tsx`
+- `Build_Progress.md`
+
+### Verification
+- Diagnostics show no errors in updated files.
+
+### Known Issues / Follow-ups
+- If the error overlay persists in a running dev session, restart Metro/web dev server with cache clear to flush stale module state.
+
+### Reasoning
+- The crash appeared immediately after introducing memoized component export; reverting to a plain component is the safest compatibility fix while preserving interaction logic.
+
+### Core Idea
+- Prefer compatibility over premature render micro-optimizations when the optimization introduces runtime instability.
+
+---
+
+## Entry 024 — 2026-04-27
+
+### Goal
+Resolve messages-screen alignment issues and replace non-functional/same-destination buttons with meaningful in-screen actions.
+
+### What Changed
+- `app/(tabs)/messages/index.tsx`
+	- Cleaned room selector layout for readability and consistency (fixed chip sizing/alignment and scroller height behavior).
+	- Added optional room search control so users can recognize available rooms quickly instead of relying on recall.
+	- Replaced top button placeholder routes with real local actions:
+		- Search button toggles room-search input.
+		- Create button adds a new room and switches context immediately.
+	- Replaced composer plus button placeholder route with a functional quick-attach action menu (location/checklist inserts).
+	- Improved composer alignment and action hit areas; added contextual status note feedback.
+
+### Files Changed
+- `app/(tabs)/messages/index.tsx`
+- `Build_Progress.md`
+
+### Verification
+- Diagnostics report no errors in updated files.
+
+### Known Issues / Follow-ups
+- CLI type-check remains impacted by previously tracked `tsconfig.json` setting issue.
+
+### Reasoning
+- The previous controls appeared interactive but routed to generic flow stubs, creating ambiguity. This pass prioritizes direct, understandable behavior in the current screen.
+
+### Core Idea
+- Reduce cognitive load by making controls self-explanatory and immediately actionable where users already are.

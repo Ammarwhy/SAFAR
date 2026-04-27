@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../constants/Theme";
@@ -13,6 +13,7 @@ const TABS = ["Upcoming", "Past Trips", "Wishlist"];
 export default function JourneysScreen() {
   const router = useRouter();
   const [tab, setTab] = useState("Upcoming");
+  const [notifyBanner, setNotifyBanner] = useState("");
   const [j1, j2] = MOCK_JOURNEYS;
   const pastTrips = MOCK_TRIPS.filter((t) => t.daysLeft === 0);
   const { newTrips, wishlist, removeFromWishlist } = useTripStore();
@@ -117,14 +118,26 @@ export default function JourneysScreen() {
                   </View>
                 </View>
                 <View style={styles.visaBtns}>
-                  <TouchableOpacity style={styles.visaActionBtn} onPress={() => router.push('/flows/notifications')}>
+                  <TouchableOpacity
+                    style={styles.visaActionBtn}
+                    onPress={() => {
+                      setNotifyBanner("Notified all travelers in this journey.");
+                      Alert.alert("Notified", "All travelers were notified successfully.");
+                    }}
+                    accessibilityLabel="Notify all travelers"
+                  >
                     <Text style={styles.visaActionText}>Notify All</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.visaActionBtn, styles.visaActionBtnOutline]} onPress={() => router.push('/flows/updates')}>
+                  <TouchableOpacity
+                    style={[styles.visaActionBtn, styles.visaActionBtnOutline]}
+                    onPress={() => router.push('/(tabs)/journeys/collection')}
+                    accessibilityLabel="View all updates"
+                  >
                     <Text style={[styles.visaActionText, { color: Colors.textSecondary }]}>View All</Text>
                   </TouchableOpacity>
                 </View>
               </View>
+              {!!notifyBanner && <Text style={styles.notifyBanner}>{notifyBanner}</Text>}
             </View>
 
             <TouchableOpacity
@@ -341,6 +354,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
   },
   visaActionText: { ...Typography.label, color: Colors.textOnDark, fontSize: 11, textAlign: "center" },
+  notifyBanner: { ...Typography.caption, color: Colors.success, marginTop: 8 },
 
   secondCard: { marginHorizontal: Spacing.screen, marginBottom: 12, borderRadius: Radius.xl, ...Shadow.sm },
   secondCardBg: { height: 180, justifyContent: "flex-end" },

@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import FrameBottomNav from "@/components/layouts/FrameBottomNav";
 import { usePathname } from "expo-router";
 
@@ -14,15 +15,17 @@ export default function BottomTabBar() {
           ? "Explore"
           : "Journeys";
 
+  const items = useMemo(() => ([
+    { label: "Explore", iconName: activeLabel === "Explore" ? "compass" : "compass-outline", href: "/(tabs)/explore", active: activeLabel === "Explore" },
+    { label: "Journeys", iconName: activeLabel === "Journeys" ? "map" : "map-outline", href: "/(tabs)/journeys", active: activeLabel === "Journeys" },
+    { label: "Community", iconName: activeLabel === "Community" ? "people" : "people-outline", href: "/(tabs)/community", active: activeLabel === "Community" },
+    { label: "Messages", iconName: activeLabel === "Messages" ? "chatbubble" : "chatbubble-outline", href: "/(tabs)/messages", active: activeLabel === "Messages" },
+    { label: "Profile", iconName: activeLabel === "Profile" ? "person" : "person-outline", href: "/(tabs)/profile", active: activeLabel === "Profile" },
+  ]), [activeLabel]);
+
   return (
     <FrameBottomNav
-      items={[
-        { label: "Explore", iconName: activeLabel === "Explore" ? "compass" : "compass-outline", href: "/(tabs)/explore", active: activeLabel === "Explore" },
-        { label: "Journeys", iconName: activeLabel === "Journeys" ? "map" : "map-outline", href: "/(tabs)/journeys", active: activeLabel === "Journeys" },
-        { label: "Community", iconName: activeLabel === "Community" ? "people" : "people-outline", href: "/(tabs)/community", active: activeLabel === "Community" },
-        { label: "Messages", iconName: activeLabel === "Messages" ? "chatbubble" : "chatbubble-outline", href: "/(tabs)/messages", active: activeLabel === "Messages" },
-        { label: "Profile", iconName: activeLabel === "Profile" ? "person" : "person-outline", href: "/(tabs)/profile", active: activeLabel === "Profile" },
-      ]}
+      items={items}
     />
   );
 }

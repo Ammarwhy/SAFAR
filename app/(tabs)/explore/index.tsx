@@ -111,11 +111,12 @@ export default function ExploreScreen() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('MOUNTAINS');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const { featured, categories, journeys, vicinityTravelers } = MOCK_EXPLORE;
   const [isFeaturedFallback, setIsFeaturedFallback] = useState(false);
-  const { addToWishlist, isWishlisted } = useTripStore();
+  const { addToWishlist, removeFromWishlist, isWishlisted } = useTripStore();
   const featuredWishlistId = featured.title.toLowerCase().replace(/\s+/g, '-');
   const featuredSaved = isWishlisted(featuredWishlistId);
 
@@ -148,15 +149,31 @@ export default function ExploreScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
-        <Animated.View entering={FadeInDown.duration(280)} style={styles.searchWrap}>
-          <Ionicons name="search-outline" size={16} color={Colors.textMuted} style={{ marginRight: 8 }} />
+        <Animated.View entering={FadeInDown.duration(280)} style={[styles.searchWrap, searchFocused && styles.searchWrapFocused]}>
+          <View style={[styles.searchIconWrap, searchFocused && styles.searchIconWrapFocused]}>
+            <Ionicons name="search-outline" size={16} color={Colors.textSecondary} />
+          </View>
           <TextInput
             style={styles.searchInput}
             placeholder="Where is your soul heading?"
             placeholderTextColor={Colors.textMuted}
             value={searchQuery}
             onChangeText={setSearchQuery}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            returnKeyType="search"
+            accessibilityLabel="Search destinations"
           />
+          {!!searchQuery && (
+            <TouchableOpacity
+              onPress={() => setSearchQuery('')}
+              style={styles.clearBtn}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              accessibilityLabel="Clear search"
+            >
+              <Ionicons name="close-circle" size={18} color={Colors.textMuted} />
+            </TouchableOpacity>
+          )}
         </Animated.View>
 
         <ScrollView
@@ -223,7 +240,10 @@ export default function ExploreScreen() {
                 <TouchableOpacity
                   style={styles.wishlistBtn}
                   onPress={() => {
-                    if (featuredSaved) return;
+                    if (featuredSaved) {
+                      removeFromWishlist(featuredWishlistId);
+                      return;
+                    }
                     addToWishlist({
                       title: featured.title,
                       subtitle: featured.region,
@@ -231,7 +251,7 @@ export default function ExploreScreen() {
                       note: `Duration: ${featured.duration}`,
                     });
                   }}
-                  accessibilityLabel={featuredSaved ? 'Saved to wishlist' : 'Save to wishlist'}
+                  accessibilityLabel={featuredSaved ? 'Remove from wishlist' : 'Save to wishlist'}
                 >
                   <Ionicons
                     name={featuredSaved ? 'heart' : 'heart-outline'}
@@ -381,12 +401,37 @@ const styles = StyleSheet.create({
   searchWrap: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: Colors.bgCard,
-    borderRadius: Radius.pill, marginHorizontal: Spacing.screen,
-    marginTop: 16, marginBottom: 12,
-    paddingHorizontal: 14, paddingVertical: 12,
-    ...Shadow.sm,
+    borderRadius: Radius.full,
+    marginHorizontal: Spacing.screen,
+    marginTop: 8,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    minHeight: 52,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  searchWrapFocused: {
+    borderColor: Colors.brand,
+  },
+  searchIconWrap: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: Colors.bgMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
+  searchIconWrapFocused: {
+    backgroundColor: Colors.bg,
   },
   searchInput: { flex: 1, ...Typography.body, color: Colors.textPrimary },
+  clearBtn: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   categoriesRow: { paddingHorizontal: Spacing.screen, paddingBottom: 4, gap: 8 },
   pill: {

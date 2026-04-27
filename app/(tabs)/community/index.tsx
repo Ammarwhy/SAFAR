@@ -14,7 +14,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AntDesign, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { Colors, Radius, Typography, scale, vscale } from '../../../constants/Theme';
 import { MOCK_MATCHES, MatchProfile } from '../../../constants/mockData';
 import BottomTabBar from '../../../components/layouts/BottomTabBar';
@@ -23,6 +24,7 @@ const { width } = Dimensions.get('window');
 const MATCHING_IDS = new Set(['amina', 'maha', 'tariq']);
 
 export default function CommunityScreen() {
+  const router = useRouter();
   const deck = useMemo(() => MOCK_MATCHES, []);
   const [activeIndex, setActiveIndex] = useState(0);
   const [matchProfile, setMatchProfile] = useState<MatchProfile | null>(null);
@@ -105,17 +107,14 @@ export default function CommunityScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.backdropLeft} />
-      <View style={styles.backdropRight} />
-
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.headerRow}>
-          <Pressable style={styles.headerIconBtn} onPress={() => Alert.alert('Filters', 'Filters are coming soon.')}>
-            <AntDesign name="sliders" size={17} color={Colors.brand} />
+          <Pressable style={styles.headerIconBtn} onPress={() => router.push('/flows/community-filters')}>
+            <MaterialCommunityIcons name="tune-variant" size={18} color={Colors.brand} />
           </Pressable>
 
           <View style={styles.headerTitleWrap}>
@@ -123,8 +122,8 @@ export default function CommunityScreen() {
             <Text style={styles.headerSub}>Swipe to connect with fellow travelers</Text>
           </View>
 
-          <Pressable style={styles.headerIconBtn} onPress={() => Alert.alert('Saved', 'Saved matches will appear here soon.')}>
-            <Ionicons name="bookmark-outline" size={17} color={Colors.brand} />
+          <Pressable style={styles.headerIconBtn} onPress={() => router.push('/flows/community-saved')}>
+            <MaterialCommunityIcons name="bookmark-multiple-outline" size={18} color={Colors.brand} />
           </Pressable>
         </View>
 
@@ -396,24 +395,6 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bg },
   scroll: { flex: 1 },
   scrollContent: { paddingBottom: 110, paddingTop: 8 },
-  backdropLeft: {
-    position: 'absolute',
-    top: -70,
-    left: -60,
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: 'rgba(242, 216, 221, 0.82)',
-  },
-  backdropRight: {
-    position: 'absolute',
-    top: 60,
-    right: -80,
-    width: 220,
-    height: 220,
-    borderRadius: 110,
-    backgroundColor: 'rgba(247, 230, 233, 0.9)',
-  },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -485,7 +466,7 @@ const styles = StyleSheet.create({
   },
   shell: {
     marginHorizontal: scale(16),
-    backgroundColor: 'rgba(255,255,255,0.68)',
+    backgroundColor: Colors.bgCard,
     borderRadius: 36,
     paddingHorizontal: 14,
     paddingTop: 12,

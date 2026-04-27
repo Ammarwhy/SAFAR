@@ -98,15 +98,20 @@ export default function ExpenseScreen() {
 		<SafeAreaView style={styles.safe}>
 			<OfflineBanner />
 			<View style={styles.header}>
-				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+				<TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
 					<Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
 				</TouchableOpacity>
 				<View style={styles.headerTitle}>
 					<Text style={styles.headerSuper}>{MOCK_EXPENSES.tripTitle.toUpperCase()}</Text>
 					<Text style={styles.headerMain}>Expense Ledger</Text>
 				</View>
-				<TouchableOpacity onPress={() => setShowAddModal(true)} style={styles.addBtn} accessibilityLabel="Add a new expense">
-					<Text style={styles.addBtnText}>+</Text>
+				<TouchableOpacity
+					onPress={() => setShowAddModal(true)}
+					style={styles.addBtn}
+					hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+					accessibilityLabel="Add a new expense"
+				>
+					<Ionicons name="add" size={20} color={Colors.textOnDark} />
 				</TouchableOpacity>
 			</View>
 
@@ -268,7 +273,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		paddingHorizontal: Spacing.screen,
-		paddingTop: 10,
+		paddingTop: 8,
 		paddingBottom: 8,
 		gap: 12,
 	},
@@ -279,8 +284,8 @@ const styles = StyleSheet.create({
 		width: 44, height: 44, borderRadius: 22,
 		backgroundColor: Colors.brand,
 		alignItems: "center", justifyContent: "center",
+		marginTop: 2,
 	},
-	addBtnText: { color: Colors.textOnDark, fontSize: 22, lineHeight: 24 },
 
 	totalCard: {
 		marginHorizontal: Spacing.screen,

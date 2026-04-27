@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import Animated, { FadeInUp, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors, Spacing } from "@/constants/Theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,45 +20,27 @@ export default function FrameBottomNav({ items }: FrameBottomNavProps) {
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
 
-	const NavButton = ({ item, index }: { item: NavItem; index: number }) => {
-		const scale = useSharedValue(1);
-
-		const animatedStyle = useAnimatedStyle(() => ({
-			transform: [{ scale: scale.value }],
-		}));
-
-		return (
-			<Animated.View entering={FadeInUp.delay(index * 35).duration(280)} style={[styles.itemWrap, animatedStyle]}>
-				<Pressable
-					accessibilityLabel={`${item.label} tab`}
-					onPress={() => {
-						if (item.onPress) {
-							item.onPress();
-							return;
-						}
-						if (item.href) {
-							router.push(item.href as never);
-						}
-					}}
-					onPressIn={() => {
-						scale.value = withSpring(0.96);
-					}}
-					onPressOut={() => {
-						scale.value = withSpring(1);
-					}}
-					style={({ pressed }) => [styles.item, item.active && styles.itemActive, pressed && styles.itemPressed]}
-				>
-					<Ionicons name={item.iconName as any} size={20} color={item.active ? Colors.brand : Colors.textMuted} />
-					<Text style={[styles.label, item.active ? styles.active : undefined]}>{item.label}</Text>
-				</Pressable>
-			</Animated.View>
-		);
-	};
-
 	return (
 		<View style={[styles.wrap, { height: 60 + insets.bottom, paddingBottom: insets.bottom + 8 }]}>
-			{items.map((item, index) => (
-				<NavButton key={item.label} item={item} index={index} />
+			{items.map((item) => (
+				<View key={item.label} style={styles.itemWrap}>
+					<Pressable
+						accessibilityLabel={`${item.label} tab`}
+						onPress={() => {
+							if (item.onPress) {
+								item.onPress();
+								return;
+							}
+							if (item.href && !item.active) {
+								router.replace(item.href as never);
+							}
+						}}
+						style={({ pressed }) => [styles.item, item.active && styles.itemActive, pressed && styles.itemPressed]}
+					>
+						<Ionicons name={item.iconName as any} size={20} color={item.active ? Colors.brand : Colors.textMuted} />
+						<Text style={[styles.label, item.active ? styles.active : undefined]}>{item.label}</Text>
+					</Pressable>
+				</View>
 			))}
 		</View>
 	);

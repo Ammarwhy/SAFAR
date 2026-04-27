@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import BottomTabBar from "@/components/layouts/BottomTabBar";
 import SafarHeader from "@/components/layouts/SafarHeader";
@@ -70,9 +70,13 @@ export default function MessagesScreen() {
         </View>
 
         <View style={styles.inputBar}>
-          <Ionicons name="add" size={22} color={Colors.brand} />
+          <TouchableOpacity onPress={() => Alert.alert('Coming Soon', 'Media sharing is on the way.')} hitSlop={8} accessibilityLabel="Attach media">
+            <Ionicons name="add" size={22} color={Colors.brand} />
+          </TouchableOpacity>
           <Text style={styles.inputHint}>Share a vibe...</Text>
-          <Ionicons name="send" size={18} color={Colors.brand} />
+          <TouchableOpacity onPress={() => Alert.alert('Coming Soon', 'Messaging will be available soon.')} hitSlop={8} accessibilityLabel="Send message">
+            <Ionicons name="send" size={18} color={Colors.brand} />
+          </TouchableOpacity>
         </View>
           </>
         )}

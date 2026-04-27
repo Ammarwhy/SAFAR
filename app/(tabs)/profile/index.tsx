@@ -38,7 +38,7 @@ export default function ProfileScreen() {
         style: 'destructive',
         onPress: () => {
           clearAuthState();
-          router.replace('/(auth)/index');
+          router.replace('/(auth)/login');
         },
       },
     ]);

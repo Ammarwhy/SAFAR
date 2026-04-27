@@ -41,6 +41,21 @@ export type MatchProfile = {
 	tags: string[];
 };
 
+export type SwipeTraveler = {
+	id: string;
+	name: string;
+	age: number;
+	city: string;
+	photo: string;
+	bio: string;
+	compatibility: number;
+	travelStyle: string[];
+	traits: { Adventure: number; Culture: number; Budget: number; Social: number };
+	pastDestinations: string[];
+	mutualMatch: boolean;
+	verified?: boolean;
+};
+
 export type MockUser = {
 	name: string;
 	title: string;
@@ -536,6 +551,116 @@ export const MOCK_AGENCIES: MockAgency[] = [
 		heroImage:
 			"https://images.unsplash.com/photo-1531501410720-c8d437636169?auto=format&fit=crop&w=1200&q=80",
 		startingPrice: 149000,
+	},
+];
+
+export const SWIPE_TRAVELERS: SwipeTraveler[] = [
+	{
+		id: "st-1",
+		name: "Amina Al-Farsi",
+		age: 29,
+		city: "Muscat, Oman",
+		photo: "https://picsum.photos/seed/amina/600/800",
+		bio: "Chasing the architectural soul of the Silk Road — from caravanserais to carved minarets. I document what most tourists walk past.",
+		compatibility: 94,
+		travelStyle: ["Heritage", "Photography", "Slow Travel"],
+		traits: { Adventure: 62, Culture: 96, Budget: 55, Social: 70 },
+		pastDestinations: ["Samarkand", "Isfahan", "Bukhara", "Petra"],
+		mutualMatch: true,
+		verified: true,
+	},
+	{
+		id: "st-2",
+		name: "Zain Malik",
+		age: 32,
+		city: "Lahore, Pakistan",
+		photo: "https://picsum.photos/seed/zainm/600/800",
+		bio: "Mountain silence and glacier routes are my reset button. Prefer slow treks over peak-bagging. Always has the best chai spot intel.",
+		compatibility: 88,
+		travelStyle: ["Mountain Seeker", "Tea Trails", "Minimalist"],
+		traits: { Adventure: 85, Culture: 72, Budget: 80, Social: 45 },
+		pastDestinations: ["Hunza", "Skardu", "Fairy Meadows", "Naran"],
+		mutualMatch: false,
+	},
+	{
+		id: "st-3",
+		name: "Maha Noor",
+		age: 27,
+		city: "Gilgit, Pakistan",
+		photo: "https://picsum.photos/seed/mahanoor/600/800",
+		bio: "Itinerary builder who structures routes around food markets, heritage lanes, and the stories locals actually want to share.",
+		compatibility: 91,
+		travelStyle: ["Food Explorer", "Route Sync", "Cultural Dive"],
+		traits: { Adventure: 68, Culture: 90, Budget: 60, Social: 88 },
+		pastDestinations: ["Lahore Old City", "Skardu Bazaar", "Quetta", "Chitral"],
+		mutualMatch: true,
+		verified: true,
+	},
+	{
+		id: "st-4",
+		name: "Rayan Khalid",
+		age: 34,
+		city: "Karachi, Pakistan",
+		photo: "https://picsum.photos/seed/rayank/600/800",
+		bio: "Desert routes, stargazing camps, and camel caravan evenings. The Thar Belt and Balochistan coast are my laboratories.",
+		compatibility: 79,
+		travelStyle: ["Desert Nomad", "Night Sky", "Off-Grid"],
+		traits: { Adventure: 92, Culture: 58, Budget: 70, Social: 52 },
+		pastDestinations: ["Thar Desert", "Makran Coast", "Hingol", "Kund Malir"],
+		mutualMatch: false,
+	},
+	{
+		id: "st-5",
+		name: "Sana Hussain",
+		age: 26,
+		city: "Islamabad, Pakistan",
+		photo: "https://picsum.photos/seed/sanahussain/600/800",
+		bio: "Wellness-first traveler who builds routes around thermal springs, forest stays, and high-altitude mornings. Always packs a journal.",
+		compatibility: 83,
+		travelStyle: ["Wellness", "Forest Bathing", "Journal"],
+		traits: { Adventure: 55, Culture: 78, Budget: 65, Social: 72 },
+		pastDestinations: ["Swat Valley", "Kaghan", "Shogran", "Ratti Gali"],
+		mutualMatch: false,
+	},
+	{
+		id: "st-6",
+		name: "Tariq Bashir",
+		age: 31,
+		city: "Peshawar, Pakistan",
+		photo: "https://picsum.photos/seed/tariqb/600/800",
+		bio: "Oral history collector. I record folk songs at chai stalls and photograph bazaar craftsmen nobody else notices.",
+		compatibility: 87,
+		travelStyle: ["Heritage", "Documentary", "Local Connect"],
+		traits: { Adventure: 48, Culture: 98, Budget: 75, Social: 82 },
+		pastDestinations: ["Khyber Pass", "Mohenjo-daro", "Takht-i-Bahi", "Lahore Fort"],
+		mutualMatch: true,
+		verified: true,
+	},
+	{
+		id: "st-7",
+		name: "Leila Ahmadi",
+		age: 28,
+		city: "Kabul, Afghanistan",
+		photo: "https://picsum.photos/seed/leilaa/600/800",
+		bio: "Textile trail researcher — following ancient weaving routes from Central Asia into the subcontinent. Every carpet tells a migration story.",
+		compatibility: 76,
+		travelStyle: ["Research", "Textiles", "Slow Overland"],
+		traits: { Adventure: 60, Culture: 95, Budget: 55, Social: 60 },
+		pastDestinations: ["Mazar-i-Sharif", "Herat", "Samarkand", "Dushanbe"],
+		mutualMatch: false,
+	},
+	{
+		id: "st-8",
+		name: "Omar Faris",
+		age: 30,
+		city: "Dubai, UAE",
+		photo: "https://picsum.photos/seed/omarfaris/600/800",
+		bio: "Luxury lodge scout who specializes in unearthing boutique mountain properties before they blow up. Always shares the finds.",
+		compatibility: 72,
+		travelStyle: ["Boutique Stays", "Fine Dining", "Curated Routes"],
+		traits: { Adventure: 58, Culture: 70, Budget: 30, Social: 80 },
+		pastDestinations: ["Eagle Nest Hunza", "Amanjiwo", "Singita", "Six Senses"],
+		mutualMatch: false,
 	},
 ];
 

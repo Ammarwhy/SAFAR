@@ -1,7 +1,12 @@
 import { Dimensions } from "react-native";
 
-const { width } = Dimensions.get("window");
-export const scale = (size: number) => (width / 390) * size;
+const { width, height } = Dimensions.get("window");
+const BASE_WIDTH = 390;
+const BASE_HEIGHT = 844;
+const clampedWidth = Math.min(width, BASE_WIDTH);
+const clampedHeight = Math.min(height, BASE_HEIGHT);
+export const scale = (size: number) => (clampedWidth / BASE_WIDTH) * size;
+export const vscale = (size: number) => (clampedHeight / BASE_HEIGHT) * size;
 
 export const Colors = {
   brand: "#371B17",
@@ -15,6 +20,7 @@ export const Colors = {
   textPrimary: "#251816",
   textSecondary: "#625654",
   textMuted: "#8A7060",
+  textBody: "#6B5344",
   textOnDark: "#F5F0E8",
 
   error: "#B44747",
@@ -36,81 +42,81 @@ export const Colors = {
 
 export const Typography = {
   display: {
-    fontSize: 48,
+    fontSize: scale(48),
     fontWeight: "700" as const,
-    lineHeight: 56,
+    lineHeight: scale(56),
     letterSpacing: -0.5,
   },
   displayXl: {
-    fontSize: 48,
+    fontSize: scale(48),
     fontWeight: "700" as const,
-    lineHeight: 56,
+    lineHeight: scale(56),
     letterSpacing: -0.5,
   },
   displayLg: {
-    fontSize: 40,
+    fontSize: scale(40),
     fontWeight: "700" as const,
-    lineHeight: 48,
+    lineHeight: scale(48),
     letterSpacing: -0.3,
   },
   h1: {
-    fontSize: 32,
+    fontSize: scale(32),
     fontWeight: "700" as const,
-    lineHeight: 40,
+    lineHeight: scale(40),
     letterSpacing: 0,
   },
   h2: {
-    fontSize: 28,
+    fontSize: scale(28),
     fontWeight: "700" as const,
-    lineHeight: 36,
+    lineHeight: scale(36),
     letterSpacing: 0,
   },
   h3: {
-    fontSize: 24,
+    fontSize: scale(24),
     fontWeight: "700" as const,
-    lineHeight: 32,
+    lineHeight: scale(32),
     letterSpacing: 0,
   },
   h4: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontWeight: "600" as const,
-    lineHeight: 28,
+    lineHeight: scale(28),
     letterSpacing: 0,
   },
   body: {
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: "400" as const,
-    lineHeight: 24,
+    lineHeight: scale(24),
     letterSpacing: 0.3,
   },
   bodyMd: {
-    fontSize: 15,
+    fontSize: scale(15),
     fontWeight: "400" as const,
-    lineHeight: 22,
+    lineHeight: scale(22),
     letterSpacing: 0.25,
   },
   bodySm: {
-    fontSize: 14,
+    fontSize: scale(14),
     fontWeight: "400" as const,
-    lineHeight: 20,
+    lineHeight: scale(20),
     letterSpacing: 0.25,
   },
   bodyMedium: {
-    fontSize: 14,
+    fontSize: scale(14),
     fontWeight: "400" as const,
-    lineHeight: 20,
+    lineHeight: scale(20),
     letterSpacing: 0.25,
   },
   label: {
-    fontSize: 12,
+    fontSize: scale(12),
     fontWeight: "600" as const,
-    lineHeight: 16,
+    lineHeight: scale(16),
     letterSpacing: 0.5,
   },
   caption: {
-    fontSize: 11,
+    fontSize: scale(11),
     fontWeight: "400" as const,
-    lineHeight: 14,
+    lineHeight: scale(14),
     letterSpacing: 0.4,
   },
 };

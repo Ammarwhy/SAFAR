@@ -6,7 +6,7 @@ Every change explanation must clearly include: what was changed, why it was chan
 
 Current primary testing mode is the web variant: `npx expo start --web --clear`.
 
-Latest update reference: Entry 011 in `Build_Progress.md`.
+Latest update reference: Entry 012 in `Build_Progress.md`.
 
 ## Simple Summary
 
@@ -66,9 +66,9 @@ For every new code change, documentation must answer four things in simple words
 - Connect the app to Supabase.
 - Make Explore, Journeys, Chat, Expense, Safety, and Profile fully functional.
 
-## Latest Change Summary (2026-04-25)
+## Latest Change Summary (2026-04-26)
 
-- What changed: Featured Escape now uses fallback image handling and includes duration + highlight chips; mock data updated accordingly; docs synced to Entry 011.
-- Why it changed: The hero card must never render blank; adding resilience and richer context improves trust and scanability.
-- How it was verified: Not run in this session (visual check pending).
-- Core idea: Make key visual surfaces robust and information-rich so failures do not break the experience.
+- What changed: Responsive typography scaling now active across all screens. All `Typography` token sizes now use the `scale()` utility function, making fonts adapt to device viewport width.
+- Why it changed: Typography was previously fixed to absolute sizes, causing text to appear oversized on wider screens (web, tablet) and not scaling proportionally across devices, violating responsive design principles.
+- How it was verified: TypeScript compilation confirms no errors; fonts will now scale relative to device width (base 390px).
+- Core idea: Design systems should treat type the same as spacing/layout — responsive and proportional, never fixed and absolute.

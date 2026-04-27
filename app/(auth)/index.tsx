@@ -1,55 +1,57 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import { Animated, Easing, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors, scale } from '@/constants/Theme';
 
 export default function SplashScreen() {
   const router = useRouter();
   const wordmarkOpacity = useRef(new Animated.Value(0)).current;
+  const lineOpacity = useRef(new Animated.Value(0)).current;
   const taglineOpacity = useRef(new Animated.Value(0)).current;
-  const screenOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.parallel([
       Animated.timing(wordmarkOpacity, {
         toValue: 1,
-        duration: 800,
-        easing: Easing.inOut(Easing.ease),
+        duration: 900,
+        delay: 0,
+        easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
-      Animated.sequence([
-        Animated.delay(400),
-        Animated.timing(taglineOpacity, {
-          toValue: 1,
-          duration: 600,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
+      Animated.timing(lineOpacity, {
+        toValue: 0.3,
+        duration: 600,
+        delay: 300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(taglineOpacity, {
+        toValue: 1,
+        duration: 600,
+        delay: 500,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
     ]).start();
 
     const t = setTimeout(() => {
-      Animated.timing(screenOpacity, {
-        toValue: 0,
-        duration: 400,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }).start(() => router.replace('/(auth)/login'));
-    }, 2200);
+      router.replace('/(auth)/login');
+    }, 2400);
 
     return () => clearTimeout(t);
   }, []);
 
   return (
-    <Animated.View style={[styles.screen, { opacity: screenOpacity }]}>
-      <View style={styles.archDecor} />
+    <View style={styles.screen}>
+      <StatusBar hidden />
       <Animated.Text style={[styles.wordmark, { opacity: wordmarkOpacity }]}>
         SAFAR
       </Animated.Text>
+      <Animated.View style={[styles.line, { opacity: lineOpacity }]} />
       <Animated.Text style={[styles.tagline, { opacity: taglineOpacity }]}>
         Every journey tells a story.
       </Animated.Text>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -60,31 +62,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  archDecor: {
-    position: 'absolute',
-    alignSelf: 'center',
-    width: scale(180),
-    height: scale(180),
-    borderRadius: scale(90),
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderBottomWidth: 0,
-    borderColor: Colors.borderDark,
-    opacity: 0.35,
-    top: '28%',
-  },
   wordmark: {
-    fontSize: scale(48),
-    fontWeight: '700',
+    fontSize: scale(58),
+    fontWeight: '800',
     color: Colors.brand,
-    letterSpacing: 6,
-    marginBottom: scale(16),
+    letterSpacing: scale(12),
+    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: undefined }),
+  },
+  line: {
+    width: scale(40),
+    height: 1,
+    backgroundColor: Colors.brand,
+    marginVertical: 16,
   },
   tagline: {
     fontSize: scale(13),
-    fontWeight: '400',
     color: Colors.textMuted,
     letterSpacing: scale(2),
+    fontStyle: 'italic',
   },
 });

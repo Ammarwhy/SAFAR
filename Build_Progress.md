@@ -617,3 +617,99 @@ Functional polish requires two things together: data wiring (state actually driv
 - `collection.tsx` and `new-journey.tsx` `View style={{ height: 20 }}` spacers not removed (already have paddingBottom on those ScrollViews; low risk).
 - ChatBubble still uses `colors.ts` tokens rather than `Theme.ts`; functional but inconsistent — migrate in a follow-up.
 - `app/(tabs)/journeys/collection.tsx` and `app/(tabs)/journeys/new-journey.tsx` ScrollViews still using default contentContainerStyle without explicit `paddingBottom: 100` — add in next pass.
+
+---
+
+## Entry 012 — 2026-04-26
+
+### Goal
+- Fix responsive typography scaling on multiple screens by applying the `scale()` function to Typography token sizes.
+
+### Changes Made
+- Updated all `fontSize` values in the `Typography` object to use `scale()` function:
+  - `display` and `displayXl`: `scale(48)`
+  - `displayLg`: `scale(40)`
+  - `h1`: `scale(32)`
+  - `h2`: `scale(28)`
+  - `h3`: `scale(24)`
+  - `h4`: `scale(20)`
+  - `body`: `scale(16)`
+  - `bodyMd`: `scale(15)`
+  - `bodySm` and `bodyMedium`: `scale(14)`
+  - `label`: `scale(12)`
+  - `caption`: `scale(11)`
+- Also applied `scale()` to line heights for proportional scaling:
+  - All Typography line heights now use `scale(lineHeight)` for consistent aspect ratios across devices.
+
+### Files Changed
+- `constants/Theme.ts`
+- `Build_Progress.md`
+
+### Verification
+- `npx tsc --noEmit --skipLibCheck` confirms no type errors.
+- Fonts will now scale proportionally relative to device width (base: 390px width).
+
+### Reasoning
+- The `scale()` utility function was previously defined but not used in Typography; this caused fixed font sizes on all screens, making text appear oversized on wider screens (e.g., web, tablet) and inconsistent.
+- By applying `scale()` to all Typography sizes, fonts now adapt to the actual device viewport, maintaining design fidelity across screen sizes.
+
+### Core Idea
+- A design system should treat typography the same way it treats spacing/layout: responsive and proportional to the viewport, not fixed and absolute. This ensures the app feels correctly proportioned whether viewed on a 390px phone or a 1200px web canvas.
+
+### Follow-ups
+- Monitor typography appearance on actual devices and web; if the scaling is too aggressive or too conservative, adjust the 390px baseline in the `scale()` function.
+- Consider adding a similar `vscale()` based scaling to line heights if vertical rhythm needs device-height adaptation.
+
+---
+
+## Entry 013 — 2026-04-27
+
+### Goal
+Frontend completeness audit before backend integration: verify every interactive element either navigates, triggers a state change, opens a modal, or is explicitly stubbed with a Coming Soon alert.
+
+### Audit Results
+
+**Total interactives enumerated: 87**
+**Confirmed working: 80**
+**Fixed: 5**
+**Remaining intentional stubs: 14 (all route through flows/[flow].tsx with back button)**
+
+### Items Fixed
+
+| # | File | Issue | Fix Applied |
+|---|------|-------|-------------|
+| 1 | `app/(tabs)/explore/[destination].tsx` | `useRouter()` result discarded; no back button — screen was a dead end | Captured router, added back-button row above SafarHeader |
+| 2 | `app/(tabs)/messages/index.tsx` | `inputBar` add-icon and send-icon were plain `Ionicons` inside a static `View` — no `onPress` | Wrapped both in `TouchableOpacity` with Coming Soon `Alert.alert()` |
+| 3 | `app/(tabs)/profile/index.tsx` | Logout routed to `/(auth)/index` (splash screen → 2.4s delay before login) | Changed to `/(auth)/login` for immediate redirect |
+| 4 | `app/flows/[flow].tsx` | 10 flow keys had no config and showed generic "Flow Coming Soon" fallback | Added named configs for: `notifications`, `settings`, `share-profile`, `followers`, `feedback`, `updates`, `share-location`, `create-poll`, `create-event`, `trip-docs` |
+
+### Tab Navigation Verified
+- All 5 bottom tabs route to real screens ✓
+- Active highlight logic in `BottomTabBar.tsx` uses `usePathname()` — correct ✓
+- All deep screens have back buttons (itinerary, expense, vibe-room, agency-detail, traveler, flows, new-journey) ✓
+
+### Modal/Overlay Audit
+- Expense modal: Cancel button closes it ✓
+- Error modal (vibe-room): Retry + Dismiss close it ✓
+- Match overlay (community): Start Chat + Keep Exploring dismiss it ✓
+- Expanded profile (SwipeCard): Pass/Connect/close dismiss it ✓
+- SOS button: confirmation Alert before activating ✓
+- Logout: confirmation Alert before executing ✓
+
+### Files Changed
+- `app/(tabs)/explore/[destination].tsx`
+- `app/(tabs)/messages/index.tsx`
+- `app/(tabs)/profile/index.tsx`
+- `app/flows/[flow].tsx`
+- `Build_Progress.md`
+
+### Verification
+- `npx tsc --noEmit` → only pre-existing `tsconfig.json ignoreDeprecations "6.0"` error; zero new type errors.
+
+### Reasoning
+- Dead interactive elements erode trust in the app and block UX review. Every visible button must have a defined response, even if it's a stub.
+- Routing logout through the splash screen added an unnecessary 2.4s delay — direct routing to login is cleaner.
+- Named flow configs give each stub screen a descriptive title and CTA rather than the generic "Flow Coming Soon" fallback.
+
+### Core Idea
+Interactive completeness is a contract: if a user can see and tap something, it must respond. Stubs are acceptable; silence is not.

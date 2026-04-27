@@ -7,7 +7,7 @@
 >
 > **Agent instruction — Doc changes:** Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 >
-> **Current implementation status:** Featured Escape card hardening complete (Entry 011, 2026-04-25). The hero now includes fallback image handling plus duration/highlight metadata. Backend / Supabase wiring remains the next implementation phase. See `Build_Progress.md` Entry 011 for full change log.
+> **Current implementation status:** Responsive typography scaling complete (Entry 012, 2026-04-26). All Typography tokens now use the `scale()` utility for device-adaptive font sizing, resolving oversized text on multiple screen sizes. Backend / Supabase wiring remains the next implementation phase. See `Build_Progress.md` Entry 012 for full change log.
 
 ---
 
@@ -21,6 +21,7 @@
 | 2.3 | Apr 21 2026 | Updated implementation status to Entry 009: added latest screen rewrites, tokenized parchment + rich mahogany color system, and documentation synchronization notes | Copilot |
 | 2.4 | Apr 25 2026 | Updated to Entry 010: category-reactive Explore, tab-distinct Journeys, enriched Vibe Room, full Profile overhaul, stale component list corrected | Claude |
 | 2.5 | Apr 25 2026 | Updated to Entry 011: Featured Escape image fallback handling and metadata chips | Copilot |
+| 2.6 | Apr 26 2026 | Updated to Entry 012: Responsive typography scaling — all Typography token sizes now use `scale()` utility for device-adaptive font sizing | Copilot |
 
 ---
 

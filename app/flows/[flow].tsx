@@ -170,6 +170,66 @@ const FLOWS: Record<string, FlowConfig> = {
     description: "Emergency contacts and local authorities have been notified with your live location.",
     cta: "Return to Safety Center",
   },
+  notifications: {
+    icon: "notifications-outline",
+    title: "Notifications",
+    description: "Manage your alerts, journey reminders, and community update preferences.",
+    cta: "Save Preferences",
+  },
+  settings: {
+    icon: "settings-outline",
+    title: "Settings",
+    description: "Adjust app language, display options, and connected account integrations.",
+    cta: "Save Settings",
+  },
+  "share-profile": {
+    icon: "share-social-outline",
+    title: "Share Profile",
+    description: "Generate a shareable link to your traveler profile and curated collection.",
+    cta: "Copy Link",
+  },
+  followers: {
+    icon: "people-outline",
+    title: "Followers",
+    description: "Browse the travelers who follow your journeys and curations.",
+    cta: "View All",
+  },
+  feedback: {
+    icon: "chatbox-ellipses-outline",
+    title: "Send Feedback",
+    description: "Share suggestions, report issues, or tell us what you love about SAFAR.",
+    cta: "Submit Feedback",
+  },
+  updates: {
+    icon: "newspaper-outline",
+    title: "All Updates",
+    description: "View the full timeline of visa, route, and logistic updates for your active trips.",
+    cta: "Mark All as Read",
+  },
+  "share-location": {
+    icon: "location-outline",
+    title: "Share Location",
+    description: "Drop your current position as a pin into the group conversation.",
+    cta: "Share Now",
+  },
+  "create-poll": {
+    icon: "stats-chart-outline",
+    title: "Create Poll",
+    description: "Ask your vibe room a question and collect votes in real time.",
+    cta: "Publish Poll",
+  },
+  "create-event": {
+    icon: "calendar-outline",
+    title: "Create Event",
+    description: "Schedule a group activity and notify all vibe room members.",
+    cta: "Create Event",
+  },
+  "trip-docs": {
+    icon: "document-text-outline",
+    title: "Trip Documents",
+    description: "Access shared permits, tickets, and itinerary files for this journey.",
+    cta: "Open Documents",
+  },
 };
 
 export default function FlowScreen() {

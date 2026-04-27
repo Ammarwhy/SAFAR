@@ -1,6 +1,7 @@
 import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import BottomTabBar from "@/components/layouts/BottomTabBar";
 import SafarHeader from "@/components/layouts/SafarHeader";
 import ArchCard from "@/components/ui/ArchCard";
@@ -8,10 +9,15 @@ import { Colors, Spacing, Radius, Typography, Shadow } from "@/constants/Theme";
 
 export default function DestinationDetailScreen() {
   const { destination } = useLocalSearchParams<{ destination: string }>();
-  useRouter();
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safe}>
+      <View style={styles.backRow}>
+        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+          <Ionicons name="arrow-back" size={22} color={Colors.textPrimary} />
+        </TouchableOpacity>
+      </View>
       <SafarHeader title="CURATED JOURNEYS" subtitle={destination?.toUpperCase() ?? "DESTINATION"} showAvatar={false} />
       <ScrollView
         style={styles.scroll}
@@ -61,6 +67,11 @@ export default function DestinationDetailScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.bg },
+  backRow: {
+    paddingHorizontal: Spacing.screen,
+    paddingTop: 10,
+    paddingBottom: 4,
+  },
   scroll: { flex: 1 },
   content: { padding: Spacing.md, paddingBottom: 100 },
   title: { marginTop: Spacing.md, ...Typography.h1, color: Colors.brand },

@@ -5,13 +5,13 @@ Any AI agent that changes code must update all Markdown files in the repo to kee
 
 Any AI agent updating documentation must explain what changed, why it changed, how it was verified, and the core idea behind the decision.
 
-Current implementation status note: Featured Escape card hardening complete as of 2026-04-25 (Entry 011). The hero image now includes fallback handling plus duration/highlight metadata. Backend/realtime wiring remains the next phase. See `Build_Progress.md` Entry 011 for full details.
+Current implementation status note: Responsive typography scaling complete as of 2026-04-26 (Entry 012). All Typography tokens now use the `scale()` utility, making fonts adapt to device viewport width. This resolves the oversized font issue on multiple screen sizes. Backend/realtime wiring remains the next phase. See `Build_Progress.md` Entry 012 for full details.
 
-### Latest Checkpoint (Entry 011 — 2026-04-25)
-- What changed: Featured Escape now uses fallback image handling and includes duration + highlight chips; mock data updated accordingly; docs synced to Entry 011.
-- Why it changed: The hero card must never render blank; adding resilience and richer context improves trust and scanability.
-- How verified: Not run in this session (visual check pending).
-- Core idea: Make key visual surfaces robust and information-rich so failures do not break the experience.
+### Latest Checkpoint (Entry 012 — 2026-04-26)
+- What changed: Responsive typography scaling implemented. All `Typography` token sizes now use `scale()` utility function for device-adaptive font sizing.
+- Why it changed: Typography was previously fixed to absolute sizes, causing overdimensioned text on wider screens and violating responsive design principles.
+- How verified: TypeScript compilation successful with no errors; fonts will scale relative to device width baseline (390px).
+- Core idea: Design systems should treat typography the same as spacing/layout — responsive and proportional, never fixed and absolute.
 
 ---
 

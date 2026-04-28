@@ -1,0 +1,29 @@
+{
+  "name": "safar-backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SAFAR backend monorepo scaffold",
+  "workspaces": [
+    "gateway",
+    "services/*"
+  ],
+  "scripts": {
+    "lint": "eslint \"{gateway,services,shared}/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"{gateway,services,shared,infra,supabase}/**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "typecheck": "npm run typecheck --workspaces",
+    "build": "npm run build --workspaces"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/express-rate-limit": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.9.2"
+  }
+}

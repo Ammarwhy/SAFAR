@@ -33,9 +33,9 @@ Latest completed UI milestone: Entry 018 in `Build_Progress.md`.
 
 ## Phase 1 — Data & Core Logic
 
-- [ ] Implement `supabase/schema.sql` from PRD entities
+- [x] Implement `supabase/schema.sql` from PRD entities
 - [ ] Implement `supabase/seed.sql` with demo-safe seed data
-- [ ] Implement `lib/supabase.ts` client with env validation
+- [x] Implement `lib/supabase.ts` client with env validation
 - [ ] Implement `lib/matchEngine.ts` using weighted scoring spec
 - [ ] Implement `lib/expenseCalc.ts` with split/balance settlement logic
 - [ ] Implement `lib/offlineStore.ts` cache wrappers with safe fallbacks

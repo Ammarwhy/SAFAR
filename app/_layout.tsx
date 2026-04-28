@@ -2,6 +2,8 @@ import { Stack } from "expo-router";
 import { Platform, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Colors } from "@/constants/Theme";
+import "@/lib/supabase"; // <--- Added this to run the Supabase connection test
+
 
 export default function RootLayout() {
   return (

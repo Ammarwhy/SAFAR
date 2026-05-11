@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTripStore } from '../stores/tripStore';
 import { useAuthStore } from '../stores/authStore';

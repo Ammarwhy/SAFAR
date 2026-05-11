@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../stores/authStore';
 
 const MatchPage = () => {
-  const { loadCurrentProfile, travelerProfile, loadAllTravelersWithDetails, loading, existingMatches, loadExistingMatches } = useProfileStore();
+  const { loadCurrentProfile, loadAllTravelersWithDetails, loading, loadExistingMatches } = useProfileStore();
   const { user } = useAuthStore();
   const [matches, setMatches] = useState<any[]>([]);
   const navigate = useNavigate();

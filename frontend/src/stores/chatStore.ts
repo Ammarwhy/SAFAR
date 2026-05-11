@@ -22,6 +22,7 @@ export type Message = {
   sent_at: string;
   sender_name?: string;
   sender_avatar?: string;
+  is_read?: boolean;
 };
 
 type ChatState = {

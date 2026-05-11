@@ -34,7 +34,7 @@ const TripDetailsPage = () => {
     );
   }
 
-  const { trip, participants, itinerary, stops } = details;
+  const { trip, participants, stops } = details;
   const liked = isWishlisted(trip.id);
 
   const toggleWishlist = (e: React.MouseEvent) => {

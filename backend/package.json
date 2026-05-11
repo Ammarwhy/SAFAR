@@ -11,7 +11,8 @@
     "lint": "eslint \"{gateway,services,shared}/**/*.{ts,tsx}\"",
     "format": "prettier --write \"{gateway,services,shared,infra,supabase}/**/*.{ts,tsx,js,json,md,yml,yaml}\"",
     "typecheck": "npm run typecheck --workspaces",
-    "build": "npm run build --workspaces"
+    "build": "npm run build --workspaces",
+    "start": "npm start -w @safar/gateway"
   },
   "devDependencies": {
     "@types/compression": "^1.8.1",

@@ -35,11 +35,16 @@ export const createProxyHandler = (targetBaseUrl: string) => {
         headers.set('content-type', headers.get('content-type') ?? 'application/json');
       }
 
-      const upstreamResponse = await fetch(upstreamUrl, {
+      const fetchOptions: RequestInit = {
         method: req.method,
         headers,
-        body,
-      });
+      };
+
+      if (body) {
+        fetchOptions.body = body;
+      }
+
+      const upstreamResponse = await fetch(upstreamUrl, fetchOptions);
 
       res.status(upstreamResponse.status);
       upstreamResponse.headers.forEach((value, key) => {

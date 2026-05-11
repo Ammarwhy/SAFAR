@@ -9,14 +9,17 @@ export class ApiError extends Error {
     super(message);
     this.code = code;
     this.status = status;
-    this.details = details;
+    if (details) this.details = details;
   }
 }
 
-export const toErrorShape = (error: ApiError): ApiErrorShape => ({
-  error: {
-    code: error.code,
-    message: error.message,
-    details: error.details,
-  },
-});
+export const toErrorShape = (error: ApiError): ApiErrorShape => {
+  const shape: ApiErrorShape = {
+    error: {
+      code: error.code,
+      message: error.message,
+    },
+  };
+  if (error.details) shape.error.details = error.details;
+  return shape;
+};

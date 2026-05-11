@@ -57,7 +57,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   initSocket: () => {
     if (get().socket) return;
-    const socket = io('http://localhost:3001');
+    const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001');
     
     socket.on('receive_message', (data: any) => {
       const msg: Message = {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import type { NextFunction, Request, Response } from 'express';
 import { env } from '../config';
-import { ApiError } from '../../shared/src/errors';
+import { ApiError } from '../../../shared/src/errors';
 
 export interface JwtPayloadShape {
   sub: string;

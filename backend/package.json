@@ -5,6 +5,7 @@
   "description": "SAFAR backend monorepo scaffold",
   "workspaces": [
     "gateway",
+    "shared",
     "services/*"
   ],
   "scripts": {

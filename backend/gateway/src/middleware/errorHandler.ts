@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ApiError, toErrorShape } from '../../shared/src/errors';
+import { ApiError, toErrorShape } from '../../../shared/src/errors';
 
 export const globalErrorHandler = (error: unknown, _req: Request, res: Response, _next: NextFunction): void => {
   if (error instanceof ApiError) {

@@ -5,7 +5,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useProfileStore } from '../stores/profileStore';
 
 const ChatPage = () => {
-  const { profile, loading: profileLoading, loadCurrentProfile } = useProfileStore();
+  const { loadCurrentProfile } = useProfileStore();
   const { 
     rooms, vibeRooms, loading, messages, roomProfiles, unreadCounts, lastMessageAt,
     loadMatchesForCurrentUser, loadMessageHistory, loadRoomProfiles,

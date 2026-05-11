@@ -70,7 +70,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       };
       
       const { user } = useAuthStore.getState();
-      const isActive = document.visibilityState === 'visible'; // Simple check, we can refine this
+      // const isActive = document.visibilityState === 'visible';
       
       set((state) => {
         const isSelf = msg.sender_id === user?.id;

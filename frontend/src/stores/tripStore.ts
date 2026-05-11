@@ -71,6 +71,7 @@ export type Expense = {
   category?: string | null;
   split_method?: string | null;
   expense_date?: string | null;
+  split_data?: any;
 };
 
 type TripState = {
@@ -96,6 +97,7 @@ type TripState = {
   addToWishlist: (tripId: string) => Promise<void>;
   removeFromWishlist: (tripId: string) => Promise<void>;
   isWishlisted: (tripId: string) => boolean;
+  loadExploreContent: () => Promise<void>;
 };
 
 export const useTripStore = create<TripState>((set, get) => ({

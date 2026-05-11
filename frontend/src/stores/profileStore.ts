@@ -10,6 +10,7 @@ export type Profile = {
   membership_tier?: string | null;
   profile_photo_url?: string | null;
   followers_count?: number;
+  travel_style?: string | null;
 };
 
 export type TravelerProfile = {
@@ -49,7 +50,7 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
   followerProfiles: [],
   existingMatches: [],
 
-  setProfile: (p) => set((s) => ({ ...s, profile: { ...(s.profile || {}), ...p } })),
+  setProfile: (p) => set((s) => ({ ...s, profile: s.profile ? { ...s.profile, ...p } as Profile : null })),
 
   loadExistingMatches: async () => {
     const auth = useAuthStore.getState();

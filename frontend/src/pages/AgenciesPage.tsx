@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { useTripStore } from '../stores/tripStore';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 const AgenciesPage = () => {

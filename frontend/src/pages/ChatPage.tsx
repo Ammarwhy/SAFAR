@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useChatStore } from '../stores/chatStore';
-import type { MatchRoom, Message } from '../stores/chatStore';
+import type { MatchRoom } from '../stores/chatStore';
 import { useAuthStore } from '../stores/authStore';
+import { useProfileStore } from '../stores/profileStore';
 
 const ChatPage = () => {
+  const { profile, loading: profileLoading, loadCurrentProfile } = useProfileStore();
   const { 
     rooms, vibeRooms, loading, messages, roomProfiles, unreadCounts, lastMessageAt,
     loadMatchesForCurrentUser, loadMessageHistory, loadRoomProfiles,
@@ -18,7 +20,8 @@ const ChatPage = () => {
   useEffect(() => {
     loadMatchesForCurrentUser();
     initSocket();
-  }, [loadMatchesForCurrentUser, initSocket]);
+    loadCurrentProfile();
+  }, [loadMatchesForCurrentUser, initSocket, loadCurrentProfile]);
 
   useEffect(() => {
     if (selectedRoom) {

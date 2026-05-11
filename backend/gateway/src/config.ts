@@ -1,4 +1,4 @@
-import { loadBackendEnv } from '../../../shared/src/env';
+import { loadBackendEnv } from '../../shared/src/env';
 
 export const env = loadBackendEnv(process.env);
 

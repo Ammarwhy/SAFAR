@@ -228,7 +228,7 @@ const ChatPage = () => {
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 {selectedRoom.isGroup ? (
                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: 'var(--brand)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                     <span className="material-icons" style={{ color: '#fff', fontSize: '20px' }}>groups</span>
+                     <span className="material-icons" style={{ color: 'var(--text-on-brand)', fontSize: '20px' }}>groups</span>
                    </div>
                 ) : (
                   <img src={selectedRoom.other_avatar || `https://i.pravatar.cc/100?u=${selectedRoom.other_id}`} alt="" style={{ width: '40px', height: '40px', borderRadius: '12px', objectFit: 'cover' }} />
@@ -258,8 +258,8 @@ const ChatPage = () => {
                       </p>
                     )}
                     <div style={{ 
-                      backgroundColor: isMine ? 'var(--brand)' : '#fff', 
-                      color: isMine ? '#fff' : 'var(--text-primary)', 
+                      backgroundColor: isMine ? 'var(--brand)' : 'var(--bg-card)', 
+                      color: isMine ? 'var(--text-on-brand)' : 'var(--text-primary)', 
                       padding: '10px 16px', 
                       borderRadius: isMine ? '16px 16px 0 16px' : '0 16px 16px 16px', 
                       boxShadow: '0 2px 4px rgba(0,0,0,0.05)', 

@@ -114,11 +114,11 @@ const SettingsPage: React.FC = () => {
       {active && <span className="material-icons" style={{ color: 'var(--brand)', fontSize: '20px' }}>check_circle</span>}
     </div>
   );
-
   return (
-    <div className="page-container animate-fade" style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <header style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <button 
+    <div className="page-container animate-fade">
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <header style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <button 
           onClick={() => navigate(-1)}
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           className="icon-btn-hover"
@@ -164,7 +164,7 @@ const SettingsPage: React.FC = () => {
           <ToggleRow icon="contrast" title="High Contrast" subtitle="Improve readability" value={highContrast} onChange={() => setHighContrast(!highContrast)} />
         </div>
       </section>
-
+      </div>
       <style>{`
         .setting-row-hover:hover {
           background-color: rgba(0,0,0,0.02);

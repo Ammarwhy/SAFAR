@@ -74,7 +74,7 @@ const JourneysPage = () => {
                 bottom: '12px', 
                 left: '12px', 
                 backgroundColor: activeTab === 'Wishlist' ? 'var(--brand-light)' : 'var(--brand)', 
-                color: '#fff', 
+                color: 'var(--text-on-brand)', 
                 padding: '4px 10px', 
                 borderRadius: '6px', 
                 fontSize: '11px', 

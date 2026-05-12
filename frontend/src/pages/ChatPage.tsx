@@ -224,7 +224,7 @@ const ChatPage = () => {
       <div style={{ backgroundColor: 'var(--bg)', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
         {selectedRoom ? (
           <>
-            <div style={{ padding: '16px 32px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', flexShrink: 0 }}>
+            <div style={{ padding: '16px 32px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-card)', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 {selectedRoom.isGroup ? (
                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: 'var(--brand)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -282,7 +282,7 @@ const ChatPage = () => {
               })}
             </div>
 
-            <div style={{ padding: '20px 32px', borderTop: '1px solid var(--border)', backgroundColor: '#fff', flexShrink: 0 }}>
+            <div style={{ padding: '20px 32px', borderTop: '1px solid var(--border)', backgroundColor: 'var(--bg-card)', flexShrink: 0 }}>
               <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <input 
                   type="text" 
@@ -291,7 +291,7 @@ const ChatPage = () => {
                   placeholder="Type a message..." 
                   style={{ flex: 1, padding: '12px 20px', borderRadius: '12px', border: '1px solid var(--border)', backgroundColor: 'var(--bg)', outline: 'none', fontSize: '13px' }}
                 />
-                <button type="submit" style={{ backgroundColor: 'var(--brand)', color: '#fff', width: '42px', height: '42px', borderRadius: '10px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <button type="submit" style={{ backgroundColor: 'var(--brand)', color: 'var(--text-on-brand)', width: '42px', height: '42px', borderRadius: '10px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <span className="material-icons" style={{ fontSize: '20px' }}>send</span>
                 </button>
               </form>

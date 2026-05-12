@@ -131,9 +131,9 @@ const SettingsPage: React.FC = () => {
       <section style={{ marginBottom: '32px' }}>
         <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Account</p>
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-          <SettingRow icon="person" title="Personal Information" subtitle="Name, email, phone" />
+          <SettingRow icon="person" title="Personal Information" subtitle="Name, email, phone" onClick={() => navigate('/settings/personal-info')} />
           <SettingRow icon="payments" title="Payments & Payouts" subtitle="Cards, bank accounts" />
-          <SettingRow icon="notifications" title="Notifications" subtitle="Alerts and reminders" />
+          <SettingRow icon="notifications" title="Notifications" subtitle="Alerts and reminders" onClick={() => navigate('/settings/notifications')} />
         </div>
       </section>
 

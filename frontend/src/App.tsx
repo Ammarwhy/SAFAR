@@ -13,6 +13,8 @@ import ExpensePage from './pages/ExpensePage';
 import SafetyPage from './pages/SafetyPage';
 import AgenciesPage from './pages/AgenciesPage';
 import SettingsPage from './pages/SettingsPage';
+import PersonalInfoPage from './pages/PersonalInfoPage';
+import NotificationSettingsPage from './pages/NotificationSettingsPage';
 import NotificationContainer from './components/NotificationContainer';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -122,6 +124,8 @@ function App() {
         <Route path="/trip/:id/safety" element={<ProtectedRoute><SafetyPage /></ProtectedRoute>} />
         <Route path="/agencies" element={<ProtectedRoute><AgenciesPage /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+        <Route path="/settings/personal-info" element={<ProtectedRoute><PersonalInfoPage /></ProtectedRoute>} />
+        <Route path="/settings/notifications" element={<ProtectedRoute><NotificationSettingsPage /></ProtectedRoute>} />
         
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

@@ -385,3 +385,25 @@ body.high-contrast p {
 body.high-contrast .premium-btn {
   border: 2px solid currentColor;
 }
+
+/* RTL Support */
+.rtl-layout .sidebar {
+  left: auto;
+  right: 0;
+  border-right: none;
+  border-left: 1px solid var(--border);
+}
+
+.rtl-layout .main-content {
+  padding-left: 0;
+  padding-right: 280px;
+}
+
+.rtl-layout .nav-icon {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+.rtl-layout .setting-row-hover .material-icons:last-child {
+  transform: rotate(180deg);
+}

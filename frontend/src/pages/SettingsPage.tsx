@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSettingsStore } from '../stores/settingsStore';
 
@@ -7,10 +7,9 @@ const SettingsPage: React.FC = () => {
   const { 
     darkMode, setDarkMode, 
     compactView, setCompactView, 
-    highContrast, setHighContrast 
+    highContrast, setHighContrast,
+    language, setLanguage
   } = useSettingsStore();
-  
-  const [language, setLanguage] = useState('English');
 
   const SettingRow = ({ icon, title, subtitle, onClick, showArrow = true }: any) => (
     <div 

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
 import { useProfileStore } from './stores/profileStore';
 import { useSettingsStore } from './stores/settingsStore';
+import { useTranslation } from './hooks/useTranslation';
 import ExplorePage from './pages/ExplorePage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
@@ -23,14 +24,15 @@ const Sidebar = () => {
   const location = useLocation();
   const { logout, user } = useAuthStore();
   const { profile } = useProfileStore();
+  const { t } = useTranslation();
   
   const navItems = [
-    { name: 'Explore', path: '/', icon: 'explore' },
-    { name: 'Nomad Match', path: '/match', icon: 'people' },
-    { name: 'Messages', path: '/chat', icon: 'forum' },
-    { name: 'My Journeys', path: '/journeys', icon: 'map' },
-    { name: 'Profile', path: '/profile', icon: 'person' },
-    { name: 'Settings', path: '/settings', icon: 'settings' },
+    { name: t('explore'), path: '/', icon: 'explore' },
+    { name: t('nomadMatch'), path: '/match', icon: 'people' },
+    { name: t('messages'), path: '/chat', icon: 'forum' },
+    { name: t('myJourneys'), path: '/journeys', icon: 'map' },
+    { name: t('profile'), path: '/profile', icon: 'person' },
+    { name: t('settings'), path: '/settings', icon: 'settings' },
   ];
 
   return (
@@ -66,7 +68,7 @@ const Sidebar = () => {
           style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', padding: '12px' }}
         >
           <span className="material-icons nav-icon">logout</span>
-          <span>Sign Out</span>
+          <span>{t('signOut')}</span>
         </button>
       </div>
     </aside>
@@ -87,11 +89,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isAuthenticated, loadCurrentProfile]);
 
+  const { language } = useTranslation();
+  const isRTL = language === 'Urdu' || language === 'Arabic';
+
   if (isLoading) return <div className="auth-container">Loading SAFAR...</div>;
   if (!isAuthenticated) return <Navigate to="/login" />;
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${isRTL ? 'rtl-layout' : ''}`} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
       <Sidebar />
       <main className="main-content">
         {children}

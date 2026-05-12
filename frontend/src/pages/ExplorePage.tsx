@@ -5,8 +5,10 @@ import { useProfileStore } from '../stores/profileStore';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../stores/authStore';
 import CreateTripModal from '../components/CreateTripModal';
+import { useTranslation } from '../hooks/useTranslation';
 
 const ExplorePage = () => {
+  const { t } = useTranslation();
   const { featuredTrip, exploreJourneys, loading: tripsLoading, loadExploreContent, isWishlisted, addToWishlist, removeFromWishlist, loadWishlist } = useTripStore();
   const { nearbyTravelers, loadNearbyTravelers, loadExistingMatches, existingMatches } = useProfileStore();
   const { user } = useAuthStore();
@@ -62,7 +64,7 @@ const ExplorePage = () => {
       <div style={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div className="animate-pulse" style={{ width: '48px', height: '48px', backgroundColor: 'var(--brand)', borderRadius: '50%', margin: '0 auto 16px' }}></div>
-          <p style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Mapping out expeditions...</p>
+          <p style={{ fontWeight: 600, color: 'var(--text-muted)' }}>{t('loadingExpeditions')}</p>
         </div>
       </div>
     );
@@ -72,8 +74,8 @@ const ExplorePage = () => {
     <div className="page-container animate-fade">
       <header style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <div>
-          <h1 className="h1" style={{ marginBottom: '8px' }}>Explore Destinations</h1>
-          <p className="body" style={{ fontSize: '18px' }}>Discover expeditions and connect with global nomads.</p>
+          <h1 className="h1" style={{ marginBottom: '8px' }}>{t('exploreDestinations')}</h1>
+          <p className="body" style={{ fontSize: '18px' }}>{t('discoverExpeditions')}</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button 
@@ -82,10 +84,10 @@ const ExplorePage = () => {
             onClick={() => setIsCreateModalOpen(true)}
           >
             <span className="material-icons" style={{ fontSize: '18px', marginRight: '8px' }}>add</span>
-            Create Expedition
+            {t('createExpedition')}
           </button>
           <button className="premium-btn" style={{ padding: '12px 24px', fontSize: '14px' }} onClick={() => navigate('/match')}>
-            Find a Travel Partner
+            {t('findTravelPartner')}
           </button>
         </div>
       </header>
@@ -114,7 +116,7 @@ const ExplorePage = () => {
               display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '64px'
             }}>
               <span style={{ color: '#fff', fontWeight: 900, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '16px' }}>
-                Featured Expedition
+                {t('featuredExpedition')}
               </span>
               <h2 className="h1" style={{ color: '#fff', fontSize: '56px', marginBottom: '16px', maxWidth: '600px', lineHeight: 1 }}>
                 {featuredTrip.title}
@@ -127,18 +129,17 @@ const ExplorePage = () => {
                 style={{ width: 'fit-content', padding: '16px 40px', backgroundColor: '#fff', color: 'var(--brand)' }}
                 onClick={(e) => { e.stopPropagation(); handleTripClick(featuredTrip.id); }}
               >
-                View Expedition Details
+                {t('viewExpeditionDetails')}
               </button>
             </div>
           </div>
         </section>
       )}
 
-      {/* Certified Agencies */}
       <section style={{ marginBottom: '64px' }}>
         <div className="section-header">
-          <h2 className="h2">Certified Agencies</h2>
-          <button className="section-link" onClick={() => navigate('/agencies')}>View All</button>
+          <h2 className="h2">{t('certifiedAgencies')}</h2>
+          <button className="section-link" onClick={() => navigate('/agencies')}>{t('viewAll')}</button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px', padding: '20px 0' }}>
           {agencies.map((agency) => (
@@ -171,8 +172,8 @@ const ExplorePage = () => {
       {/* Nearby Travelers */}
       <section style={{ marginBottom: '64px' }}>
         <div className="section-header">
-          <h2 className="h2">Global Nomads Nearby</h2>
-          <button className="section-link" onClick={() => navigate('/match')}>View All</button>
+          <h2 className="h2">{t('globalNomadsNearby')}</h2>
+          <button className="section-link" onClick={() => navigate('/match')}>{t('viewAll')}</button>
         </div>
         <div style={{ display: 'flex', gap: '24px', overflowX: 'auto', padding: '20px 0', scrollbarWidth: 'none' }}>
           {filteredTravelers.map((traveler) => (
@@ -182,12 +183,12 @@ const ExplorePage = () => {
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '4px' }}>{traveler.name}</h3>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '16px' }}>{traveler.travel_style || 'Adventure Seeker'}</p>
-              <button className="premium-btn" style={{ width: '100%', padding: '10px', fontSize: '12px' }} onClick={() => navigate('/match')}>Connect</button>
+              <button className="premium-btn" style={{ width: '100%', padding: '10px', fontSize: '12px' }} onClick={() => navigate('/match')}>{t('connect')}</button>
             </div>
           ))}
           {filteredTravelers.length === 0 && (
             <div style={{ padding: '24px', opacity: 0.5 }}>
-               <p style={{ fontSize: '13px' }}>No new nomads nearby.</p>
+               <p style={{ fontSize: '13px' }}>{t('noNomadsNearby')}</p>
             </div>
           )}
         </div>
@@ -196,9 +197,9 @@ const ExplorePage = () => {
       {/* Expeditions Grid */}
       <section>
         <div className="section-header" style={{ marginBottom: '32px' }}>
-          <h2 className="h2">Upcoming Expeditions</h2>
+          <h2 className="h2">{t('upcomingExpeditions')}</h2>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--brand)' }}>Sort by: Date</span>
+            <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--brand)' }}>{t('sortByDate')}</span>
             <span className="material-icons" style={{ fontSize: '18px' }}>filter_list</span>
           </div>
         </div>

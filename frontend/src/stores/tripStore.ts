@@ -371,8 +371,31 @@ export const useTripStore = create<TripState>((set, get) => ({
       
       const settlementAmount = Math.abs(myBalance);
       
-      if (myBalance < 0) {
-        // I owe money, I pay someone who is owed
+      if (myBalance > 0) {
+        // Current user is OWED money. They are settling the group.
+        // We create a settlement record for everyone who owes them.
+        // For simplicity, we'll create one record that summarizes the group settlement.
+        const debtors = Object.entries(balances).filter(([uid, bal]) => bal < 0 && uid !== user.id);
+        
+        for (const [debtorId, debtAmount] of debtors) {
+          const { error: expErr } = await supabase.from('expenses').insert({
+            ledger_id: ledger.id,
+            paid_by_user_id: debtorId,
+            amount_pkr: Math.abs(debtAmount),
+            category: 'Other',
+            split_method: 'Custom',
+            split_data: { 
+              [user.id]: Math.abs(debtAmount),
+              is_settlement: true,
+              settled_by: user.id,
+              type: 'group_settle'
+            },
+            expense_date: new Date().toISOString().split('T')[0]
+          });
+          if (expErr) throw expErr;
+        }
+      } else {
+        // Current user OWES money. They are paying someone who is owed.
         const recipient = Object.entries(balances).find(([_, bal]) => bal > 0)?.[0];
         if (!recipient) throw new Error('No one to pay');
 
@@ -382,22 +405,13 @@ export const useTripStore = create<TripState>((set, get) => ({
           amount_pkr: settlementAmount,
           category: 'Other',
           split_method: 'Custom',
-          split_data: { [recipient]: settlementAmount },
-          expense_date: new Date().toISOString().split('T')[0]
-        });
-        if (expErr) throw expErr;
-      } else {
-        // I am owed money, someone who owes pays me
-        const payer = Object.entries(balances).find(([_, bal]) => bal < 0)?.[0];
-        if (!payer) throw new Error('No one owes money');
-
-        const { error: expErr } = await supabase.from('expenses').insert({
-          ledger_id: ledger.id,
-          paid_by_user_id: payer,
-          amount_pkr: settlementAmount,
-          category: 'Other',
-          split_method: 'Custom',
-          split_data: { [user.id]: settlementAmount },
+          split_data: { 
+            [recipient]: settlementAmount,
+            is_settlement: true,
+            payer: user.id,
+            recipient: recipient,
+            type: 'individual_pay'
+          },
           expense_date: new Date().toISOString().split('T')[0]
         });
         if (expErr) throw expErr;

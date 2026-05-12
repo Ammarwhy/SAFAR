@@ -106,31 +106,37 @@ const ExpensePage = () => {
                           width: '48px', 
                           height: '48px', 
                           borderRadius: '14px', 
-                          backgroundColor: (exp.category === 'Other' && exp.split_method === 'Custom') ? 'var(--brand)' : 'var(--bg)', 
+                          backgroundColor: exp.split_data?.is_settlement ? 'var(--brand)' : 'var(--bg)', 
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center' 
                         }}>
-                          <span className="material-icons" style={{ color: (exp.category === 'Other' && exp.split_method === 'Custom') ? '#fff' : 'var(--brand)', fontSize: '24px' }}>
+                          <span className="material-icons" style={{ color: exp.split_data?.is_settlement ? '#fff' : 'var(--brand)', fontSize: '24px' }}>
                             {exp.category === 'Dining' ? 'restaurant' : 
                              exp.category === 'Transport' ? 'directions_car' : 
                              exp.category === 'Stay' ? 'hotel' :
                              exp.category === 'Activity' ? 'local_activity' :
-                             (exp.category === 'Other' && exp.split_method === 'Custom') ? 'handshake' : 'receipt'}
+                             exp.split_data?.is_settlement ? 'handshake' : 'receipt'}
                           </span>
                         </div>
                         <div>
-                          <p style={{ fontWeight: 800, fontSize: '15px', color: 'var(--text-primary)' }}>{exp.category || 'General'}</p>
+                          <p style={{ fontWeight: 800, fontSize: '15px', color: 'var(--text-primary)' }}>
+                            {exp.split_data?.type === 'group_settle' ? 'Group Settlement' : 
+                             exp.split_data?.type === 'individual_pay' ? 'Payment' : 
+                             (exp.category || 'General')}
+                          </p>
                           <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                            {(exp.category === 'Other' && exp.split_method === 'Custom') ? 
-                              `Settled by ${participants.find(p => p.user_id === exp.paid_by_user_id)?.name || 'Someone'}` :
+                            {exp.split_data?.type === 'group_settle' ? 
+                              `Settled up by ${participants.find(p => p.user_id === exp.split_data?.settled_by)?.name || 'Someone'}` :
+                             exp.split_data?.type === 'individual_pay' ?
+                              `${participants.find(p => p.user_id === exp.paid_by_user_id)?.name || 'Someone'} paid ${participants.find(p => p.user_id === exp.split_data?.recipient)?.name || 'Someone'}` :
                               `Paid by ${participants.find(p => p.user_id === exp.paid_by_user_id)?.name || 'Someone'}`
                             }
                           </p>
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontWeight: 900, color: (exp.category === 'Other' && exp.split_method === 'Custom') ? 'var(--text-secondary)' : 'var(--brand)', fontSize: '16px' }}>
+                        <p style={{ fontWeight: 900, color: exp.split_data?.is_settlement ? 'var(--text-secondary)' : 'var(--brand)', fontSize: '16px' }}>
                           PKR {Number(exp.amount_pkr).toLocaleString()}
                         </p>
                         <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{exp.expense_date}</p>

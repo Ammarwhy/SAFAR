@@ -380,8 +380,8 @@ export const useTripStore = create<TripState>((set, get) => ({
           ledger_id: ledger.id,
           paid_by_user_id: user.id,
           amount_pkr: settlementAmount,
-          category: 'Settlement',
-          split_method: 'Settlement',
+          category: 'Other',
+          split_method: 'Custom',
           split_data: { [recipient]: settlementAmount },
           expense_date: new Date().toISOString().split('T')[0]
         });
@@ -395,8 +395,8 @@ export const useTripStore = create<TripState>((set, get) => ({
           ledger_id: ledger.id,
           paid_by_user_id: payer,
           amount_pkr: settlementAmount,
-          category: 'Settlement',
-          split_method: 'Settlement',
+          category: 'Other',
+          split_method: 'Custom',
           split_data: { [user.id]: settlementAmount },
           expense_date: new Date().toISOString().split('T')[0]
         });

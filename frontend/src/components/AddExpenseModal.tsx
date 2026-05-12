@@ -93,8 +93,8 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClose, onAd
             >
               <option value="Dining">Dining</option>
               <option value="Transport">Transport</option>
-              <option value="Accommodation">Accommodation</option>
-              <option value="Shopping">Shopping</option>
+              <option value="Stay">Stay</option>
+              <option value="Activity">Activity</option>
               <option value="Other">Other</option>
             </select>
           </div>

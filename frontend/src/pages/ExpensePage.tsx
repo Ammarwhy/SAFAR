@@ -106,22 +106,23 @@ const ExpensePage = () => {
                           width: '48px', 
                           height: '48px', 
                           borderRadius: '14px', 
-                          backgroundColor: exp.category === 'Settlement' ? 'var(--brand)' : 'var(--bg)', 
+                          backgroundColor: (exp.category === 'Other' && exp.split_method === 'Custom') ? 'var(--brand)' : 'var(--bg)', 
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center' 
                         }}>
-                          <span className="material-icons" style={{ color: exp.category === 'Settlement' ? '#fff' : 'var(--brand)', fontSize: '24px' }}>
+                          <span className="material-icons" style={{ color: (exp.category === 'Other' && exp.split_method === 'Custom') ? '#fff' : 'var(--brand)', fontSize: '24px' }}>
                             {exp.category === 'Dining' ? 'restaurant' : 
                              exp.category === 'Transport' ? 'directions_car' : 
-                             exp.category === 'Accommodation' ? 'hotel' :
-                             exp.category === 'Settlement' ? 'handshake' : 'receipt'}
+                             exp.category === 'Stay' ? 'hotel' :
+                             exp.category === 'Activity' ? 'local_activity' :
+                             (exp.category === 'Other' && exp.split_method === 'Custom') ? 'handshake' : 'receipt'}
                           </span>
                         </div>
                         <div>
                           <p style={{ fontWeight: 800, fontSize: '15px', color: 'var(--text-primary)' }}>{exp.category || 'General'}</p>
                           <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                            {exp.category === 'Settlement' ? 
+                            {(exp.category === 'Other' && exp.split_method === 'Custom') ? 
                               `Settled by ${participants.find(p => p.user_id === exp.paid_by_user_id)?.name || 'Someone'}` :
                               `Paid by ${participants.find(p => p.user_id === exp.paid_by_user_id)?.name || 'Someone'}`
                             }
@@ -129,7 +130,7 @@ const ExpensePage = () => {
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontWeight: 900, color: exp.category === 'Settlement' ? 'var(--text-secondary)' : 'var(--brand)', fontSize: '16px' }}>
+                        <p style={{ fontWeight: 900, color: (exp.category === 'Other' && exp.split_method === 'Custom') ? 'var(--text-secondary)' : 'var(--brand)', fontSize: '16px' }}>
                           PKR {Number(exp.amount_pkr).toLocaleString()}
                         </p>
                         <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{exp.expense_date}</p>

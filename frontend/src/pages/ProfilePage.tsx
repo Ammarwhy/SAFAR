@@ -84,15 +84,15 @@ const ProfilePage = () => {
 
         <div style={{ display: 'flex', gap: '20px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
           <div>
-            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{travelerProfile?.destinations_visited || 12}</p>
+            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{travelerProfile?.destinations_visited || 0}</p>
             <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Visited</p>
           </div>
           <div>
-            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{profile?.followers_count || 248}</p>
+            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{profile?.followers_count || 0}</p>
             <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Followers</p>
           </div>
           <div>
-            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{travelerProfile?.expeditions_count || 5}</p>
+            <p style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{travelerProfile?.expeditions_count || 0}</p>
             <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Expeditions</p>
           </div>
         </div>

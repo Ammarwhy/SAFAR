@@ -120,23 +120,36 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
       }
 
       let followersCount = 0;
+      let expeditionsCount = 0;
       let fProfiles: Profile[] = [];
       try {
-        const { data: fRows, count } = await supabase
+        const { data: fRows, count: fCount } = await supabase
           .from('followers')
           .select('follower_id, profiles!followers_follower_id_fkey(*)', { count: 'exact' })
           .eq('user_id', id)
           .limit(5);
         
-        followersCount = count ?? 0;
+        followersCount = fCount ?? 0;
         fProfiles = (fRows ?? []).map((row: any) => row.profiles).filter(Boolean);
+
+        const { count: eCount } = await supabase
+          .from('trip_participants')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', id);
+        expeditionsCount = eCount ?? 0;
       } catch (e) {
-        console.warn('followers fetch failed', e);
+        console.warn('Stats fetch failed', e);
       }
 
-      const traveler = t ?? null;
-      if (traveler && typeof traveler.expeditions_count === 'undefined') traveler.expeditions_count = 0;
-      if (traveler && typeof traveler.countries_count === 'undefined') traveler.countries_count = traveler.destinations_visited ?? 0;
+      const traveler = t ?? { user_id: id, destinations_visited: 0, expeditions_count: expeditionsCount };
+      if (traveler) {
+        if (typeof traveler.expeditions_count === 'undefined' || traveler.expeditions_count === 0) {
+          traveler.expeditions_count = expeditionsCount;
+        }
+        if (typeof traveler.destinations_visited === 'undefined') {
+          traveler.destinations_visited = 0;
+        }
+      }
 
       set({ 
         profile: p ?? null, 

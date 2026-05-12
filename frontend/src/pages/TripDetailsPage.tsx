@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTripStore } from '../stores/tripStore';
+import { useAuthStore } from '../stores/authStore';
 
 const TripDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { tripDetails, loadTripById, loading, isWishlisted, addToWishlist, removeFromWishlist, loadWishlist } = useTripStore();
+  const { tripDetails, loadTripById, loading, isWishlisted, addToWishlist, removeFromWishlist, loadWishlist, joinTrip } = useTripStore();
+  const { user } = useAuthStore();
 
   const [isAnimating, setIsAnimating] = useState(false);
   const details = id ? tripDetails[id] : null;
@@ -43,6 +44,14 @@ const TripDetailsPage = () => {
     setTimeout(() => setIsAnimating(false), 300);
     if (liked) removeFromWishlist(trip.id);
     else addToWishlist(trip.id);
+  };
+
+  const isParticipant = user && participants.some(p => p.user_id === user.id);
+
+  const handleJoin = async () => {
+    if (id) {
+      await joinTrip(id);
+    }
   };
 
   return (
@@ -185,7 +194,23 @@ const TripDetailsPage = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <button className="premium-btn" style={{ width: '100%', padding: '20px', fontSize: '16px', borderRadius: '16px' }}>Book Now</button>
+              {isParticipant ? (
+                <div style={{ padding: '20px', backgroundColor: 'rgba(22, 163, 74, 0.1)', borderRadius: '16px', textAlign: 'center', border: '1px solid #16a34a' }}>
+                  <p style={{ color: '#16a34a', fontWeight: 800, fontSize: '15px' }}>
+                    <span className="material-icons" style={{ fontSize: '18px', verticalAlign: 'middle', marginRight: '8px' }}>check_circle</span>
+                    You're on the team!
+                  </p>
+                </div>
+              ) : (
+                <button 
+                  className="premium-btn" 
+                  style={{ width: '100%', padding: '20px', fontSize: '16px', borderRadius: '16px' }}
+                  onClick={handleJoin}
+                  disabled={loading}
+                >
+                  {loading ? 'Joining...' : 'Join Expedition'}
+                </button>
+              )}
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '12px' }}>
                 <button 

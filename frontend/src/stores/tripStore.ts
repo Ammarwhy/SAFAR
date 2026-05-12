@@ -100,6 +100,9 @@ type TripState = {
   loadExploreContent: () => Promise<void>;
   addExpense: (tripId: string, amount: number, category: string, splitMethod: string) => Promise<void>;
   settleUp: (tripId: string) => Promise<void>;
+  createTrip: (tripData: Partial<NewTrip>) => Promise<string | null>;
+  joinTrip: (tripId: string) => Promise<void>;
+  createVibeRoom: (tripId: string) => Promise<void>;
 };
 
 export const useTripStore = create<TripState>((set, get) => ({
@@ -420,6 +423,102 @@ export const useTripStore = create<TripState>((set, get) => ({
     } catch (e: any) {
       console.error('Settle up error', e);
       set({ error: e?.message || String(e), loading: false });
+    }
+  },
+
+  createTrip: async (tripData) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return null;
+
+    try {
+      set({ loading: true });
+      const { data, error } = await supabase
+        .from('trips')
+        .insert({
+          ...tripData,
+          owner_id: user.id,
+          status: 'Upcoming',
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Add owner as first participant
+      await supabase.from('trip_participants').insert({
+        trip_id: data.id,
+        user_id: user.id
+      });
+
+      // Automatically create vibe room for new trip
+      await get().createVibeRoom(data.id);
+
+      await get().loadExploreContent();
+      await get().loadTripsForCurrentUser();
+      
+      set({ loading: false });
+      return data.id;
+    } catch (e: any) {
+      console.error('Create trip error', e);
+      set({ error: e?.message || String(e), loading: false });
+      return null;
+    }
+  },
+
+  joinTrip: async (tripId) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
+    try {
+      set({ loading: true });
+      
+      // Add user as participant
+      const { error: partErr } = await supabase.from('trip_participants').insert({
+        trip_id: tripId,
+        user_id: user.id
+      });
+
+      if (partErr && partErr.code !== '23505') throw partErr; // 23505 is unique constraint (already joined)
+
+      // Ensure vibe room exists
+      await get().createVibeRoom(tripId);
+
+      await get().loadTripById(tripId);
+      await get().loadTripsForCurrentUser();
+      set({ loading: false });
+    } catch (e: any) {
+      console.error('Join trip error', e);
+      set({ error: e?.message || String(e), loading: false });
+    }
+  },
+
+  createVibeRoom: async (tripId) => {
+    try {
+      // Check if room already exists
+      const { data: existing } = await supabase
+        .from('vibe_rooms')
+        .select('id')
+        .eq('trip_id', tripId)
+        .maybeSingle();
+
+      if (existing) return;
+
+      const { error } = await supabase
+        .from('vibe_rooms')
+        .insert({
+          trip_id: tripId,
+          session_status: 'active'
+        });
+
+      if (error) throw error;
+      
+      // If we have trip details loaded, refresh them
+      if (get().tripDetails[tripId]) {
+        await get().loadTripById(tripId);
+      }
+    } catch (e: any) {
+      console.error('Create vibe room error', e);
     }
   },
 }));

@@ -4,6 +4,7 @@ import { useTripStore } from '../stores/tripStore';
 import { useProfileStore } from '../stores/profileStore';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../stores/authStore';
+import CreateTripModal from '../components/CreateTripModal';
 
 const ExplorePage = () => {
   const { featuredTrip, exploreJourneys, loading: tripsLoading, loadExploreContent, isWishlisted, addToWishlist, removeFromWishlist, loadWishlist } = useTripStore();
@@ -11,6 +12,9 @@ const ExplorePage = () => {
   const { user } = useAuthStore();
   const [agencies, setAgencies] = useState<any[]>([]);
   const [animatingTripId, setAnimatingTripId] = useState<string | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const { createTrip } = useTripStore();
 
   const toggleWishlist = (tripId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -41,6 +45,14 @@ const ExplorePage = () => {
     navigate(`/trip/${id}`);
   };
 
+  const handleCreateTrip = async (tripData: any) => {
+    const tripId = await createTrip(tripData);
+    if (tripId) {
+      setIsCreateModalOpen(false);
+      navigate(`/trip/${tripId}`);
+    }
+  };
+
   // Filter out travelers who are already matched
   const matchedUserIds = existingMatches.map(m => m.requester_id === user?.id ? m.target_id : m.requester_id);
   const filteredTravelers = nearbyTravelers.filter(t => !matchedUserIds.includes(t.id));
@@ -64,6 +76,14 @@ const ExplorePage = () => {
           <p className="body" style={{ fontSize: '18px' }}>Discover expeditions and connect with global nomads.</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            className="premium-btn" 
+            style={{ padding: '12px 24px', fontSize: '14px', backgroundColor: 'var(--bg)', color: 'var(--brand)', border: '1px solid var(--brand)' }} 
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <span className="material-icons" style={{ fontSize: '18px', marginRight: '8px' }}>add</span>
+            Create Expedition
+          </button>
           <button className="premium-btn" style={{ padding: '12px 24px', fontSize: '14px' }} onClick={() => navigate('/match')}>
             Find a Travel Partner
           </button>
@@ -256,6 +276,13 @@ const ExplorePage = () => {
           ))}
         </div>
       </section>
+
+      <CreateTripModal 
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreate={handleCreateTrip}
+        loading={tripsLoading}
+      />
     </div>
   );
 };

@@ -8,9 +8,10 @@ const ChatPage = () => {
   const { loadCurrentProfile } = useProfileStore();
   const { 
     rooms, vibeRooms, loading, messages, roomProfiles, unreadCounts, lastMessageAt,
-    loadMatchesForCurrentUser, loadMessageHistory, loadRoomProfiles,
-    sendMessage, markAsRead, initSocket, joinRoom 
+    sendMessage, markAsRead, initSocket, joinRoom, loadMatchesForCurrentUser 
   } = useChatStore();
+  
+  const { trips, loadTripsForCurrentUser, createVibeRoom } = useTripStore();
   
   const { user } = useAuthStore();
   const [selectedRoom, setSelectedRoom] = useState<MatchRoom | null>(null);
@@ -19,9 +20,10 @@ const ChatPage = () => {
 
   useEffect(() => {
     loadMatchesForCurrentUser();
+    loadTripsForCurrentUser();
     initSocket();
     loadCurrentProfile();
-  }, [loadMatchesForCurrentUser, initSocket, loadCurrentProfile]);
+  }, [loadMatchesForCurrentUser, loadTripsForCurrentUser, initSocket, loadCurrentProfile]);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -71,6 +73,16 @@ const ChatPage = () => {
       return timeB.localeCompare(timeA);
     });
   }, [rooms, lastMessageAt]);
+
+  const tripsWithoutRooms = useMemo(() => {
+    const existingTripIds = new Set(vibeRooms.map(r => r.other_id));
+    return trips.filter(t => !existingTripIds.has(t.id));
+  }, [trips, vibeRooms]);
+
+  const handleCreateRoom = async (tripId: string) => {
+    await createVibeRoom(tripId);
+    await loadMatchesForCurrentUser(); // Refresh chat rooms
+  };
 
   if (loading && rooms.length === 0 && vibeRooms.length === 0) {
     return (
@@ -136,6 +148,39 @@ const ChatPage = () => {
               )}
             </div>
           ))}
+
+          {tripsWithoutRooms.length > 0 && (
+            <>
+              <div style={{ padding: '32px 24px 8px', fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.6 }}>
+                Initialize Room
+              </div>
+              {tripsWithoutRooms.map(trip => (
+                <div 
+                  key={trip.id}
+                  style={{ 
+                    padding: '12px 24px', 
+                    display: 'flex', 
+                    gap: '12px', 
+                    alignItems: 'center', 
+                    opacity: 0.7
+                  }}
+                >
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span className="material-icons" style={{ color: 'var(--text-muted)', fontSize: '18px' }}>add_comment</span>
+                  </div>
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <p style={{ fontWeight: 600, fontSize: '13px', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{trip.title}</p>
+                    <button 
+                      onClick={() => handleCreateRoom(trip.id)}
+                      style={{ background: 'none', border: 'none', padding: 0, color: 'var(--brand)', fontSize: '10px', fontWeight: 800, cursor: 'pointer', textAlign: 'left' }}
+                    >
+                      CREATE VIBE ROOM
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
 
           <div style={{ padding: '32px 24px 8px', fontSize: '11px', fontWeight: 800, color: 'var(--brand)', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.8 }}>
             Nomad Matches

@@ -307,6 +307,7 @@ export const useTripStore = create<TripState>((set, get) => ({
       }
 
       // 2. Insert expense
+      if (!ledger) throw new Error('Ledger could not be initialized');
       const { error: expErr } = await supabase.from('expenses').insert({
         ledger_id: ledger.id,
         paid_by_user_id: user.id,
@@ -372,7 +373,7 @@ export const useTripStore = create<TripState>((set, get) => ({
       
       if (myBalance < 0) {
         // I owe money, I pay someone who is owed
-        const recipient = Object.entries(balances).find(([uid, bal]) => bal > 0)?.[0];
+        const recipient = Object.entries(balances).find(([_, bal]) => bal > 0)?.[0];
         if (!recipient) throw new Error('No one to pay');
 
         const { error: expErr } = await supabase.from('expenses').insert({
@@ -387,7 +388,7 @@ export const useTripStore = create<TripState>((set, get) => ({
         if (expErr) throw expErr;
       } else {
         // I am owed money, someone who owes pays me
-        const payer = Object.entries(balances).find(([uid, bal]) => bal < 0)?.[0];
+        const payer = Object.entries(balances).find(([_, bal]) => bal < 0)?.[0];
         if (!payer) throw new Error('No one owes money');
 
         const { error: expErr } = await supabase.from('expenses').insert({

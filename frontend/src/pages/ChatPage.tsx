@@ -3,12 +3,14 @@ import { useChatStore } from '../stores/chatStore';
 import type { MatchRoom } from '../stores/chatStore';
 import { useAuthStore } from '../stores/authStore';
 import { useProfileStore } from '../stores/profileStore';
+import { useTripStore } from '../stores/tripStore';
 
 const ChatPage = () => {
   const { loadCurrentProfile } = useProfileStore();
   const { 
     rooms, vibeRooms, loading, messages, roomProfiles, unreadCounts, lastMessageAt,
-    sendMessage, markAsRead, initSocket, joinRoom, loadMatchesForCurrentUser 
+    loadMatchesForCurrentUser, loadMessageHistory, loadRoomProfiles,
+    sendMessage, markAsRead, initSocket, joinRoom 
   } = useChatStore();
   
   const { trips, loadTripsForCurrentUser, createVibeRoom } = useTripStore();
@@ -76,7 +78,7 @@ const ChatPage = () => {
 
   const tripsWithoutRooms = useMemo(() => {
     const existingTripIds = new Set(vibeRooms.map(r => r.other_id));
-    return trips.filter(t => !existingTripIds.has(t.id));
+    return trips.filter((t: any) => !existingTripIds.has(t.id));
   }, [trips, vibeRooms]);
 
   const handleCreateRoom = async (tripId: string) => {
@@ -154,7 +156,7 @@ const ChatPage = () => {
               <div style={{ padding: '32px 24px 8px', fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.6 }}>
                 Initialize Room
               </div>
-              {tripsWithoutRooms.map(trip => (
+              {tripsWithoutRooms.map((trip: any) => (
                 <div 
                   key={trip.id}
                   style={{ 

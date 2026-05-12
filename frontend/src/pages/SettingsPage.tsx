@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSettingsStore } from '../stores/settingsStore';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [settings, setSettings] = useState({
-    twoFactor: false,
-    faceId: false,
-    darkMode: false,
-    compactView: false,
-    highContrast: false,
-    language: 'English'
-  });
-
-  const toggleSetting = (key: keyof typeof settings) => {
-    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
-  };
+  const { 
+    darkMode, setDarkMode, 
+    compactView, setCompactView, 
+    highContrast, setHighContrast 
+  } = useSettingsStore();
+  
+  const [language, setLanguage] = useState('English');
 
   const SettingRow = ({ icon, title, subtitle, onClick, showArrow = true }: any) => (
     <div 
@@ -99,15 +95,18 @@ const SettingsPage: React.FC = () => {
     </div>
   );
 
-  const LanguageRow = ({ name, active }: any) => (
-    <div style={{ 
-      padding: '16px 20px', 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '16px', 
-      borderBottom: '1px solid var(--border)',
-      cursor: 'pointer'
-    }}>
+  const LanguageRow = ({ name, active, onClick }: any) => (
+    <div 
+      onClick={onClick}
+      style={{ 
+        padding: '16px 20px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '16px', 
+        borderBottom: '1px solid var(--border)',
+        cursor: 'pointer'
+      }}
+    >
        <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <span className="material-icons" style={{ color: 'var(--text-muted)', fontSize: '20px' }}>translate</span>
       </div>
@@ -141,28 +140,28 @@ const SettingsPage: React.FC = () => {
       <section style={{ marginBottom: '32px' }}>
         <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Security</p>
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-          <ToggleRow icon="security" title="Two-Factor Auth" subtitle="Extra login security" value={settings.twoFactor} onChange={() => toggleSetting('twoFactor')} />
-          <ToggleRow icon="face" title="Face ID" subtitle="Biometric unlock" value={settings.faceId} onChange={() => toggleSetting('faceId')} />
+          <ToggleRow icon="security" title="Two-Factor Auth" subtitle="Extra login security" value={false} onChange={() => {}} />
+          <ToggleRow icon="face" title="Face ID" subtitle="Biometric unlock" value={false} onChange={() => {}} />
         </div>
       </section>
 
       <section style={{ marginBottom: '32px' }}>
         <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Language</p>
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-          <LanguageRow name="English" active={settings.language === 'English'} />
-          <LanguageRow name="Urdu" active={settings.language === 'Urdu'} />
-          <LanguageRow name="Arabic" active={settings.language === 'Arabic'} />
-          <LanguageRow name="French" active={settings.language === 'French'} />
-          <LanguageRow name="Deutsch" active={settings.language === 'Deutsch'} />
+          <LanguageRow name="English" active={language === 'English'} onClick={() => setLanguage('English')} />
+          <LanguageRow name="Urdu" active={language === 'Urdu'} onClick={() => setLanguage('Urdu')} />
+          <LanguageRow name="Arabic" active={language === 'Arabic'} onClick={() => setLanguage('Arabic')} />
+          <LanguageRow name="French" active={language === 'French'} onClick={() => setLanguage('French')} />
+          <LanguageRow name="Deutsch" active={language === 'Deutsch'} onClick={() => setLanguage('Deutsch')} />
         </div>
       </section>
 
       <section style={{ marginBottom: '32px' }}>
         <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Display Options</p>
         <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-          <ToggleRow icon="dark_mode" title="Dark Mode" subtitle="Switch to darker color scheme" value={settings.darkMode} onChange={() => toggleSetting('darkMode')} />
-          <ToggleRow icon="view_compact" title="Compact View" subtitle="Reduce spacing between cards" value={settings.compactView} onChange={() => toggleSetting('compactView')} />
-          <ToggleRow icon="contrast" title="High Contrast" subtitle="Improve readability" value={settings.highContrast} onChange={() => toggleSetting('highContrast')} />
+          <ToggleRow icon="dark_mode" title="Dark Mode" subtitle="Switch to darker color scheme" value={darkMode} onChange={() => setDarkMode(!darkMode)} />
+          <ToggleRow icon="view_compact" title="Compact View" subtitle="Reduce spacing between cards" value={compactView} onChange={() => setCompactView(!compactView)} />
+          <ToggleRow icon="contrast" title="High Contrast" subtitle="Improve readability" value={highContrast} onChange={() => setHighContrast(!highContrast)} />
         </div>
       </section>
 

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } f
 import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
 import { useProfileStore } from './stores/profileStore';
+import { useSettingsStore } from './stores/settingsStore';
 import ExplorePage from './pages/ExplorePage';
 import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
@@ -98,6 +99,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+  const { initSettings } = useSettingsStore();
+  
+  useEffect(() => {
+    initSettings();
+  }, [initSettings]);
+
   return (
     <Router>
       <NotificationContainer />

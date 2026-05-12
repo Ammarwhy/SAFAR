@@ -303,3 +303,82 @@ html, body, #root {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(55, 27, 23, 0.2);
 }
+
+/* --- THEME OPTIONS --- */
+
+/* 1. Dark Mode */
+body.dark-mode {
+  --brand: #E5E1DA;
+  --brand-light: #A88B7B;
+  --bg: #1A1817;
+  --bg-muted: #252220;
+  --bg-card: #2A2624;
+  --text-primary: #EEEDE9;
+  --text-secondary: #D9D4CB;
+  --text-muted: #A89588;
+  --border: #3D3834;
+  --divider: #3D3834;
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .nav-link:hover {
+  background-color: var(--bg-muted);
+}
+
+body.dark-mode .nav-link.active {
+  background-color: #EEEDE9;
+  color: #1A1817;
+}
+
+body.dark-mode .section-link {
+  background-color: rgba(238, 237, 233, 0.1);
+  color: #EEEDE9;
+}
+
+/* 2. Compact View */
+body.compact-view .page-container {
+  padding: 20px;
+}
+
+body.compact-view .grid-layout {
+  gap: 12px;
+}
+
+body.compact-view .card {
+  border-radius: 12px;
+}
+
+body.compact-view .card > div {
+  padding: 12px !important;
+}
+
+body.compact-view section {
+  margin-bottom: 24px !important;
+}
+
+/* 3. High Contrast */
+body.high-contrast {
+  --text-primary: #000;
+  --text-secondary: #000;
+  --brand: #000;
+  --border: #000;
+}
+
+body.dark-mode.high-contrast {
+  --text-primary: #fff;
+  --text-secondary: #fff;
+  --brand: #fff;
+  --border: #fff;
+}
+
+body.high-contrast .h1, 
+body.high-contrast .h2, 
+body.high-contrast p {
+  font-weight: 700 !important;
+}
+
+body.high-contrast .premium-btn {
+  border: 2px solid currentColor;
+}

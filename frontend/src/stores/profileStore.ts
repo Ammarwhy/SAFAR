@@ -151,8 +151,10 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
         }
       }
 
+      const finalProfile = p ? { ...p, followers_count: followersCount } : null;
+
       set({ 
-        profile: p ?? null, 
+        profile: finalProfile, 
         travelerProfile: traveler, 
         followerProfiles: fProfiles,
         loading: false 

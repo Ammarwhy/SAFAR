@@ -11,6 +11,7 @@ import MatchPage from './pages/MatchPage';
 import ExpensePage from './pages/ExpensePage';
 import SafetyPage from './pages/SafetyPage';
 import AgenciesPage from './pages/AgenciesPage';
+import SettingsPage from './pages/SettingsPage';
 import NotificationContainer from './components/NotificationContainer';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -26,6 +27,7 @@ const Sidebar = () => {
     { name: 'Messages', path: '/chat', icon: 'forum' },
     { name: 'My Journeys', path: '/journeys', icon: 'map' },
     { name: 'Profile', path: '/profile', icon: 'person' },
+    { name: 'Settings', path: '/settings', icon: 'settings' },
   ];
 
   return (
@@ -112,6 +114,7 @@ function App() {
         <Route path="/trip/:id/expenses" element={<ProtectedRoute><ExpensePage /></ProtectedRoute>} />
         <Route path="/trip/:id/safety" element={<ProtectedRoute><SafetyPage /></ProtectedRoute>} />
         <Route path="/agencies" element={<ProtectedRoute><AgenciesPage /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

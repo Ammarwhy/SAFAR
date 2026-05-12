@@ -159,17 +159,18 @@ html, body, #root {
   letter-spacing: 1px;
 }
 
-.input-group input {
+.input-group input, .input-group textarea {
   padding: 12px 16px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--bg);
+  color: var(--text-primary);
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.input-group input:focus {
+.input-group input:focus, .input-group textarea:focus {
   border-color: var(--brand);
 }
 

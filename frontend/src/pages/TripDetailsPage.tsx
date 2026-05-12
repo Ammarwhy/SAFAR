@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTripStore } from '../stores/tripStore';
 import { useAuthStore } from '../stores/authStore';
+import { useChatStore } from '../stores/chatStore';
 
 const TripDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { tripDetails, loadTripById, loading, isWishlisted, addToWishlist, removeFromWishlist, loadWishlist, joinTrip } = useTripStore();
   const { user } = useAuthStore();
+  const { contactUser } = useChatStore();
 
   const [isAnimating, setIsAnimating] = useState(false);
   const details = id ? tripDetails[id] : null;
@@ -48,10 +50,18 @@ const TripDetailsPage = () => {
   };
 
   const isParticipant = user && participants.some(p => p.user_id === user.id);
+  const isOwner = !!(user && trip.owner_id === user.id);
 
   const handleJoin = async () => {
     if (id) {
       await joinTrip(id);
+    }
+  };
+
+  const handleContactLead = async () => {
+    if (trip.owner_id && !isOwner) {
+      await contactUser(trip.owner_id);
+      navigate('/chat');
     }
   };
 
@@ -230,8 +240,23 @@ const TripDetailsPage = () => {
                 </button>
               </div>
               
-              <button style={{ background: 'var(--bg)', border: 'none', padding: '16px', borderRadius: '14px', fontWeight: 800, cursor: 'pointer', fontSize: '13px', color: 'var(--brand)', marginTop: '8px' }}>
-                Contact Expedition Lead
+              <button 
+                onClick={handleContactLead}
+                disabled={isOwner}
+                style={{ 
+                  background: 'var(--bg)', 
+                  border: 'none', 
+                  padding: '16px', 
+                  borderRadius: '14px', 
+                  fontWeight: 800, 
+                  cursor: isOwner ? 'default' : 'pointer', 
+                  fontSize: '13px', 
+                  color: 'var(--brand)', 
+                  marginTop: '8px',
+                  opacity: isOwner ? 0.6 : 1
+                }}
+              >
+                {isOwner ? 'You are the Expedition Lead' : 'Contact Expedition Lead'}
               </button>
             </div>
           </div>

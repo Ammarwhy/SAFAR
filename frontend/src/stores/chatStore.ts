@@ -43,6 +43,7 @@ type ChatState = {
   markAsRead: (roomId: string) => Promise<void>;
   initSocket: () => void;
   joinRoom: (roomId: string) => void;
+  contactUser: (targetId: string) => Promise<void>;
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -293,6 +294,35 @@ export const useChatStore = create<ChatState>((set, get) => ({
       }
     } catch (e) {
       console.error('Failed to load room profiles', e);
+    }
+  },
+
+  contactUser: async (targetId: string) => {
+    const user = useAuthStore.getState().user;
+    if (!user || user.id === targetId) return;
+
+    try {
+      // Check if match already exists
+      const { data: existing } = await supabase
+        .from('matches')
+        .select('id')
+        .or(`and(requester_id.eq.${user.id},target_id.eq.${targetId}),and(requester_id.eq.${targetId},target_id.eq.${user.id})`)
+        .eq('status', 'Connected')
+        .maybeSingle();
+
+      if (!existing) {
+        // Create a new connected match
+        await supabase.from('matches').insert({
+          requester_id: user.id,
+          target_id: targetId,
+          status: 'Connected',
+          match_percentage: 100
+        });
+      }
+      
+      await get().loadMatchesForCurrentUser();
+    } catch (e) {
+      console.error('Failed to contact user', e);
     }
   }
 }));

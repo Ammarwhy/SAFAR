@@ -2,7 +2,7 @@ export interface Expense {
   id: string;
   paidByUserId: string;
   amountPKR: number;
-  splitMethod: 'Equal' | 'Custom' | 'Payer-only';
+  splitMethod: 'Equal' | 'Custom' | 'Payer-only' | 'Settlement';
   splitData?: Record<string, number>; // for Custom splits: { "userId": amount }
   participants: string[]; // userIds involved in the split
 }
@@ -31,6 +31,13 @@ export function calculateBalances(expenses: Expense[], participants: string[]): 
     }
     else if (splitMethod === 'Payer-only') {
       balances[paidByUserId] -= amountPKR; 
+    }
+    else if (splitMethod === 'Settlement' && splitData) {
+      // splitData should be { [recipientId]: amount }
+      Object.entries(splitData).forEach(([recipientId, amount]) => {
+        if (balances[recipientId] === undefined) balances[recipientId] = 0;
+        balances[recipientId] -= amount;
+      });
     }
   });
 

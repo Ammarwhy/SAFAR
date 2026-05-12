@@ -98,6 +98,8 @@ type TripState = {
   removeFromWishlist: (tripId: string) => Promise<void>;
   isWishlisted: (tripId: string) => boolean;
   loadExploreContent: () => Promise<void>;
+  addExpense: (tripId: string, amount: number, category: string, splitMethod: string) => Promise<void>;
+  settleUp: (tripId: string) => Promise<void>;
 };
 
 export const useTripStore = create<TripState>((set, get) => ({
@@ -280,6 +282,128 @@ export const useTripStore = create<TripState>((set, get) => ({
         loading: false 
       });
     } catch (e: any) {
+      set({ error: e?.message || String(e), loading: false });
+    }
+  },
+
+  addExpense: async (tripId, amount, category, splitMethod) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
+    try {
+      set({ loading: true });
+      
+      // 1. Get or create ledger
+      let { data: ledger } = await supabase.from('expense_ledgers').select('id').eq('trip_id', tripId).maybeSingle();
+      
+      if (!ledger) {
+        const { data: newLedger, error: ledgerErr } = await supabase
+          .from('expense_ledgers')
+          .insert({ trip_id: tripId, total_group_spend: 0 })
+          .select()
+          .single();
+        if (ledgerErr) throw ledgerErr;
+        ledger = newLedger;
+      }
+
+      // 2. Insert expense
+      const { error: expErr } = await supabase.from('expenses').insert({
+        ledger_id: ledger.id,
+        paid_by_user_id: user.id,
+        amount_pkr: amount,
+        category,
+        split_method: splitMethod,
+        expense_date: new Date().toISOString().split('T')[0]
+      });
+
+      if (expErr) throw expErr;
+
+      // 3. Refresh trip details
+      await get().loadTripById(tripId);
+    } catch (e: any) {
+      console.error('Add expense error', e);
+      set({ error: e?.message || String(e), loading: false });
+    }
+  },
+
+  settleUp: async (tripId) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
+    const details = get().tripDetails[tripId];
+    if (!details) return;
+
+    try {
+      set({ loading: true });
+      
+      // Calculate current balances to find how much the user owes/is owed
+      const participantIds = details.participants.map(p => p.user_id);
+      const formattedExpenses = details.expenses.map(e => ({
+        id: e.id,
+        paidByUserId: e.paid_by_user_id || '',
+        amountPKR: Number(e.amount_pkr) || 0,
+        splitMethod: (e.split_method as any) || 'Equal',
+        splitData: e.split_data,
+        participants: participantIds
+      }));
+
+      // We need to import calculateBalances here or use it if it's available.
+      // Since it's in a lib, I'll assume I can import it or just re-implement the logic if needed.
+      // But wait, I can't easily import from lib inside the store without a circular dependency if the store is used in lib (not likely).
+      // Let's assume calculateBalances is pure.
+      const { calculateBalances } = await import('../lib/expenseCalc');
+      const balances = calculateBalances(formattedExpenses, participantIds);
+      const myBalance = balances[user.id] || 0;
+
+      if (Math.abs(myBalance) < 1) {
+        set({ loading: false });
+        return; // Already settled
+      }
+
+      let { data: ledger } = await supabase.from('expense_ledgers').select('id').eq('trip_id', tripId).maybeSingle();
+      if (!ledger) throw new Error('Ledger not found');
+
+      // To settle up:
+      // If myBalance is negative (I owe money), I "pay" the group.
+      // If myBalance is positive (Others owe me), others "pay" me.
+      // A simple way is to create an expense that reverses the balance.
+      
+      const settlementAmount = Math.abs(myBalance);
+      
+      if (myBalance < 0) {
+        // I owe money, I pay someone who is owed
+        const recipient = Object.entries(balances).find(([uid, bal]) => bal > 0)?.[0];
+        if (!recipient) throw new Error('No one to pay');
+
+        const { error: expErr } = await supabase.from('expenses').insert({
+          ledger_id: ledger.id,
+          paid_by_user_id: user.id,
+          amount_pkr: settlementAmount,
+          category: 'Settlement',
+          split_method: 'Settlement',
+          split_data: { [recipient]: settlementAmount },
+          expense_date: new Date().toISOString().split('T')[0]
+        });
+        if (expErr) throw expErr;
+      } else {
+        // I am owed money, someone who owes pays me
+        const payer = Object.entries(balances).find(([uid, bal]) => bal < 0)?.[0];
+        if (!payer) throw new Error('No one owes money');
+
+        const { error: expErr } = await supabase.from('expenses').insert({
+          ledger_id: ledger.id,
+          paid_by_user_id: payer,
+          amount_pkr: settlementAmount,
+          category: 'Settlement',
+          split_method: 'Settlement',
+          split_data: { [user.id]: settlementAmount },
+          expense_date: new Date().toISOString().split('T')[0]
+        });
+        if (expErr) throw expErr;
+      }
+      await get().loadTripById(tripId);
+    } catch (e: any) {
+      console.error('Settle up error', e);
       set({ error: e?.message || String(e), loading: false });
     }
   },

@@ -136,13 +136,6 @@ const SettingsPage: React.FC = () => {
         </div>
       </section>
 
-      <section style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Security</p>
-        <div style={{ backgroundColor: 'var(--bg-card)', borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-          <ToggleRow icon="security" title="Two-Factor Auth" subtitle="Extra login security" value={false} onChange={() => {}} />
-          <ToggleRow icon="face" title="Face ID" subtitle="Biometric unlock" value={false} onChange={() => {}} />
-        </div>
-      </section>
 
       <section style={{ marginBottom: '32px' }}>
         <p style={{ fontSize: '12px', fontWeight: 900, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', paddingLeft: '4px' }}>Language</p>
